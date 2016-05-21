@@ -1,0 +1,588 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="vim," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="复合数据类型之列表
+列表是事物的有序集合, 这里是事物是各种类型的值,甚至是混合项目.
+列表是引用类型, 就如同java中的对象一样.
+在必要的时候可以使用copy() 和 deepcopy()
+
+建立列表123456&quot; 建立空列表let alist = []&quot; 建立一个字符串列表let strlist = [&apos;app&apos;, &apos;root&apos;, &apos;qml&apos;]&quot; 多维列表let nestlist = [[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim列表类型">
+<meta property="og:url" content="http://yoursite.com/2016/05/21/vim-复合类型之列表/index.html">
+<meta property="og:site_name" content="这是一场不停的追逐!">
+<meta property="og:description" content="复合数据类型之列表
+列表是事物的有序集合, 这里是事物是各种类型的值,甚至是混合项目.
+列表是引用类型, 就如同java中的对象一样.
+在必要的时候可以使用copy() 和 deepcopy()
+
+建立列表123456&quot; 建立空列表let alist = []&quot; 建立一个字符串列表let strlist = [&apos;app&apos;, &apos;root&apos;, &apos;qml&apos;]&quot; 多维列表let nestlist = [[">
+<meta property="og:updated_time" content="2016-05-21T03:23:12.424Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vim列表类型">
+<meta name="twitter:description" content="复合数据类型之列表
+列表是事物的有序集合, 这里是事物是各种类型的值,甚至是混合项目.
+列表是引用类型, 就如同java中的对象一样.
+在必要的时候可以使用copy() 和 deepcopy()
+
+建立列表123456&quot; 建立空列表let alist = []&quot; 建立一个字符串列表let strlist = [&apos;app&apos;, &apos;root&apos;, &apos;qml&apos;]&quot; 多维列表let nestlist = [[">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Vim列表类型 | 这是一场不停的追逐! </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">这是一场不停的追逐!</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Vim列表类型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-05-21T11:19:19+08:00" content="2016-05-21">
+              2016-05-21
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="复合数据类型之列表"><a href="#复合数据类型之列表" class="headerlink" title="复合数据类型之列表"></a>复合数据类型之列表</h1><ul>
+<li>列表是事物的有序集合, 这里是事物是各种类型的值,甚至是混合项目.</li>
+<li>列表是引用类型, 就如同java中的对象一样.</li>
+<li>在必要的时候可以使用copy() 和 deepcopy()</li>
+</ul>
+<h2 id="建立列表"><a href="#建立列表" class="headerlink" title="建立列表"></a>建立列表</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">" 建立空列表</span></span><br><span class="line"><span class="keyword">let</span> alist = []</span><br><span class="line"><span class="comment">" 建立一个字符串列表</span></span><br><span class="line"><span class="keyword">let</span> strlist = [<span class="string">'app'</span>, <span class="string">'root'</span>, <span class="string">'qml'</span>]</span><br><span class="line"><span class="comment">" 多维列表</span></span><br><span class="line"><span class="keyword">let</span> nestlist = [[<span class="number">11</span>, <span class="number">12</span>], [<span class="number">21</span>, <span class="number">22</span>], [<span class="number">33</span>, <span class="number">43</span>]]</span><br></pre></td></tr></table></figure>
+<h2 id="列表索引"><a href="#列表索引" class="headerlink" title="列表索引"></a>列表索引</h2><p><strong>索引从0开始; 索引可以为负数, -1表示最后一个项目.</strong></p>
+  <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> item = strlist[<span class="number">0</span>] <span class="comment">" 得到第一个项目</span></span><br><span class="line"><span class="keyword">let</span> item = strlist[<span class="number">2</span>] <span class="comment">" 得到第三个项目</span></span><br><span class="line"><span class="keyword">let</span> item = nestlist[<span class="number">1</span>][<span class="number">1</span>] <span class="comment">" 22</span></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">last</span> = strlist[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="built_in">get</span>(strlist, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">echo</span> <span class="built_in">get</span>(strlist, <span class="number">4</span>, <span class="string">'none'</span>) <span class="comment">" 如果要找的索引超过范围,则返回none</span></span><br></pre></td></tr></table></figure>
+<h2 id="列表切片"><a href="#列表切片" class="headerlink" title="列表切片"></a>列表切片</h2><p><strong>通过指定首末俩个索引, 获取列表的一部分.</strong><br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> testlist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="string">'one'</span>, <span class="string">'three'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> shortlist = testlist[<span class="number">2</span> : -<span class="number">1</span>] <span class="comment">" [4, 'one', 'three']</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 如果首索引省略,则为0; 末索引省略为-1;</span></span><br><span class="line"><span class="keyword">let</span> endlist = testlist[<span class="number">3</span>:] <span class="comment">" ['one', 'three']</span></span><br><span class="line"><span class="keyword">let</span> shortlist = testlist[<span class="number">2</span>:<span class="number">3</span>] <span class="comment">" [4, 'one']</span></span><br><span class="line"><span class="keyword">let</span> otherlist = mylist[:] <span class="comment">" 复制列表</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 如果末索引大于等于列表的长度, 使用长度减1</span></span><br><span class="line"><span class="keyword">let</span> mylist = [<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line"><span class="keyword">echo</span> mylist[<span class="number">2</span>: <span class="number">9</span>] <span class="comment">"[8, 9]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="列表解包"><a href="#列表解包" class="headerlink" title="列表解包"></a>列表解包</h2><p><strong>将列表中的值存入变量.</strong></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [var1, var2, var3] = mylist</span><br><span class="line"></span><br><span class="line"><span class="comment">" 相当于</span></span><br><span class="line"><span class="keyword">let</span> var1 = mylist[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">let</span> var2 = mylist[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">let</span> var3 = mylist[<span class="number">2</span>:]</span><br></pre></td></tr></table></figure>
+<h2 id="列表修改"><a href="#列表修改" class="headerlink" title="列表修改"></a>列表修改</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">" 用 add() 函数添加item</span></span><br><span class="line"><span class="keyword">let</span> alist = []</span><br><span class="line"><span class="keyword">call</span> <span class="built_in">add</span>(alist, <span class="string">'foo'</span>)</span><br><span class="line"><span class="keyword">call</span> <span class="built_in">add</span>(alist, <span class="string">'bar'</span>)</span><br><span class="line"><span class="keyword">echo</span> alist</span><br><span class="line"></span><br><span class="line"><span class="comment">" 用 '+' 添加item</span></span><br><span class="line"><span class="keyword">let</span> alist = [<span class="string">'user'</span>, <span class="string">'password'</span>]</span><br><span class="line"><span class="keyword">let</span> alist += [<span class="string">'name'</span>, <span class="string">'other'</span>]</span><br><span class="line"><span class="keyword">echo</span> alist</span><br><span class="line"></span><br><span class="line"><span class="comment">" 用extend() 扩展</span></span><br><span class="line"><span class="keyword">let</span> alist = [<span class="string">'one'</span>]</span><br><span class="line"><span class="keyword">call</span> <span class="built_in">extend</span>(alist, [<span class="string">'two'</span>, <span class="string">'three'</span>])</span><br><span class="line"><span class="keyword">echo</span> alist</span><br><span class="line"><span class="comment">" ['one', 'two', 'three']</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 注意: 如果上面的用add()扩展,效果就不一样</span></span><br><span class="line"><span class="keyword">let</span> alist = [<span class="string">'one'</span>]</span><br><span class="line"><span class="keyword">call</span> <span class="built_in">add</span>(alist, [<span class="string">'two'</span>, <span class="string">'three'</span>])</span><br><span class="line"><span class="keyword">echo</span> alist</span><br><span class="line"><span class="comment">" ['one', ['two', 'three']]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 删除项目</span></span><br><span class="line"><span class="keyword">let</span> i = <span class="built_in">remove</span>(alist, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">unlet</span> alist[<span class="number">3</span>]</span><br><span class="line"><span class="keyword">let</span> <span class="keyword">l</span> = <span class="built_in">remove</span>(alist, <span class="number">3</span>, -<span class="number">1</span>)</span><br><span class="line"><span class="keyword">unlet</span> alist[<span class="number">3</span>: ]</span><br><span class="line"><span class="keyword">call</span> <span class="built_in">filter</span>(<span class="keyword">list</span>, <span class="string">'v:val !~ "x"'</span>) <span class="comment">" 删除有x的项目</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 改变顺序</span></span><br><span class="line"><span class="keyword">call</span> <span class="keyword">sort</span>(alist)</span><br><span class="line"><span class="keyword">call</span> <span class="built_in">reverse</span>(alist)</span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong> add()的第二个参数是作为单个项目被加入的.</p>
+<h2 id="列表的循环"><a href="#列表的循环" class="headerlink" title="列表的循环"></a>列表的循环</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> alist = [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>]</span><br><span class="line"><span class="keyword">for</span> n in alist</span><br><span class="line">    <span class="keyword">echo</span> n</span><br><span class="line"><span class="keyword">endfor</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 如果需要循环长度为给定次数的列表,range可以建立这样的列表:</span></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">a</span> in <span class="built_in">range</span>(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">echo</span> <span class="keyword">a</span></span><br><span class="line"><span class="keyword">endfor</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" range() 产生的列表的第一个项目为0, 最后一个项目比列表的长度小1</span></span><br><span class="line"><span class="comment">" 也可以指定其他参数, 如初始值, 最大值, 步进(正负均可)</span></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">a</span> in <span class="built_in">range</span>(<span class="number">8</span>, <span class="number">4</span>, -<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">echo</span> <span class="keyword">a</span> <span class="comment">" 8 6 4</span></span><br><span class="line"><span class="keyword">endfor</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">line</span> in <span class="built_in">getline</span>(<span class="number">1</span>, <span class="number">20</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">line</span> =~ <span class="string">"Date: "</span></span><br><span class="line">        <span class="keyword">echo</span> <span class="built_in">matchstr</span>(<span class="built_in">line</span>, <span class="string">'Data: \zs.*'</span>)</span><br><span class="line">    <span class="keyword">endif</span></span><br><span class="line"><span class="keyword">endfor</span></span><br></pre></td></tr></table></figure>
+<h2 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> r = <span class="keyword">call</span>(funcname, <span class="keyword">list</span>)   <span class="comment">" 调用带参数列表的函数</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">empty</span>(<span class="keyword">list</span>)                 <span class="comment">" 检查 list 是否为空</span></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">l</span> = <span class="built_in">len</span>(<span class="keyword">list</span>)              <span class="comment">" list 项目的数量</span></span><br><span class="line"><span class="keyword">let</span> big = <span class="built_in">max</span>(<span class="keyword">list</span>)            <span class="comment">" list 项目的最大值</span></span><br><span class="line"><span class="keyword">let</span> small = <span class="built_in">min</span>(<span class="keyword">list</span>)          <span class="comment">" list 项目的最小值</span></span><br><span class="line"><span class="keyword">let</span> xs = <span class="built_in">count</span>(<span class="keyword">list</span>, <span class="string">'x'</span>)      <span class="comment">" 计算 list 里 'x' 出现的次数</span></span><br><span class="line"><span class="keyword">let</span> i = <span class="built_in">index</span>(<span class="keyword">list</span>, <span class="string">'x'</span>)       <span class="comment">" list 第一个 'x' 的位置</span></span><br><span class="line"><span class="keyword">let</span> lines = <span class="built_in">getline</span>(<span class="number">1</span>, <span class="number">10</span>)     <span class="comment">" 得到缓冲区十行文本行</span></span><br><span class="line"><span class="keyword">call</span> <span class="keyword">append</span>(<span class="string">'$'</span>, lines)        <span class="comment">" 附加若干文本行到缓冲区尾部</span></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">list</span> = <span class="keyword">split</span>(<span class="string">"a b c"</span>)      <span class="comment">" 用字符串中的项目建立列表</span></span><br><span class="line"><span class="keyword">let</span> <span class="built_in">string</span> = <span class="keyword">join</span>(<span class="keyword">list</span>, <span class="string">', '</span>)  <span class="comment">" 用 list 项目构造字符串</span></span><br><span class="line"><span class="keyword">let</span> s = <span class="built_in">string</span>(<span class="keyword">list</span>)           <span class="comment">" list 的字符串表示</span></span><br><span class="line"><span class="keyword">call</span> <span class="keyword">map</span>(<span class="keyword">list</span>, <span class="string">'"&gt;&gt; " . v:val'</span>)  <span class="string">" 在每个项目前加上 "</span>&gt;&gt; <span class="comment">"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" 不要忘记组合使用不同功能可以简化任务。例如，要计算列表中所有数值的总和: &gt;</span></span><br><span class="line"><span class="keyword">exe</span> <span class="string">'let sum = '</span> . <span class="keyword">join</span>(nrlist, <span class="string">'+'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p><code>更多请:h List</code></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vim/" rel="tag">#vim</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/21/vim-复合类型之字典/" rel="next" title="Vim字典类型">
+                <i class="fa fa-chevron-left"></i> Vim字典类型
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/21/vim-基础/" rel="prev" title="Vim基础">
+                Vim基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="DaSea" />
+          <p class="site-author-name" itemprop="name">DaSea</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#复合数据类型之列表"><span class="nav-number">1.</span> <span class="nav-text">复合数据类型之列表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#建立列表"><span class="nav-number">1.1.</span> <span class="nav-text">建立列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表索引"><span class="nav-number">1.2.</span> <span class="nav-text">列表索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表切片"><span class="nav-number">1.3.</span> <span class="nav-text">列表切片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表解包"><span class="nav-number">1.4.</span> <span class="nav-text">列表解包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表修改"><span class="nav-number">1.5.</span> <span class="nav-text">列表修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表的循环"><span class="nav-number">1.6.</span> <span class="nav-text">列表的循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关函数"><span class="nav-number">1.7.</span> <span class="nav-text">相关函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多"><span class="nav-number">1.8.</span> <span class="nav-text">更多</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaSea</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
