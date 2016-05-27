@@ -1,0 +1,590 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>c++ 格式化输出总结 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="&amp;#x53EF;&amp;#x4F7F;&amp;#x7528;&amp;#x7684;&amp;#x683C;&amp;#x5F0F;&amp;#x539F;&amp;#x59CB;&amp;#x683C;&amp;#x5F0F;&amp;#x7684;&amp;#x5907;&amp;#x4EFD;&amp;#x4E0E;&amp;#x6062;&amp;#x590D;12345// &amp;#x5907;&amp;#x4EFD;std::ostream::fmtflags flags = std::cout.flags()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++ 格式化输出总结">
+<meta property="og:url" content="http://yoursite.com/2016/05/26/cpp-inout-format/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="&amp;#x53EF;&amp;#x4F7F;&amp;#x7528;&amp;#x7684;&amp;#x683C;&amp;#x5F0F;&amp;#x539F;&amp;#x59CB;&amp;#x683C;&amp;#x5F0F;&amp;#x7684;&amp;#x5907;&amp;#x4EFD;&amp;#x4E0E;&amp;#x6062;&amp;#x590D;12345// &amp;#x5907;&amp;#x4EFD;std::ostream::fmtflags flags = std::cout.flags()">
+<meta property="og:updated_time" content="2016-05-26T09:37:07.686Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c++ 格式化输出总结">
+<meta name="twitter:description" content="&amp;#x53EF;&amp;#x4F7F;&amp;#x7528;&amp;#x7684;&amp;#x683C;&amp;#x5F0F;&amp;#x539F;&amp;#x59CB;&amp;#x683C;&amp;#x5F0F;&amp;#x7684;&amp;#x5907;&amp;#x4EFD;&amp;#x4E0E;&amp;#x6062;&amp;#x590D;12345// &amp;#x5907;&amp;#x4EFD;std::ostream::fmtflags flags = std::cout.flags()">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/05/26/cpp-inout-format/" title="c++ 格式化输出总结" itemprop="url">c++ 格式化输出总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-26T09:37:07.000Z" itemprop="datePublished"> 發表於 2016-05-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#可使用的格式"><span class="toc-number">1.</span> <span class="toc-text">可使用的格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原始格式的备份与恢复"><span class="toc-number">1.1.</span> <span class="toc-text">原始格式的备份与恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存在的格式"><span class="toc-number">1.2.</span> <span class="toc-text">存在的格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式的使用"><span class="toc-number">2.</span> <span class="toc-text">格式的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bool-变量的输出"><span class="toc-number">2.1.</span> <span class="toc-text">bool 变量的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进制的操作"><span class="toc-number">2.2.</span> <span class="toc-text">进制的操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对齐操作"><span class="toc-number">2.3.</span> <span class="toc-text">对齐操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点型的控制输出"><span class="toc-number">2.4.</span> <span class="toc-text">浮点型的控制输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出指针地址"><span class="toc-number">3.</span> <span class="toc-text">输出指针地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="&#x53EF;&#x4F7F;&#x7528;&#x7684;&#x683C;&#x5F0F;"><a href="#&#x53EF;&#x4F7F;&#x7528;&#x7684;&#x683C;&#x5F0F;" class="headerlink" title="&#x53EF;&#x4F7F;&#x7528;&#x7684;&#x683C;&#x5F0F;"></a>&#x53EF;&#x4F7F;&#x7528;&#x7684;&#x683C;&#x5F0F;</h2><h3 id="&#x539F;&#x59CB;&#x683C;&#x5F0F;&#x7684;&#x5907;&#x4EFD;&#x4E0E;&#x6062;&#x590D;"><a href="#&#x539F;&#x59CB;&#x683C;&#x5F0F;&#x7684;&#x5907;&#x4EFD;&#x4E0E;&#x6062;&#x590D;" class="headerlink" title="&#x539F;&#x59CB;&#x683C;&#x5F0F;&#x7684;&#x5907;&#x4EFD;&#x4E0E;&#x6062;&#x590D;"></a>&#x539F;&#x59CB;&#x683C;&#x5F0F;&#x7684;&#x5907;&#x4EFD;&#x4E0E;&#x6062;&#x590D;</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x5907;&#x4EFD;</span></span><br><span class="line"><span class="built_in">std</span>::ostream::fmtflags flags = <span class="built_in">std</span>::<span class="built_in">cout</span>.flags();</span><br><span class="line"></span><br><span class="line"><span class="comment">// &#x6062;&#x590D;</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.flags(flags);</span><br></pre></td></tr></table></figure>
+<h3 id="&#x5B58;&#x5728;&#x7684;&#x683C;&#x5F0F;"><a href="#&#x5B58;&#x5728;&#x7684;&#x683C;&#x5F0F;" class="headerlink" title="&#x5B58;&#x5728;&#x7684;&#x683C;&#x5F0F;"></a>&#x5B58;&#x5728;&#x7684;&#x683C;&#x5F0F;</h3><p>flags: &#x65B0;&#x7684;&#x683C;&#x5F0F;&#x8BBE;&#x7F6E;, &#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4E0B;&#x9762;&#x7684;&#x8FDB;&#x884C;&#x7EC4;&#x5408;&#x5F97;&#x5230;.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Constant</th>
+<th style="text-align:left">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">dec</td>
+<td style="text-align:left">10&#x8FDB;&#x5236;&#x8868;&#x793A;&#x6574;&#x6570;, std::dec</td>
+</tr>
+<tr>
+<td style="text-align:left">oct</td>
+<td style="text-align:left">8&#x8FDB;&#x5236;&#x8868;&#x793A;&#x6574;&#x6570;, std::oct</td>
+</tr>
+<tr>
+<td style="text-align:left">hex</td>
+<td style="text-align:left">16&#x8FDB;&#x5236;&#x8868;&#x793A;&#x6574;&#x6570;, std::hex</td>
+</tr>
+<tr>
+<td style="text-align:left">basefield</td>
+<td style="text-align:left">&#x7528;&#x4E8E;dec,oct,hex or 0. &#x662F;&#x4E2A;&#x5173;&#x4E8E;&#x8FDB;&#x5236;&#x7684;&#x63A9;&#x7801;, &#x7528;&#x4E8E;&#x8BB0;&#x5F55;&#x5F53;&#x524D;&#x662F;&#x54EA;&#x4E2A;&#x8FDB;&#x5236;</td>
+</tr>
+<tr>
+<td style="text-align:left">left</td>
+<td style="text-align:left">&#x5DE6;&#x5BF9;&#x9F50;, &#x7528;&#x586B;&#x5145;&#x5B57;&#x7B26;&#x586B;&#x5145;&#x53F3;&#x8FB9;, std::left</td>
+</tr>
+<tr>
+<td style="text-align:left">right</td>
+<td style="text-align:left">&#x53F3;&#x5BF9;&#x9F50;, &#x7528;&#x586B;&#x5145;&#x5B57;&#x7B26;&#x586B;&#x5145;&#x53F3;&#x8FB9;, std::right</td>
+</tr>
+<tr>
+<td style="text-align:left">internal</td>
+<td style="text-align:left">&#x5185;&#x90E8;&#x5BF9;&#x9F50;,&#x7528;&#x586B;&#x5145;&#x5B57;&#x7B26;&#x586B;&#x5145;&#x5185;&#x90E8;&#x6307;&#x5B9A;&#x7684;&#x70B9;, std::internal</td>
+</tr>
+<tr>
+<td style="text-align:left">adjustfield</td>
+<td style="text-align:left">&#x7528;&#x4E8E;left,right&#x548C;internal. &#x540C;basefield</td>
+</tr>
+<tr>
+<td style="text-align:left">scientific</td>
+<td style="text-align:left">&#x4F7F;&#x7528;&#x79D1;&#x5B66;&#x8BA1;&#x6570;&#x6CD5;&#x8868;&#x793A;&#x5C0F;&#x6570;, &#x6216;&#x8FDB;&#x5236;&#x8BA1;&#x6570;&#x6CD5;(&#x5982;&#x679C;&#x4E0E;fixed&#x8054;&#x5408;&#x4F7F;&#x7528;), std::scientific</td>
+</tr>
+<tr>
+<td style="text-align:left">fixed</td>
+<td style="text-align:left">&#x4F7F;&#x7528;&#x666E;&#x901A;&#x5B9A;&#x70B9;&#x683C;&#x5F0F;&#x8868;&#x793A;&#x5C0F;&#x6570;, std::fixed</td>
+</tr>
+<tr>
+<td style="text-align:left">floatfield</td>
+<td style="text-align:left">&#x7528;&#x4E8E;scientific, fixed, (scientific,fixed)&#x548C;0. &#x540C;basefield</td>
+</tr>
+<tr>
+<td style="text-align:left">boolalpha</td>
+<td style="text-align:left">&#x5C06;bool&#x7C7B;&#x578B;&#x4EE5;true&#x6216;false&#x8F93;&#x51FA;,&#x800C;&#x4E0D;&#x662F;0&#x6216;1, std::boolalpha</td>
+</tr>
+<tr>
+<td style="text-align:left">showbase</td>
+<td style="text-align:left">&#x4E3A;&#x6574;&#x6570;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x8868;&#x793A;&#x5176;&#x8FDB;&#x5236;&#x7684;&#x524D;&#x7F00;, std::showbase</td>
+</tr>
+<tr>
+<td style="text-align:left">showpoint</td>
+<td style="text-align:left">&#x5728;&#x6D6E;&#x70B9;&#x6570;&#x4E2D;&#x5F3A;&#x5236;&#x63D2;&#x5165;&#x5C0F;&#x6570;&#x70B9;, std::showpoint</td>
+</tr>
+<tr>
+<td style="text-align:left">showpos</td>
+<td style="text-align:left">&#x5728;&#x6B63;&#x6570;&#x524D;&#x9762;&#x52A0;&#x5165;+, &#x53EA;&#x5BF9;&#x5341;&#x8FDB;&#x5236;&#x6709;&#x6548;, std::showpos</td>
+</tr>
+<tr>
+<td style="text-align:left">skipws</td>
+<td style="text-align:left">&#x5FFD;&#x7565;&#x524D;&#x5BFC;&#x7A7A;&#x683C;, &#x4E3B;&#x8981;&#x7528;&#x4E8E;&#x8F93;&#x5165;&#x6D41;, std::skipws</td>
+</tr>
+<tr>
+<td style="text-align:left">unitbuf</td>
+<td style="text-align:left">&#x5728;&#x6BCF;&#x6B21;&#x63D2;&#x5165;&#x540E;&#x6E05;&#x7A7A;&#x8F93;&#x51FA;&#x7F13;&#x5B58;, std::unitbuf</td>
+</tr>
+<tr>
+<td style="text-align:left">uppercase</td>
+<td style="text-align:left">&#x5BF9;&#x4E8E;&#x5341;&#x516D;&#x8FDB;&#x5236;&#x548C;&#x79D1;&#x5B66;&#x8BA1;&#x6570;&#x6CD5;&#x91CC;&#x7684;&#x5B57;&#x7B26;, &#x4EE5;&#x5927;&#x5199;&#x8F93;&#x51FA;, std::uppercase</td>
+</tr>
+</tbody>
+</table>
+<h2 id="&#x683C;&#x5F0F;&#x7684;&#x4F7F;&#x7528;"><a href="#&#x683C;&#x5F0F;&#x7684;&#x4F7F;&#x7528;" class="headerlink" title="&#x683C;&#x5F0F;&#x7684;&#x4F7F;&#x7528;"></a>&#x683C;&#x5F0F;&#x7684;&#x4F7F;&#x7528;</h2><h3 id="bool-&#x53D8;&#x91CF;&#x7684;&#x8F93;&#x51FA;"><a href="#bool-&#x53D8;&#x91CF;&#x7684;&#x8F93;&#x51FA;" class="headerlink" title="bool &#x53D8;&#x91CF;&#x7684;&#x8F93;&#x51FA;"></a>bool &#x53D8;&#x91CF;&#x7684;&#x8F93;&#x51FA;</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="comment">//  &#x8F93;&#x51FA;true or false</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::boolalpha</span><br><span class="line">              &lt;&lt; <span class="string">&quot;boolalpha true: &quot;</span> &lt;&lt; <span class="literal">true</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">              &lt;&lt; <span class="string">&quot;boolalpha false: &quot;</span> &lt;&lt; <span class="literal">false</span> &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"><span class="comment">// &#x8F93;&#x51FA;0 or 1</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::noboolalpha</span><br><span class="line">              &lt;&lt; <span class="string">&quot;noboolalpha true: &quot;</span> &lt;&lt; <span class="literal">true</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">              &lt;&lt; <span class="string">&quot;noboolalpha false: &quot;</span> &lt;&lt; <span class="literal">false</span> &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"><span class="comment">// booalpha parse</span></span><br><span class="line"><span class="keyword">bool</span> b1, b2;</span><br><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">istringstream</span> <span class="title">is</span><span class="params">(<span class="string">&quot;true false&quot;</span>)</span></span>;</span><br><span class="line">is &gt;&gt; <span class="built_in">std</span>::boolalpha &gt;&gt; b1 &gt;&gt; b2;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&apos;\&quot;&apos;</span> &lt;&lt; is.str() &lt;&lt; <span class="string">&quot;\&quot; parsed as &quot;</span> &lt;&lt; b1 &lt;&lt; <span class="string">&apos; &apos;</span> &lt;&lt; b2 &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x8F93;&#x51FA;&#x4E3A;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">boolalpha true: true</span><br><span class="line">boolalpha false: false</span><br><span class="line">noboolalpha true: 1</span><br><span class="line">noboolalpha false: 0</span><br><span class="line">&quot;true false&quot; parsed as 1 0</span><br></pre></td></tr></table></figure>
+<h3 id="&#x8FDB;&#x5236;&#x7684;&#x64CD;&#x4F5C;"><a href="#&#x8FDB;&#x5236;&#x7684;&#x64CD;&#x4F5C;" class="headerlink" title="&#x8FDB;&#x5236;&#x7684;&#x64CD;&#x4F5C;"></a>&#x8FDB;&#x5236;&#x7684;&#x64CD;&#x4F5C;</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x8F93;&#x51FA;&#x6307;&#x5B9A;&#x8FDB;&#x5236;&#x7684;&#x6574;&#x6570;</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;&#x65E0;&#x524D;&#x5BFC;: &quot;</span>&lt;&lt;<span class="string">&apos;\n&apos;</span>&lt;&lt;<span class="built_in">std</span>::noshowbase</span><br><span class="line">    &lt;&lt; <span class="string">&quot;The number 42 in octal:   &quot;</span> &lt;&lt; <span class="built_in">std</span>::oct &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">    &lt;&lt; <span class="string">&quot;The number 42 in decimal: &quot;</span> &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">    &lt;&lt; <span class="string">&quot;The number 42 in hex:     &quot;</span> &lt;&lt; <span class="built_in">std</span>::hex &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// &#x6DFB;&#x52A0;&#x8FDB;&#x5236;&#x7684;&#x524D;&#x5BFC;</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x6709;&#x524D;&#x5BFC;&quot;</span> &lt;&lt;<span class="string">&apos;\n&apos;</span>&lt;&lt;<span class="built_in">std</span>::showbase</span><br><span class="line">    &lt;&lt; <span class="string">&quot;The number 42 in octal:   &quot;</span> &lt;&lt; <span class="built_in">std</span>::oct &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">    &lt;&lt; <span class="string">&quot;The number 42 in decimal: &quot;</span> &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">    &lt;&lt; <span class="string">&quot;The number 42 in hex:     &quot;</span> &lt;&lt; <span class="built_in">std</span>::hex &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// &#x901A;&#x8FC7;&#x63A9;&#x7801;&#x8BBE;&#x7F6E;&#x8FDB;&#x5236;</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x63A9;&#x7801;&#x64CD;&#x4F5C;&#x8FDB;&#x5236;&#x663E;&#x793A;&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="keyword">int</span> num = <span class="number">150</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.setf(<span class="built_in">std</span>::<span class="built_in">cout</span>.oct, <span class="built_in">std</span>::<span class="built_in">cout</span>.basefield);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.setf(<span class="built_in">std</span>::<span class="built_in">cout</span>.showbase);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; num &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.setf (<span class="built_in">std</span>::<span class="built_in">cout</span>.dec , <span class="built_in">std</span>::<span class="built_in">cout</span>.basefield);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.setf (<span class="built_in">std</span>::<span class="built_in">cout</span>.showbase);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; num &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.setf(<span class="built_in">std</span>::<span class="built_in">cout</span>.hex, <span class="built_in">std</span>::<span class="built_in">cout</span>.basefield);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.setf(<span class="built_in">std</span>::<span class="built_in">cout</span>.showbase);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; num &lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x8F93;&#x51FA;&#x4E3A;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x65E0;&#x524D;&#x5BFC;:</span><br><span class="line">The number 42 in octal:   52</span><br><span class="line">The number 42 in decimal: 42</span><br><span class="line">The number 42 in hex:     2a</span><br><span class="line">&#x6709;&#x524D;&#x5BFC;</span><br><span class="line">The number 42 in octal:   052</span><br><span class="line">The number 42 in decimal: 42</span><br><span class="line">The number 42 in hex:     0x2a</span><br><span class="line">&#x63A9;&#x7801;&#x64CD;&#x4F5C;&#x8FDB;&#x5236;&#x663E;&#x793A;</span><br><span class="line">0226</span><br><span class="line">150</span><br><span class="line">0x96</span><br></pre></td></tr></table></figure>
+<h3 id="&#x5BF9;&#x9F50;&#x64CD;&#x4F5C;"><a href="#&#x5BF9;&#x9F50;&#x64CD;&#x4F5C;" class="headerlink" title="&#x5BF9;&#x9F50;&#x64CD;&#x4F5C;"></a>&#x5BF9;&#x9F50;&#x64CD;&#x4F5C;</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x5BF9;&#x9F50;</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===============&#x5BF9;&#x9F50;&#x4E0E;&#x586B;&#x5145;&#x64CD;&#x4F5C;=======================&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Left fill:\n&quot;</span> &lt;&lt; <span class="built_in">std</span>::left &lt;&lt; <span class="built_in">std</span>::setfill(<span class="string">&apos;*&apos;</span>)</span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="number">-1.23</span>  &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::showpos &lt;&lt; <span class="number">1.23</span>  &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="built_in">std</span>::noshowpos &lt;&lt;<span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="built_in">std</span>::showpos &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::hex &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span> &lt;&lt;<span class="string">&apos;\n&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Internal fill:\n&quot;</span> &lt;&lt; <span class="built_in">std</span>::internal</span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="number">-1.23</span>  &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::showpos &lt;&lt; <span class="number">1.23</span>  &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="built_in">std</span>::noshowpos &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="built_in">std</span>::showpos &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::hex &lt;&lt; <span class="built_in">std</span>::showbase&lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span>&lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Right fill:\n&quot;</span> &lt;&lt; <span class="built_in">std</span>::right</span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="number">-1.23</span>  &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::showpos &lt;&lt; <span class="number">1.23</span>  &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="built_in">std</span>::noshowpos &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::dec &lt;&lt; <span class="built_in">std</span>::showpos &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">std</span>::setw(<span class="number">12</span>) &lt;&lt; <span class="built_in">std</span>::hex &lt;&lt; <span class="built_in">std</span>::showbase &lt;&lt; <span class="number">42</span> &lt;&lt; <span class="string">&apos;\n&apos;</span>&lt;&lt; <span class="string">&apos;\n&apos;</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x8F93;&#x51FA;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">===============&#x5BF9;&#x9F50;&#x4E0E;&#x586B;&#x5145;&#x64CD;&#x4F5C;=======================</span><br><span class="line">Left fill:</span><br><span class="line">-1.23*******</span><br><span class="line">+1.23*******</span><br><span class="line">42**********</span><br><span class="line">+42*********</span><br><span class="line">0x2a********</span><br><span class="line"></span><br><span class="line">Internal fill:</span><br><span class="line">-*******1.23</span><br><span class="line">+*******1.23</span><br><span class="line">**********42</span><br><span class="line">+*********42</span><br><span class="line">0x********2a</span><br><span class="line"></span><br><span class="line">Right fill:</span><br><span class="line">*******-1.23</span><br><span class="line">*******+1.23</span><br><span class="line">**********42</span><br><span class="line">*********+42</span><br><span class="line">********0x2a</span><br></pre></td></tr></table></figure>
+<h3 id="&#x6D6E;&#x70B9;&#x578B;&#x7684;&#x63A7;&#x5236;&#x8F93;&#x51FA;"><a href="#&#x6D6E;&#x70B9;&#x578B;&#x7684;&#x63A7;&#x5236;&#x8F93;&#x51FA;" class="headerlink" title="&#x6D6E;&#x70B9;&#x578B;&#x7684;&#x63A7;&#x5236;&#x8F93;&#x51FA;"></a>&#x6D6E;&#x70B9;&#x578B;&#x7684;&#x63A7;&#x5236;&#x8F93;&#x51FA;</h3><ul>
+<li>&#x7528;&#x6D6E;&#x70B9;&#x8868;&#x793A;&#x7684;&#x8F93;&#x51FA;&#x4E2D;&#xFF0C;setprecision(n)&#x8868;&#x793A;&#x6709;&#x6548;&#x4F4D;&#x6570;.</li>
+<li>&#x7528;&#x5B9A;&#x70B9;&#x8868;&#x793A;&#x7684;&#x8F93;&#x51FA;&#x4E2D;&#xFF0C;setprecision(n)&#x8868;&#x793A;&#x5C0F;&#x6570;&#x4F4D;&#x6570;, &#x4E0E;fixed&#x914D;&#x5408;.</li>
+<li>&#x7528;&#x6307;&#x6570;&#x5F62;&#x5F0F;&#x8F93;&#x51FA;&#x65F6;&#xFF0C;setprecision(n)&#x8868;&#x793A;&#x5C0F;&#x6570;&#x4F4D;&#x6570;, &#x4E0E;scientific&#x914D;&#x5408;.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> originPrecision = <span class="built_in">std</span>::<span class="built_in">cout</span>.precision();</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===========================================================&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x7CBE;&#x5EA6;&#x4F7F;&#x7528;, &#x521D;&#x59CB;&#x7CBE;&#x5EA6;: &quot;</span>&lt;&lt;originPrecision &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt;<span class="built_in">std</span>::setprecision(<span class="number">4</span>) &lt;&lt;<span class="number">12.345678</span> &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span> ;    <span class="comment">// 12.35  rounded!</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt;<span class="built_in">std</span>::setprecision(<span class="number">10</span>) &lt;&lt;<span class="number">12.345678</span> &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span> ;   <span class="comment">// 12.345678 &#x5176;&#x5B9E;&#x5185;&#x90E8;&#x53D1;&#x751F;&#x4E86; rounded, &#x800C;&#x7ED3;&#x679C;&#x6B63;&#x597D;&#x8FDB;&#x4F4D;, &#x4E0E;&#x539F;&#x503C;&#x76F8;&#x540C;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===========================================================&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x5C0F;&#x6570;&#x7684;&#x8868;&#x793A;&#x5F62;&#x5F0F;&#x7684;&#x4F7F;&#x7528;&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x5F53;&#x524D;&#x7CBE;&#x5EA6;: &quot;</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">cout</span>.precision() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="keyword">double</span> f = <span class="number">101</span> / <span class="number">6.0</span> ;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x5C0F;&#x6570;&#x7684;&#x8868;&#x73B0;&#x5F62;&#x5F0F;:&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt;<span class="string">&quot;&#x5B9A;&#x70B9;&#x5C0F;&#x6570;:&quot;</span>&lt;&lt;<span class="built_in">std</span>::fixed &lt;&lt; f &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span> ;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt;<span class="string">&quot;&#x79D1;&#x5B66;&#x8BA1;&#x6570;&#x6CD5;:&quot;</span>&lt;&lt;<span class="built_in">std</span>::scientific &lt;&lt;f &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span> ;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt;<span class="string">&quot;&#x4E0A;&#x4E00;&#x6B21;&#x8BBE;&#x7F6E;&#x7684;&#x5F62;&#x5F0F;:&quot;</span>&lt;&lt;f*<span class="number">10</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===========================================================&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x8868;&#x73B0;&#x5F62;&#x5F0F;&#x6062;&#x590D;&#x4E3A;&#x9ED8;&#x8BA4;&#x503C;, &#x8FD9;&#x65F6;&#x5019;&#x7CBE;&#x5EA6;&#x5C31;&#x8868;&#x793A;&#x5C0F;&#x6570;&#x7684;&#x6709;&#x6548;&#x4F4D;&#x6570;&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>.unsetf(<span class="built_in">std</span>::ostream::floatfield);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x5F53;&#x524D;&#x6709;&#x6548;&#x4F4D;&#x6570;: &quot;</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">cout</span>.precision() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; f &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span> ;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===========================================================&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x6062;&#x590D;&#x4E3A;&#x521D;&#x59CB;&#x7CBE;&#x5EA6;:&quot;</span>&lt;&lt;<span class="built_in">std</span>::setprecision(originPrecision) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x5F53;&#x524D;&#x7CBE;&#x5EA6;: &quot;</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">cout</span>.precision() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===========================================================&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x663E;&#x793A;&#x5341;&#x8FDB;&#x5236;&#x6D6E;&#x70B9;&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x4E0D;&#x663E;&#x793A;&#x6D6E;&#x70B9;:&quot;</span>&lt;&lt;<span class="number">12.0</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x663E;&#x793A;&#x6D6E;&#x70B9;:&quot;</span>&lt;&lt; <span class="built_in">std</span>::showpoint&lt;&lt;<span class="number">10.0</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x4E0D;&#x663E;&#x793A;&#x6D6E;&#x70B9;:&quot;</span>&lt;&lt; <span class="built_in">std</span>::noshowpoint&lt;&lt;<span class="number">10.0</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x8F93;&#x51FA;&#x4E3A;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">===========================================================</span><br><span class="line">&#x7CBE;&#x5EA6;&#x4F7F;&#x7528;, &#x521D;&#x59CB;&#x7CBE;&#x5EA6;: 6</span><br><span class="line">12.35</span><br><span class="line">12.345678</span><br><span class="line">===========================================================</span><br><span class="line">&#x5C0F;&#x6570;&#x7684;&#x8868;&#x793A;&#x5F62;&#x5F0F;&#x7684;&#x4F7F;&#x7528;</span><br><span class="line">&#x5F53;&#x524D;&#x7CBE;&#x5EA6;: 10</span><br><span class="line">&#x5C0F;&#x6570;&#x7684;&#x8868;&#x73B0;&#x5F62;&#x5F0F;:</span><br><span class="line">&#x5B9A;&#x70B9;&#x5C0F;&#x6570;:16.8333333333</span><br><span class="line">&#x79D1;&#x5B66;&#x8BA1;&#x6570;&#x6CD5;:1.6833333333e+001</span><br><span class="line">&#x4E0A;&#x4E00;&#x6B21;&#x8BBE;&#x7F6E;&#x7684;&#x5F62;&#x5F0F;:1.6833333333e+002</span><br><span class="line">===========================================================</span><br><span class="line">&#x8868;&#x73B0;&#x5F62;&#x5F0F;&#x6062;&#x590D;&#x4E3A;&#x9ED8;&#x8BA4;&#x503C;, &#x8FD9;&#x65F6;&#x5019;&#x7CBE;&#x5EA6;&#x5C31;&#x8868;&#x793A;&#x5C0F;&#x6570;&#x7684;&#x6709;&#x6548;&#x4F4D;&#x6570;</span><br><span class="line">&#x5F53;&#x524D;&#x6709;&#x6548;&#x4F4D;&#x6570;: 10</span><br><span class="line">16.83333333</span><br><span class="line">===========================================================</span><br><span class="line">&#x6062;&#x590D;&#x4E3A;&#x521D;&#x59CB;&#x7CBE;&#x5EA6;:</span><br><span class="line">&#x5F53;&#x524D;&#x7CBE;&#x5EA6;: 6</span><br><span class="line">===========================================================</span><br><span class="line">&#x663E;&#x793A;&#x5341;&#x8FDB;&#x5236;&#x6D6E;&#x70B9;</span><br><span class="line">&#x4E0D;&#x663E;&#x793A;&#x6D6E;&#x70B9;:12</span><br><span class="line">&#x663E;&#x793A;&#x6D6E;&#x70B9;:10.0000</span><br><span class="line">&#x4E0D;&#x663E;&#x793A;&#x6D6E;&#x70B9;:10</span><br></pre></td></tr></table></figure>
+<h2 id="&#x8F93;&#x51FA;&#x6307;&#x9488;&#x5730;&#x5740;"><a href="#&#x8F93;&#x51FA;&#x6307;&#x9488;&#x5730;&#x5740;" class="headerlink" title="&#x8F93;&#x51FA;&#x6307;&#x9488;&#x5730;&#x5740;"></a>&#x8F93;&#x51FA;&#x6307;&#x9488;&#x5730;&#x5740;</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;&#x57FA;&#x672C;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x5730;&#x5740;:&quot;</span> &lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">void</span>*&gt;(&amp;a) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> str = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;string&#x7C7B;&#x578B;&#x9996;&#x5730;&#x5740;:&quot;</span>&lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">void</span>*&gt;(&amp;str) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span>* strc = <span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>*&gt;(str.c_str());</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;string&#x91CC;&#x9762;&#x5B58;&#x653E;&#x5185;&#x5BB9;&#x7684;&#x5730;&#x5740;:&quot;</span>&lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">void</span>*&gt;(strc) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;string&#x91CC;&#x9762;&#x5B58;&#x653E;&#x5185;&#x5BB9;&#x7684;&#x5730;&#x5740;:&quot;</span>&lt;&lt; <span class="keyword">static_cast</span>&lt;<span class="keyword">void</span>*&gt;(<span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>*&gt;(str.c_str())) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<p>&#x8F93;&#x51FA;&#x4E3A;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x57FA;&#x672C;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x5730;&#x5740;:0x62fe00</span><br><span class="line">string&#x7C7B;&#x578B;&#x9996;&#x5730;&#x5740;:0x62fde0</span><br><span class="line">string&#x91CC;&#x9762;&#x5B58;&#x653E;&#x5185;&#x5BB9;&#x7684;&#x5730;&#x5740;:0x62fdf0</span><br><span class="line">string&#x91CC;&#x9762;&#x5B58;&#x653E;&#x5185;&#x5BB9;&#x7684;&#x5730;&#x5740;:0x62fdf0</span><br></pre></td></tr></table></figure>
+<h2 id="&#x5176;&#x4ED6;"><a href="#&#x5176;&#x4ED6;" class="headerlink" title="&#x5176;&#x4ED6;"></a>&#x5176;&#x4ED6;</h2><p>&#x540E;&#x7EED;&#x5B8C;&#x5584;</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/cpp/">cpp</a><a href="/tags/format/">format</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/05/26/cpp-inout-format/" data-title="c++ 格式化输出总结 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/05/27/git_learn/" title="git命令记录">
+  <strong>上一篇：</strong><br/>
+  <span>
+  git命令记录</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/05/25/bash-ps1-setting/"  title="bash中PS1的设置">
+ <strong>下一篇：</strong><br/> 
+ <span>bash中PS1的设置
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#可使用的格式"><span class="toc-number">1.</span> <span class="toc-text">可使用的格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原始格式的备份与恢复"><span class="toc-number">1.1.</span> <span class="toc-text">原始格式的备份与恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存在的格式"><span class="toc-number">1.2.</span> <span class="toc-text">存在的格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#格式的使用"><span class="toc-number">2.</span> <span class="toc-text">格式的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bool-变量的输出"><span class="toc-number">2.1.</span> <span class="toc-text">bool 变量的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进制的操作"><span class="toc-number">2.2.</span> <span class="toc-text">进制的操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对齐操作"><span class="toc-number">2.3.</span> <span class="toc-text">对齐操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点型的控制输出"><span class="toc-number">2.4.</span> <span class="toc-text">浮点型的控制输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出指针地址"><span class="toc-number">3.</span> <span class="toc-text">输出指针地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
