@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="兼容">
 <meta property="og:description" content="&amp;#x76EE;&amp;#x7684;&amp;#x4E3B;&amp;#x8981;&amp;#x662F;&amp;#x5728;&amp;#x4F7F;&amp;#x7528;JNI&amp;#x7684;&amp;#x65F6;&amp;#x5019;, &amp;#x7ECF;&amp;#x5E38;&amp;#x6709;&amp;#x4E9B;&amp;#x57FA;&amp;#x672C;&amp;#x5185;&amp;#x5BB9;&amp;#x8981;&amp;#x53BB;&amp;#x7F51;&amp;#x4E0A;&amp;#x627E;, &amp;">
 <meta property="og:image" content="http://yoursite.com/2016/05/21/ndk_always/001_type.png">
-<meta property="og:updated_time" content="2016-05-26T02:30:55.801Z">
+<meta property="og:updated_time" content="2016-06-02T05:48:11.987Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NDK常用备份">
 <meta name="twitter:description" content="&amp;#x76EE;&amp;#x7684;&amp;#x4E3B;&amp;#x8981;&amp;#x662F;&amp;#x5728;&amp;#x4F7F;&amp;#x7528;JNI&amp;#x7684;&amp;#x65F6;&amp;#x5019;, &amp;#x7ECF;&amp;#x5E38;&amp;#x6709;&amp;#x4E9B;&amp;#x57FA;&amp;#x672C;&amp;#x5185;&amp;#x5BB9;&amp;#x8981;&amp;#x53BB;&amp;#x7F51;&amp;#x4E0A;&amp;#x627E;, &amp;">
@@ -50,7 +50,7 @@
 				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
 				<h2 class="blog-motto">这是一场不停的追逐!</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -66,7 +66,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -89,14 +89,14 @@
 		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-21T05:56:46.411Z" itemprop="datePublished"> 發表於 2016-05-21</time>
+    <time datetime="2016-05-21T05:56:46.411Z" itemprop="datePublished"> Published 2016-05-21</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#目的"><span class="toc-number">1.</span> <span class="toc-text">目的</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些重要的网址"><span class="toc-number">1.1.</span> <span class="toc-text">一些重要的网址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-jni-与-c-数据类型对照图"><span class="toc-number">1.2.</span> <span class="toc-text">Java, jni 与 c++ 数据类型对照图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#native接口命名规则"><span class="toc-number">1.3.</span> <span class="toc-text">native接口命名规则</span></a></li></ol></li></ol>
 		
@@ -155,13 +155,13 @@
 <td style="text-align:left">float</td>
 <td style="text-align:left">jfloat</td>
 <td style="text-align:left">float</td>
-<td style="text-align:left">&#x6709;&#x7B26;&#x53F7;32&#x4F4D;&#x6574;&#x6570;</td>
+<td style="text-align:left">&#x6709;&#x7B26;&#x53F7;32&#x4F4D;&#x6D6E;&#x70B9;&#x6570;</td>
 </tr>
 <tr>
 <td style="text-align:left">double</td>
 <td style="text-align:left">jdouble</td>
 <td style="text-align:left">double</td>
-<td style="text-align:left">&#x6709;&#x7B26;&#x53F7;64&#x4F4D;&#x6574;&#x6570;</td>
+<td style="text-align:left">&#x6709;&#x7B26;&#x53F7;64&#x4F4D;&#x6D6E;&#x70B9;&#x6570;</td>
 </tr>
 </tbody>
 </table>
@@ -192,7 +192,8 @@
 </tr>
 </tbody>
 </table>
-<p><strong>&#x7C7B;&#x578B;&#x5BF9;&#x5E94;&#x7684;&#x7B7E;&#x540D;:</strong> <img src="/2016/05/21/ndk_always/001_type.png" alt=""></p>
+<p><strong>&#x7C7B;&#x578B;&#x5BF9;&#x5E94;&#x7684;&#x7B7E;&#x540D;:</strong></p>
+<p><img src="/2016/05/21/ndk_always/001_type.png" alt=""></p>
 <h2 id="native&#x63A5;&#x53E3;&#x547D;&#x540D;&#x89C4;&#x5219;"><a href="#native&#x63A5;&#x53E3;&#x547D;&#x540D;&#x89C4;&#x5219;" class="headerlink" title="native&#x63A5;&#x53E3;&#x547D;&#x540D;&#x89C4;&#x5219;"></a>native&#x63A5;&#x53E3;&#x547D;&#x540D;&#x89C4;&#x5219;</h2><p><strong>&#x5BF9;&#x4E8E;&#x4F20;&#x7EDF;&#x7684;JNI&#x7F16;&#x7A0B;&#x6765;&#x8BF4;&#xFF0C;JNI&#x65B9;&#x6CD5;&#x8DDF;Java&#x7C7B;&#x65B9;&#x6CD5;&#x7684;&#x540D;&#x79F0;&#x4E4B;&#x95F4;&#x6709;&#x4E00;&#x5B9A;&#x7684;&#x5BF9;&#x5E94;&#x5173;&#x7CFB;&#xFF0C;&#x8981;&#x9075;&#x5FAA;&#x4E00;&#x5B9A;&#x7684;&#x547D;&#x540D;&#x89C4;&#x5219;&#xFF0C;&#x5982;&#x4E0B;&#xFF1A;</strong></p>
 <ol>
 <li>&#x524D;&#x7F00;&#xFF1A; Java_</li>
@@ -259,36 +260,32 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#目的"><span class="toc-number">1.</span> <span class="toc-text">目的</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些重要的网址"><span class="toc-number">1.1.</span> <span class="toc-text">一些重要的网址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-jni-与-c-数据类型对照图"><span class="toc-number">1.2.</span> <span class="toc-text">Java, jni 与 c++ 数据类型对照图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#native接口命名规则"><span class="toc-number">1.3.</span> <span class="toc-text">native接口命名规则</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/vim/" title="vim">vim<sup>3</sup></a></li>
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+				<li><a href="/tags/vim/" title="vim">vim<sup>4</sup></a></li>
 			
 		
 			
@@ -296,15 +293,31 @@
 			
 		
 			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cmd/" title="cmd">cmd<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cpp/" title="cpp">cpp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
 			
 		
 			
@@ -312,7 +325,7 @@
 			
 		
 			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
 			
 		
 			
@@ -328,7 +341,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -347,7 +360,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -572,7 +585,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

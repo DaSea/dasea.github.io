@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="兼容">
 <meta property="og:description" content="&amp;#x907F;&amp;#x514D;&amp;#x5185;&amp;#x5B58;&amp;#x6CC4;&amp;#x9732;&amp;#x4E3B;&amp;#x8981;&amp;#x8BB2;&amp;#x8FF0;&amp;#x4E86;NDK&amp;#x7F16;&amp;#x7A0B;&amp;#x4E2D;&amp;#x53EF;&amp;#x80FD;&amp;#x7684;&amp;#x5185;&amp;#x5B58;&amp;#x6CC4;&amp;#x9732;!
 &amp;#x6587;&amp;#x7AE0;&amp;#x6536;&amp;#x">
-<meta property="og:updated_time" content="2016-05-21T06:30:51.546Z">
+<meta property="og:updated_time" content="2016-08-11T01:33:25.882Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NDK内存使用问题">
 <meta name="twitter:description" content="&amp;#x907F;&amp;#x514D;&amp;#x5185;&amp;#x5B58;&amp;#x6CC4;&amp;#x9732;&amp;#x4E3B;&amp;#x8981;&amp;#x8BB2;&amp;#x8FF0;&amp;#x4E86;NDK&amp;#x7F16;&amp;#x7A0B;&amp;#x4E2D;&amp;#x53EF;&amp;#x80FD;&amp;#x7684;&amp;#x5185;&amp;#x5B58;&amp;#x6CC4;&amp;#x9732;!
@@ -51,7 +51,7 @@
 				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
 				<h2 class="blog-motto">这是一场不停的追逐!</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -67,7 +67,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -90,14 +90,14 @@
 		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-21T05:56:46.432Z" itemprop="datePublished"> 發表於 2016-05-21</time>
+    <time datetime="2016-05-21T05:56:46.432Z" itemprop="datePublished"> Published 2016-05-21</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#避免内存泄露"><span class="toc-number">1.</span> <span class="toc-text">避免内存泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#文章收录"><span class="toc-number">1.1.</span> <span class="toc-text">文章收录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#需要释放的内容"><span class="toc-number">1.2.</span> <span class="toc-text">需要释放的内容</span></a></li></ol></li></ol>
 		
@@ -105,7 +105,8 @@
 		
 		<h1 id="&#x907F;&#x514D;&#x5185;&#x5B58;&#x6CC4;&#x9732;"><a href="#&#x907F;&#x514D;&#x5185;&#x5B58;&#x6CC4;&#x9732;" class="headerlink" title="&#x907F;&#x514D;&#x5185;&#x5B58;&#x6CC4;&#x9732;"></a>&#x907F;&#x514D;&#x5185;&#x5B58;&#x6CC4;&#x9732;</h1><p><strong>&#x4E3B;&#x8981;&#x8BB2;&#x8FF0;&#x4E86;NDK&#x7F16;&#x7A0B;&#x4E2D;&#x53EF;&#x80FD;&#x7684;&#x5185;&#x5B58;&#x6CC4;&#x9732;!</strong></p>
 <h2 id="&#x6587;&#x7AE0;&#x6536;&#x5F55;"><a href="#&#x6587;&#x7AE0;&#x6536;&#x5F55;" class="headerlink" title="&#x6587;&#x7AE0;&#x6536;&#x5F55;"></a>&#x6587;&#x7AE0;&#x6536;&#x5F55;</h2><p><a href="http://www.ibm.com/developerworks/cn/java/j-lo-jnileak/index.html?ca=drs-" target="_blank" rel="external">&#x5728;Jni&#x7F16;&#x7A0B;&#x4E2D;&#x907F;&#x514D;&#x5185;&#x5B58;&#x6CC4;&#x9732;</a></p>
-<h2 id="&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;"><a href="#&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;" class="headerlink" title="&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;"></a>&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;</h2>  
+<h2 id="&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;"><a href="#&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;" class="headerlink" title="&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;"></a>&#x9700;&#x8981;&#x91CA;&#x653E;&#x7684;&#x5185;&#x5BB9;</h2><p>&#x540E;&#x7EED;&#x6574;&#x7406;</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -136,10 +137,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/05/21/markdown_rumen/" title="Markdown快速入门">
+ <a href="/2016/05/21/markdown_atom/" title="Atom默认对markdown的支持">
   <strong>上一篇：</strong><br/>
   <span>
-  Markdown快速入门</span>
+  Atom默认对markdown的支持</span>
 </a>
 </div>
 
@@ -157,36 +158,32 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#避免内存泄露"><span class="toc-number">1.</span> <span class="toc-text">避免内存泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#文章收录"><span class="toc-number">1.1.</span> <span class="toc-text">文章收录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#需要释放的内容"><span class="toc-number">1.2.</span> <span class="toc-text">需要释放的内容</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/vim/" title="vim">vim<sup>3</sup></a></li>
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+				<li><a href="/tags/vim/" title="vim">vim<sup>4</sup></a></li>
 			
 		
 			
@@ -194,15 +191,31 @@
 			
 		
 			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cmd/" title="cmd">cmd<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cpp/" title="cpp">cpp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
 			
 		
 			
@@ -210,7 +223,7 @@
 			
 		
 			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
 			
 		
 			
@@ -226,7 +239,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -245,7 +258,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -470,7 +483,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

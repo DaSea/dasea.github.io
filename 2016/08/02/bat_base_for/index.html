@@ -1,0 +1,549 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>批处理之for语句 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="for&amp;#x57FA;&amp;#x672C;&amp;#x7528;&amp;#x6CD5;
+cmd&amp;#x7A97;&amp;#x53E3;: for %i in (command1) do command2
+&amp;#x6279;&amp;#x5904;&amp;#x7406;&amp;#x4E2D;: for %%i in (command1) do command2
+
+&amp;#x57FA;&amp;#x672C;&amp;#x8981;&amp;#x7D20;:
+
+or&amp;#x3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="批处理之for语句">
+<meta property="og:url" content="http://yoursite.com/2016/08/02/bat_base_for/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="for&amp;#x57FA;&amp;#x672C;&amp;#x7528;&amp;#x6CD5;
+cmd&amp;#x7A97;&amp;#x53E3;: for %i in (command1) do command2
+&amp;#x6279;&amp;#x5904;&amp;#x7406;&amp;#x4E2D;: for %%i in (command1) do command2
+
+&amp;#x57FA;&amp;#x672C;&amp;#x8981;&amp;#x7D20;:
+
+or&amp;#x3">
+<meta property="og:updated_time" content="2016-08-02T03:26:59.036Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="批处理之for语句">
+<meta name="twitter:description" content="for&amp;#x57FA;&amp;#x672C;&amp;#x7528;&amp;#x6CD5;
+cmd&amp;#x7A97;&amp;#x53E3;: for %i in (command1) do command2
+&amp;#x6279;&amp;#x5904;&amp;#x7406;&amp;#x4E2D;: for %%i in (command1) do command2
+
+&amp;#x57FA;&amp;#x672C;&amp;#x8981;&amp;#x7D20;:
+
+or&amp;#x3">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/02/bat_base_for/" title="批处理之for语句" itemprop="url">批处理之for语句</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-02T01:00:34.018Z" itemprop="datePublished"> Published 2016-08-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#for基本用法"><span class="toc-number">1.</span> <span class="toc-text">for基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文本解析-for-f"><span class="toc-number">2.</span> <span class="toc-text">文本解析: for /f</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">2.1.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切分字符串-delims"><span class="toc-number">2.2.</span> <span class="toc-text">切分字符串: delims=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定点提取-tokens"><span class="toc-number">2.3.</span> <span class="toc-text">定点提取: tokens=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跳过无关内容-直奔主题-skip-n"><span class="toc-number">2.4.</span> <span class="toc-text">跳过无关内容, 直奔主题: skip=n</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#忽略以指定字符打头的行-eol"><span class="toc-number">2.5.</span> <span class="toc-text">忽略以指定字符打头的行: eol=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用哪种格式"><span class="toc-number">2.6.</span> <span class="toc-text">使用哪种格式?</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="for&#x57FA;&#x672C;&#x7528;&#x6CD5;"><a href="#for&#x57FA;&#x672C;&#x7528;&#x6CD5;" class="headerlink" title="for&#x57FA;&#x672C;&#x7528;&#x6CD5;"></a>for&#x57FA;&#x672C;&#x7528;&#x6CD5;</h2><ul>
+<li>cmd&#x7A97;&#x53E3;: for %i in (command1) do command2</li>
+<li>&#x6279;&#x5904;&#x7406;&#x4E2D;: for %%i in (command1) do command2</li>
+</ul>
+<p>&#x57FA;&#x672C;&#x8981;&#x7D20;:</p>
+<ol>
+<li>or&#x3001;in&#x548C;do&#x662F;for&#x8BED;&#x53E5;&#x7684;&#x5173;&#x952E;&#x5B57;&#xFF0C;&#x5B83;&#x4EEC;&#x4E09;&#x4E2A;&#x7F3A;&#x4E00;&#x4E0D;&#x53EF;;</li>
+<li>%%I&#x662F;for&#x8BED;&#x53E5;&#x4E2D;&#x5BF9;&#x5F62;&#x5F0F;&#x53D8;&#x91CF;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x5C31;&#x7B97;&#x5B83;&#x5728;do&#x540E;&#x7684;&#x8BED;&#x53E5;&#x4E2D;&#x6CA1;&#x6709;&#x53C2;&#x4E0E;&#x8BED;&#x53E5;&#x7684;&#x6267;&#x884C;&#xFF0C;&#x4E5F;&#x662F;&#x5FC5;&#x987B;&#x51FA;&#x73B0;&#x7684;;</li>
+<li>in&#x4E4B;&#x540E;&#xFF0C;do&#x4E4B;&#x524D;&#x7684;&#x62EC;&#x53F7;&#x4E0D;&#x80FD;&#x7701;&#x7565;;</li>
+<li>command1&#x548C;command2&#x8868;&#x793A;&#x5B57;&#x7B26;&#x4E32;&#x3001;&#x53D8;&#x91CF;&#x6216;&#x547D;&#x4EE4;&#x8BED;&#x53E5;;</li>
+<li>command1&#x4E4B;&#x95F4;&#x7684;&#x5143;&#x7D20;&#x9700;&#x8981;&#x7528;&#x7A7A;&#x683C;&#x952E;, tab&#x952E;, &#x9017;&#x53F7;, &#x5206;&#x53F7;, &#x6216;&#x7B49;&#x53F7;&#x5206;&#x5272;;</li>
+</ol>
+<p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">for %%i in (bbs.bathome.cn) do (</span><br><span class="line">    echo %%i</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">for %%i in (bbs,bathome,cn) do (</span><br><span class="line">    echo %%i</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">set str=c d e f g h i j k l m n o p q r s t u v w x y z</span><br><span class="line">echo &#x5F53;&#x524D;&#x786C;&#x76D8;&#x7684;&#x5206;&#x533A;&#x6709;&#xFF1A;</span><br><span class="line">for %%i in (%str%) do if exist %%i: echo %%i:</span><br><span class="line"></span><br><span class="line">echo ====&#x5217;&#x51FA;&#x6240;&#x6709;&#x6587;&#x4EF6;====</span><br><span class="line">for %%i in (*.*) do (</span><br><span class="line">    echo &quot;%%i&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo ====&#x5217;&#x51FA;txt&#x7C7B;&#x578B;&#x7684;&#x6587;&#x4EF6;====</span><br><span class="line">for %%i in (*.txt) do (</span><br><span class="line">    echo &quot;%%i&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo ====&#x5217;&#x51FA;&#x6587;&#x4EF6;&#x540D;&#x53EA;&#x6709;3&#x4E2A;&#x5B57;&#x7B26;&#x7684;bat&#x6587;&#x4EF6;====</span><br><span class="line">for %%i in (???.bat) do (</span><br><span class="line">    echo &quot;%%i&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo ====&#x5FAA;&#x73AF;&#x5EFA;&#x7ACB;&#x4E09;&#x4E2A;&#x7A7A;&#x6587;&#x4EF6;====</span><br><span class="line">for %%i in (1,2,3) do (</span><br><span class="line">    type nul&gt;test%%i.txt</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h2 id="&#x6587;&#x672C;&#x89E3;&#x6790;-for-f"><a href="#&#x6587;&#x672C;&#x89E3;&#x6790;-for-f" class="headerlink" title="&#x6587;&#x672C;&#x89E3;&#x6790;: for /f"></a>&#x6587;&#x672C;&#x89E3;&#x6790;: for /f</h2><h3 id="&#x57FA;&#x672C;&#x7528;&#x6CD5;"><a href="#&#x57FA;&#x672C;&#x7528;&#x6CD5;" class="headerlink" title="&#x57FA;&#x672C;&#x7528;&#x6CD5;"></a>&#x57FA;&#x672C;&#x7528;&#x6CD5;</h3><p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rem &#x6BCF;&#x6B21;&#x8BFB;&#x53D6;&#x6587;&#x672C;&#x7684;&#x4E00;&#x884C;&#x6570;&#x636E;</span><br><span class="line">for /f %%i in (test1.txt) do (</span><br><span class="line">    echo ===========</span><br><span class="line">    echo %%i</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="&#x5207;&#x5206;&#x5B57;&#x7B26;&#x4E32;-delims"><a href="#&#x5207;&#x5206;&#x5B57;&#x7B26;&#x4E32;-delims" class="headerlink" title="&#x5207;&#x5206;&#x5B57;&#x7B26;&#x4E32;: delims="></a>&#x5207;&#x5206;&#x5B57;&#x7B26;&#x4E32;: delims=</h3><p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">echo -----------------------------------------</span><br><span class="line">:: &#x5982;&#x679C;&#x6CA1;&#x6709;&#x7528;delims, &#x9ED8;&#x8BA4;&#x4F1A;&#x4EE5;&#x7A7A;&#x683C;&#x6216;&#x8005;tab&#x952E;&#x4E3A;&#x5206;&#x5272;&#x7B26;</span><br><span class="line">for /f %%i in (test1.txt) do (</span><br><span class="line">    echo ===========</span><br><span class="line">    echo %%i</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo -----------------------------------------</span><br><span class="line">:: &#x8FD9;&#x91CC;&#x4EE5;&#x9017;&#x53F7;&#x4E3A;&#x5206;&#x5272;&#x7B26;</span><br><span class="line">for /f &quot;delims=,&quot; %%i in (test1.txt) do (</span><br><span class="line">    echo ===========</span><br><span class="line">    echo %%i</span><br><span class="line">)</span><br><span class="line">echo -----------------------------------------</span><br><span class="line">:: &#x8FD9;&#x91CC;&#x4EE5;&#x70B9;&#x53F7;&#x548C;&#x9017;&#x53F7;&#x4E3A;&#x5206;&#x5272;&#x7B26;, &#x622A;&#x53D6;&#x524D;&#x9762;&#x7684;&#x5185;&#x5BB9;</span><br><span class="line">for /f &quot;delims=.,&quot; %%i in (test1.txt) do (</span><br><span class="line">    echo ===========</span><br><span class="line">    echo %%i</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="&#x5B9A;&#x70B9;&#x63D0;&#x53D6;-tokens"><a href="#&#x5B9A;&#x70B9;&#x63D0;&#x53D6;-tokens" class="headerlink" title="&#x5B9A;&#x70B9;&#x63D0;&#x53D6;: tokens="></a>&#x5B9A;&#x70B9;&#x63D0;&#x53D6;: tokens=</h3><p>&#x8F85;&#x52A9;delims, &#x7528;&#x4E8E;&#x63D0;&#x53D6;&#x5177;&#x4F53;&#x7684;&#x4E00;&#x6BB5;<br><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">:: &#x9ED8;&#x8BA4;&#x662F;&#x4EE5;&#x7A7A;&#x683C;&#x4E3A;&#x5206;&#x5272;&#x7B26;</span><br><span class="line">for /f &quot;tokens=1-3&quot; %%i in (test2.txt) do (</span><br><span class="line">    echo %%i</span><br><span class="line">    echo %%j</span><br><span class="line">    echo %%k</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo -----------------------------------------------</span><br><span class="line">for /f &quot;delims=, tokens=2-5&quot; %%i in (test3.txt) do (</span><br><span class="line">    echo %%i</span><br><span class="line">    echo %%j</span><br><span class="line">    echo %%k</span><br><span class="line">    echo %%l</span><br><span class="line">)</span><br><span class="line">echo -----------------------------------------------</span><br><span class="line">for /f &quot;delims=, tokens=2,3-5&quot; %%i in (test3.txt) do (</span><br><span class="line">    echo %%i</span><br><span class="line">    echo %%j</span><br><span class="line">    echo %%k</span><br><span class="line">    echo %%l</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="&#x8DF3;&#x8FC7;&#x65E0;&#x5173;&#x5185;&#x5BB9;-&#x76F4;&#x5954;&#x4E3B;&#x9898;-skip-n"><a href="#&#x8DF3;&#x8FC7;&#x65E0;&#x5173;&#x5185;&#x5BB9;-&#x76F4;&#x5954;&#x4E3B;&#x9898;-skip-n" class="headerlink" title="&#x8DF3;&#x8FC7;&#x65E0;&#x5173;&#x5185;&#x5BB9;, &#x76F4;&#x5954;&#x4E3B;&#x9898;: skip=n"></a>&#x8DF3;&#x8FC7;&#x65E0;&#x5173;&#x5185;&#x5BB9;, &#x76F4;&#x5954;&#x4E3B;&#x9898;: skip=n</h3><p><strong>&#x8DF3;&#x8FC7;n&#x884C;, &#x4ECE;n+1&#x884C;&#x5F00;&#x59CB;</strong><br><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for /f &quot;skip=2&quot; %%i in (test3.txt) do echo %%i</span><br></pre></td></tr></table></figure></p>
+<h3 id="&#x5FFD;&#x7565;&#x4EE5;&#x6307;&#x5B9A;&#x5B57;&#x7B26;&#x6253;&#x5934;&#x7684;&#x884C;-eol"><a href="#&#x5FFD;&#x7565;&#x4EE5;&#x6307;&#x5B9A;&#x5B57;&#x7B26;&#x6253;&#x5934;&#x7684;&#x884C;-eol" class="headerlink" title="&#x5FFD;&#x7565;&#x4EE5;&#x6307;&#x5B9A;&#x5B57;&#x7B26;&#x6253;&#x5934;&#x7684;&#x884C;: eol="></a>&#x5FFD;&#x7565;&#x4EE5;&#x6307;&#x5B9A;&#x5B57;&#x7B26;&#x6253;&#x5934;&#x7684;&#x884C;: eol=</h3><p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">echo -----------------------------------------------</span><br><span class="line">:: &#x5FFD;&#x7565;&#x4EE5;;&#x5F00;&#x5934;&#x7684;&#x884C;</span><br><span class="line">for /f &quot;eol=;&quot; %%i in (test4.txt) do echo %%i</span><br><span class="line"></span><br><span class="line">echo -----------------------------------------------</span><br><span class="line">:: eol&#x540E;&#x9762;&#x53EA;&#x80FD;&#x6307;&#x5B9A;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;</span><br><span class="line">for /f &quot;eol=,&quot; %%i in (test4.txt) do echo %%i</span><br></pre></td></tr></table></figure></p>
+<h3 id="&#x4F7F;&#x7528;&#x54EA;&#x79CD;&#x683C;&#x5F0F;"><a href="#&#x4F7F;&#x7528;&#x54EA;&#x79CD;&#x683C;&#x5F0F;" class="headerlink" title="&#x4F7F;&#x7528;&#x54EA;&#x79CD;&#x683C;&#x5F0F;?"></a>&#x4F7F;&#x7528;&#x54EA;&#x79CD;&#x683C;&#x5F0F;?</h3><ol>
+<li>for /f %%i in (&#x6587;&#x4EF6;&#x540D;) do (&#x2026;)</li>
+<li>for /f %%i in (&#x2018;&#x547D;&#x4EE4;&#x8BED;&#x53E5;&#x2019;) do (&#x2026;)</li>
+<li>for /f %%i in (&#x201C;&#x5B57;&#x7B26;&#x4E32;&#x201D;) do (&#x2026;)</li>
+<li>for /f &#x201C;usebackq&#x201D; %%i in (&#x201C;&#x6587;&#x4EF6;&#x540D;&#x201D;) do (&#x2026;&#x2026;)</li>
+<li>for /f &#x201C;usebackq&#x201D; %%i in (<code>&#x547D;&#x4EE4;&#x8BED;&#x53E5;</code>) do (&#x2026;&#x2026;)</li>
+<li>for /f &#x201C;usebackq&#x201D; %%i in (&#x2018;&#x5B57;&#x7B26;&#x4E32;&#x2019;) do (&#x2026;&#x2026;)&#x3000;</li>
+</ol>
+<p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo -----------------------------------------------</span><br><span class="line">:: &#x5148;&#x627E;&#x5230;&#x6587;&#x4EF6;,&#x5728;&#x9010;&#x4E2A;&#x8F93;&#x51FA;</span><br><span class="line">for /f %%i in (&apos;dir /a-d /b test*.txt&apos;) do echo %%i</span><br></pre></td></tr></table></figure></p>
+<p><strong>&#x5F53;&#x8DEF;&#x5F84;&#x4E2D;&#x5305;&#x542B;&#x7279;&#x6B8A;&#x5B57;&#x7B26;&#x65F6;,&#x9700;&#x8981;&#x4F7F;&#x7528;usebackq, &#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x589E;&#x5F3A;&#x578B;&#x53C2;&#x6570;, &#x4F7F;&#x7528;&#x540E;, command1&#x9700;&#x8981;&#x53D8;&#x52A8;&#x5982;&#x4E0B;:</strong></p>
+<ol>
+<li>&#x5982;&#x679C;&#x7B2C;&#x4E00;&#x4E2A;&#x62EC;&#x53F7;&#x91CC;&#x7684;&#x5BF9;&#x8C61;&#x662F;&#x4E00;&#x6761;&#x547D;&#x4EE4;&#x8BED;&#x53E5;&#x7684;&#x8BDD;&#xFF0C;&#x539F;&#x6765;&#x7684;&#x5355;&#x5F15;&#x53F7;&#x2019;&#x8981;&#x6539;&#x4E3A;&#x540E;&#x5F15;&#x53F7; `</li>
+<li>&#x5982;&#x679C;&#x7B2C;&#x4E00;&#x4E2A;&#x62EC;&#x53F7;&#x91CC;&#x7684;&#x5BF9;&#x8C61;&#x662F;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x8BDD;&#xFF0C;&#x539F;&#x6765;&#x7684;&#x53CC;&#x5F15;&#x53F7;&#x201D;&#x8981;&#x6539;&#x4E3A;&#x5355;&#x5F15;&#x53F7;&#x2019;</li>
+<li>&#x5982;&#x679C;&#x7B2C;&#x4E00;&#x4E2A;&#x62EC;&#x53F7;&#x91CC;&#x7684;&#x5BF9;&#x8C61;&#x662F;&#x6587;&#x4EF6;&#x540D;&#x7684;&#x8BDD;&#xFF0C;&#x8981;&#x7528;&#x53CC;&#x5F15;&#x53F7;&#x201D;&#x62EC;&#x8D77;&#x6765;</li>
+</ol>
+<p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">echo ------------------------------------------------</span><br><span class="line">:: &#x627E;&#x4E0D;&#x5230;&#x6587;&#x4EF6;</span><br><span class="line">for /f %%i in (test .txt) do echo %%i</span><br><span class="line">:: &#x5F53;&#x6210;&#x5B57;&#x7B26;&#x4E32;&#x5904;&#x7406;</span><br><span class="line">for /f %%i in (&quot;test .txt&quot;) do echo %%i</span><br><span class="line">:: &#x9519;&#x8BEF;</span><br><span class="line">for /f %%i in (&apos;test .txt&apos;) do echo %%i</span><br><span class="line">:: &#x627E;&#x4E0D;&#x5230;&#x6587;&#x4EF6;</span><br><span class="line">for /f %%i in (`test .txt`) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------</span><br><span class="line">:: for /f &quot;delims==&quot; %%i in (&apos;set&apos;) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------</span><br><span class="line">:: &#x4F7F;&#x7528;usebakq&#x65F6;&#x5019;&#x9700;&#x8981;&#x5C06;(command1)&#x7684;&#x5355;&#x5F15;&#x53F7;&#x6539;&#x4E3A; &#x53CD;&#x5F15;&#x53F7; `(1&#x65C1;&#x8FB9;&#x7684;)</span><br><span class="line">:: for /f &quot;usebackq delims==&quot; %%i in (`set`) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------</span><br><span class="line">for /f &quot;usebackq&quot; %%i in (&quot;test .txt&quot;) do echo %%i</span><br><span class="line">pause</span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/bat/">bat</a><a href="/tags/cmd/">cmd</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/02/bat_base_for/" data-title="批处理之for语句 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/02/bat_base_for2/" title="批处理之for第二篇">
+  <strong>上一篇：</strong><br/>
+  <span>
+  批处理之for第二篇</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/07/30/bat_base_if/"  title="批处理之 if, set语句">
+ <strong>下一篇：</strong><br/> 
+ <span>批处理之 if, set语句
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#for基本用法"><span class="toc-number">1.</span> <span class="toc-text">for基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文本解析-for-f"><span class="toc-number">2.</span> <span class="toc-text">文本解析: for /f</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">2.1.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切分字符串-delims"><span class="toc-number">2.2.</span> <span class="toc-text">切分字符串: delims=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定点提取-tokens"><span class="toc-number">2.3.</span> <span class="toc-text">定点提取: tokens=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跳过无关内容-直奔主题-skip-n"><span class="toc-number">2.4.</span> <span class="toc-text">跳过无关内容, 直奔主题: skip=n</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#忽略以指定字符打头的行-eol"><span class="toc-number">2.5.</span> <span class="toc-text">忽略以指定字符打头的行: eol=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用哪种格式"><span class="toc-number">2.6.</span> <span class="toc-text">使用哪种格式?</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cmd/" title="cmd">cmd<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

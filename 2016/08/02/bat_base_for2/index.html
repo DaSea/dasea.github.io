@@ -1,0 +1,514 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>批处理之for第二篇 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="for&amp;#x5FAA;&amp;#x73AF;&amp;#x8BED;&amp;#x53E5;for /d &amp;#x53C2;&amp;#x6570; &amp;#x67E5;&amp;#x8BE2;&amp;#x76EE;&amp;#x5F55;for /d %%variable in (set) do command [command-parameters]
+
+&amp;#x4E3B;&amp;#x8981;&amp;#x7528;&amp;#x4E8E;&amp;#x76EE;&amp;#x5F55;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="批处理之for第二篇">
+<meta property="og:url" content="http://yoursite.com/2016/08/02/bat_base_for2/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="for&amp;#x5FAA;&amp;#x73AF;&amp;#x8BED;&amp;#x53E5;for /d &amp;#x53C2;&amp;#x6570; &amp;#x67E5;&amp;#x8BE2;&amp;#x76EE;&amp;#x5F55;for /d %%variable in (set) do command [command-parameters]
+
+&amp;#x4E3B;&amp;#x8981;&amp;#x7528;&amp;#x4E8E;&amp;#x76EE;&amp;#x5F55;&amp;">
+<meta property="og:updated_time" content="2016-08-02T04:12:11.170Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="批处理之for第二篇">
+<meta name="twitter:description" content="for&amp;#x5FAA;&amp;#x73AF;&amp;#x8BED;&amp;#x53E5;for /d &amp;#x53C2;&amp;#x6570; &amp;#x67E5;&amp;#x8BE2;&amp;#x76EE;&amp;#x5F55;for /d %%variable in (set) do command [command-parameters]
+
+&amp;#x4E3B;&amp;#x8981;&amp;#x7528;&amp;#x4E8E;&amp;#x76EE;&amp;#x5F55;&amp;">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/02/bat_base_for2/" title="批处理之for第二篇" itemprop="url">批处理之for第二篇</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-02T03:26:59.195Z" itemprop="datePublished"> Published 2016-08-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#for循环语句"><span class="toc-number">1.</span> <span class="toc-text">for循环语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#for-d-参数-查询目录"><span class="toc-number">1.1.</span> <span class="toc-text">for /d 参数 查询目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-r-参数-遍历搜索"><span class="toc-number">1.2.</span> <span class="toc-text">for /r 参数 遍历搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-l-参数-建立索引"><span class="toc-number">1.3.</span> <span class="toc-text">for /l 参数 建立索引</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="for&#x5FAA;&#x73AF;&#x8BED;&#x53E5;"><a href="#for&#x5FAA;&#x73AF;&#x8BED;&#x53E5;" class="headerlink" title="for&#x5FAA;&#x73AF;&#x8BED;&#x53E5;"></a>for&#x5FAA;&#x73AF;&#x8BED;&#x53E5;</h2><h3 id="for-d-&#x53C2;&#x6570;-&#x67E5;&#x8BE2;&#x76EE;&#x5F55;"><a href="#for-d-&#x53C2;&#x6570;-&#x67E5;&#x8BE2;&#x76EE;&#x5F55;" class="headerlink" title="for /d &#x53C2;&#x6570; &#x67E5;&#x8BE2;&#x76EE;&#x5F55;"></a>for /d &#x53C2;&#x6570; &#x67E5;&#x8BE2;&#x76EE;&#x5F55;</h3><p><strong>for /d %%variable in (set) do command [command-parameters]</strong></p>
+<ul>
+<li>&#x4E3B;&#x8981;&#x7528;&#x4E8E;&#x76EE;&#x5F55;&#x641C;&#x7D22;, &#x4E0D;&#x4F1A;&#x641C;&#x7D22;&#x6587;&#x4EF6;</li>
+<li>&#x53EA;&#x80FD;&#x641C;&#x7D22;&#x6307;&#x5B9A;&#x76EE;&#x5F55;&#x548C;&#x7F3A;&#x7701;&#x60C5;&#x51B5;&#x4E0B;&#x7684;&#x5F53;&#x524D;&#x76EE;&#x5F55;, &#x4E0D;&#x80FD;&#x641C;&#x7D22;&#x5B50;&#x76EE;&#x5F55;</li>
+</ul>
+<p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line"></span><br><span class="line">echo -------------------------------------------------------</span><br><span class="line">:: &#x6253;&#x5370;c&#x76D8;&#x76EE;&#x5F55;</span><br><span class="line">for /d %%i in (c:\*) do echo %%i</span><br><span class="line"></span><br><span class="line">echo -------------------------------------------------------</span><br><span class="line">:: &#x6253;&#x5370;c&#x76D8;&#x76EE;&#x5F55;&#x4E94;&#x4E2A;&#x5B57;&#x7B26;&#x7684;&#x76EE;&#x5F55;</span><br><span class="line">for /d %%i in (?????) do echo %%i</span><br><span class="line"></span><br><span class="line">echo -------------------------------------------------------</span><br><span class="line">:: &#x5982;&#x679C;&#x8DEF;&#x5F84;&#x6709;&#x7A7A;&#x683C;, &#x7528;&#x53CC;&#x5F15;&#x53F7;</span><br><span class="line">for /d %%i in (&quot;c:\Program files\*&quot;) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: &#x641C;&#x7D22;&#x4EE5;w&#x5F00;&#x5934;&#x7684;</span><br><span class="line">for /d %%i in (c:\w*) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: &#x641C;&#x7D22;&#x4EE5;w&#x5F00;&#x5934;&#x7684;, &#x4EE5;s&#x7ED3;&#x5C3E;&#x7684;</span><br><span class="line">for /d %%i in (c:\w*s) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: &#x5220;&#x9664;&#x5F53;&#x524D;&#x76EE;&#x5F55;&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x5939;</span><br><span class="line">for /d %%i in (*) do rd /s /q &quot;%%i&quot;</span><br><span class="line">:: &#x4E0A;&#x9762;&#x7684;&#x53EF;&#x4EE5;&#x5199;&#x4F5C;&#x5982;&#x4E0B;, &#x6D4B;&#x8BD5;&#x6210;&#x529F;&#x540E;&#xFF0C;&#x628A;echo &#x53BB;&#x6389;&#xFF0C;&#x8FD9;&#x65F6;&#x6267;&#x884C;&#x547D;&#x4EE4;&#x624D;&#x4F1A;&#x751F;&#x6548;&#xFF0C;&#x9632;&#x6B62;&#x51FA;&#x9519;&#xFF01;</span><br><span class="line">for /d %%i in (*)do echo rd /s /q &quot;%%~fi&quot;</span><br><span class="line"></span><br><span class="line">pause</span><br></pre></td></tr></table></figure></p>
+<h3 id="for-r-&#x53C2;&#x6570;-&#x904D;&#x5386;&#x641C;&#x7D22;"><a href="#for-r-&#x53C2;&#x6570;-&#x904D;&#x5386;&#x641C;&#x7D22;" class="headerlink" title="for /r &#x53C2;&#x6570; &#x904D;&#x5386;&#x641C;&#x7D22;"></a>for /r &#x53C2;&#x6570; &#x904D;&#x5386;&#x641C;&#x7D22;</h3><p><code>for /r [[drive:]path] %%variable IN (set) DO command [command-parameters]</code></p>
+<p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: set &#x4E2D;&#x7684;&#x6587;&#x4EF6;&#x540D;&#x5982;&#x679C;&#x542B;&#x6709;&#x901A;&#x914D;&#x7B26;(&#xFF1F;&#x6216;*)&#xFF0C;&#x5219;&#x5217;&#x4E3E;/R &#x53C2;&#x6570;&#x6307;&#x5B9A;&#x7684;&#x76EE;&#x5F55;&#x53CA;&#x5176;&#x4E0B;&#x9762;&#x7684;&#x6240;&#x6709;&#x5B50;&#x76EE;&#x5F55;&#x4E2D;&#x4E0E; set &#x76F8;&#x7B26;&#x5408;&#x7684;</span><br><span class="line">:: &#x6240;&#x6709;&#x6587;&#x4EF6;&#xFF0C;&#x65E0;&#x76F8;&#x7B26;&#x6587;&#x4EF6;&#x7684;&#x76EE;&#x5F55;&#x5219;&#x4E0D;&#x5217;&#x4E3E;&#x3002;</span><br><span class="line">for /r %%i in (*.txt) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: set  &#x4E2D;&#x4E3A;&#x5177;&#x4F53;&#x6587;&#x4EF6;&#x540D;&#xFF0C;&#x4E0D;&#x542B;&#x901A;&#x914D;&#x7B26;&#xFF0C;&#x5219;&#x679A;&#x4E3E;&#x8BE5;&#x76EE;&#x5F55;&#x6811;&#xFF08;&#x5373;&#x5217;&#x4E3E;&#x8BE5;&#x76EE;&#x5F55;&#x53CA;&#x5176;&#x4E0B;&#x9762;&#x7684;&#x6240;&#x6709;&#x5B50;&#x76EE;&#x5F55;&#xFF09;&#xFF0C;</span><br><span class="line">:: &#x800C;&#x4E0D;&#x7BA1;set &#x4E2D;&#x7684;&#x6307;&#x5B9A;&#x6587;&#x4EF6;&#x662F;&#x5426;&#x5B58;&#x5728;&#x3002;&#x8FD9;&#x4E0E;&#x524D;&#x9762;&#x6240;&#x8BF4;&#x7684;&#x5355;&#x70B9;&#xFF08;.&#xFF09;&#x679A;&#x4E3E;&#x76EE;&#x5F55;&#x6811;&#x662F;&#x4E00;&#x4E2A;&#x9053;&#x7406;&#xFF0C;</span><br><span class="line">:: &#x5355;&#x70B9;&#x4EE3;&#x8868;&#x5F53;&#x524D;&#x76EE;&#x5F55;&#xFF0C;&#x4E5F;&#x53EF;&#x89C6;&#x4E3A;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x3002;</span><br><span class="line">for /r %%i in (test.txt) do echo %%i</span><br><span class="line">:: test6.txt&#x4E0D;&#x5B58;&#x5728;&#x4E5F;&#x679A;&#x4E3E;&#x51FA;&#x6765;</span><br><span class="line">for /r %%i in (test6.txt) do echo %%i</span><br><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: &#x5224;&#x65AD;&#x662F;&#x5426;&#x5B58;&#x5728;</span><br><span class="line">for /r %%i in (test.txt) do if exist %%i echo %%i</span><br></pre></td></tr></table></figure></p>
+<h3 id="for-l-&#x53C2;&#x6570;-&#x5EFA;&#x7ACB;&#x7D22;&#x5F15;"><a href="#for-l-&#x53C2;&#x6570;-&#x5EFA;&#x7ACB;&#x7D22;&#x5F15;" class="headerlink" title="for /l &#x53C2;&#x6570; &#x5EFA;&#x7ACB;&#x7D22;&#x5F15;"></a>for /l &#x53C2;&#x6570; &#x5EFA;&#x7ACB;&#x7D22;&#x5F15;</h3><p><code>for /l %%variable in (start,step,end) do command [command-parameters]</code></p>
+<p><strong>&#x8BE5;&#x8BED;&#x53E5;&#x4E2D;(start,step,end)&#x8868;&#x793A;&#x4EE5;&#x589E;&#x91CF;&#x6216;&#x8005;&#x9012;&#x51CF;&#x5F62;&#x5F0F;&#x4ECE;&#x5F00;&#x59CB;&#x5230;&#x7ED3;&#x675F;&#x7684;&#x4E00;&#x4E2A;&#x6570;&#x5B57;&#x5E8F;&#x5217;</strong><br><strong>&#x56E0;&#x6B64;&#xFF0C;(1,1,5)&#x5C06;&#x4EA7;&#x751F;&#x5E8F;&#x5217;1 2 3 4 5&#xFF0C;(5,-1,1) &#x5C06;&#x4EA7;&#x751F;&#x5E8F;&#x5217;5 4 3 2 1</strong></p>
+<p><strong>&#x4F8B;&#x5B50;:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">echo ------------------------------------------------------</span><br><span class="line">for /l %%i in (1,3,10) do echo %%i</span><br><span class="line"></span><br><span class="line">echo ------------------------------------------------------</span><br><span class="line">:: for /l %%i in (1,1,5) do start cmd</span><br><span class="line">for /l %%i in (1,1,5) do md %%i</span><br></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/bat/">bat</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/02/bat_base_for2/" data-title="批处理之for第二篇 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/02/bat_enable_delayed/" title="环境变量延迟扩展">
+  <strong>上一篇：</strong><br/>
+  <span>
+  环境变量延迟扩展</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/02/bat_base_for/"  title="批处理之for语句">
+ <strong>下一篇：</strong><br/> 
+ <span>批处理之for语句
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#for循环语句"><span class="toc-number">1.</span> <span class="toc-text">for循环语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#for-d-参数-查询目录"><span class="toc-number">1.1.</span> <span class="toc-text">for /d 参数 查询目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-r-参数-遍历搜索"><span class="toc-number">1.2.</span> <span class="toc-text">for /r 参数 遍历搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-l-参数-建立索引"><span class="toc-number">1.3.</span> <span class="toc-text">for /l 参数 建立索引</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cmd/" title="cmd">cmd<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

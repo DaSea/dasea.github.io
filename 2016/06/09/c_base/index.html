@@ -1,0 +1,585 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>原码,反码,补码, 大小端 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="&amp;#x539F;&amp;#x7801;, &amp;#x53CD;&amp;#x7801;, &amp;#x8865;&amp;#x7801; &amp;#x8BE6;&amp;#x89E3;&amp;#x673A;&amp;#x5668;&amp;#x6570;&amp;#x4E0E;&amp;#x771F;&amp;#x503C;
+&amp;#x673A;&amp;#x5668;&amp;#x6570;
+
+&amp;#x4E00;&amp;#x4E2A;&amp;#x6570;&amp;#x5728;&amp;#x8BA1;&amp;#x7B97;&amp;#x673A;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原码,反码,补码, 大小端">
+<meta property="og:url" content="http://yoursite.com/2016/06/09/c_base/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="&amp;#x539F;&amp;#x7801;, &amp;#x53CD;&amp;#x7801;, &amp;#x8865;&amp;#x7801; &amp;#x8BE6;&amp;#x89E3;&amp;#x673A;&amp;#x5668;&amp;#x6570;&amp;#x4E0E;&amp;#x771F;&amp;#x503C;
+&amp;#x673A;&amp;#x5668;&amp;#x6570;
+
+&amp;#x4E00;&amp;#x4E2A;&amp;#x6570;&amp;#x5728;&amp;#x8BA1;&amp;#x7B97;&amp;#x673A;">
+<meta property="og:updated_time" content="2016-08-11T01:23:07.467Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="原码,反码,补码, 大小端">
+<meta name="twitter:description" content="&amp;#x539F;&amp;#x7801;, &amp;#x53CD;&amp;#x7801;, &amp;#x8865;&amp;#x7801; &amp;#x8BE6;&amp;#x89E3;&amp;#x673A;&amp;#x5668;&amp;#x6570;&amp;#x4E0E;&amp;#x771F;&amp;#x503C;
+&amp;#x673A;&amp;#x5668;&amp;#x6570;
+
+&amp;#x4E00;&amp;#x4E2A;&amp;#x6570;&amp;#x5728;&amp;#x8BA1;&amp;#x7B97;&amp;#x673A;">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/06/09/c_base/" title="原码,反码,补码, 大小端" itemprop="url">原码,反码,补码, 大小端</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2016-06-09T03:52:00.046Z" itemprop="datePublished"> Published 2016-06-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原码-反码-补码-详解"><span class="toc-number">1.</span> <span class="toc-text">原码, 反码, 补码 详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#机器数与真值"><span class="toc-number">1.1.</span> <span class="toc-text">机器数与真值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用原码-反码-补码的原因"><span class="toc-number">1.2.</span> <span class="toc-text">使用原码,反码,补码的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原码-反码-补码-再深入"><span class="toc-number">1.3.</span> <span class="toc-text">原码,反码, 补码 再深入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大端小端"><span class="toc-number">2.</span> <span class="toc-text">大端小端</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="&#x539F;&#x7801;-&#x53CD;&#x7801;-&#x8865;&#x7801;-&#x8BE6;&#x89E3;"><a href="#&#x539F;&#x7801;-&#x53CD;&#x7801;-&#x8865;&#x7801;-&#x8BE6;&#x89E3;" class="headerlink" title="&#x539F;&#x7801;, &#x53CD;&#x7801;, &#x8865;&#x7801; &#x8BE6;&#x89E3;"></a>&#x539F;&#x7801;, &#x53CD;&#x7801;, &#x8865;&#x7801; &#x8BE6;&#x89E3;</h2><h3 id="&#x673A;&#x5668;&#x6570;&#x4E0E;&#x771F;&#x503C;"><a href="#&#x673A;&#x5668;&#x6570;&#x4E0E;&#x771F;&#x503C;" class="headerlink" title="&#x673A;&#x5668;&#x6570;&#x4E0E;&#x771F;&#x503C;"></a>&#x673A;&#x5668;&#x6570;&#x4E0E;&#x771F;&#x503C;</h3><ol>
+<li><p>&#x673A;&#x5668;&#x6570;</p>
+<ul>
+<li>&#x4E00;&#x4E2A;&#x6570;&#x5728;&#x8BA1;&#x7B97;&#x673A;&#x4E2D;&#x7684;&#x4E8C;&#x8FDB;&#x5236;&#x8868;&#x793A;&#x5F62;&#x5F0F;, &#x53EB;&#x505A;&#x8FD9;&#x4E2A;&#x6570;&#x7684;&#x673A;&#x5668;&#x6570;;</li>
+<li>&#x673A;&#x5668;&#x6570;&#x662F;&#x5E26;&#x7B26;&#x53F7;&#x7684;, &#x4F7F;&#x7528;&#x6700;&#x9AD8;&#x4F4D;&#x4E3A;&#x7B26;&#x53F7;&#x4F4D;, &#x6B63;&#x6570;&#x4E3A;0, &#x8D1F;&#x6570;&#x4E3A;1;</li>
+<li>&#x5982;: +3:0000 0011; -3:1000 0011; &#x8FD9;&#x91CC;&#x7684;&#x4E8C;&#x8FDB;&#x5236;&#x5C31;&#x662F;&#x673A;&#x5668;&#x6570;;</li>
+</ul>
+</li>
+<li><p>&#x771F;&#x503C;</p>
+<ul>
+<li>&#x56E0;&#x4E3A;&#x7B2C;&#x4E00;&#x4F4D;&#x4E3A;&#x7B26;&#x53F7;&#x4F4D;, &#x6240;&#x4EE5;&#x673A;&#x5668;&#x6570;&#x7684;&#x5F62;&#x5F0F;&#x503C;&#x5C31;&#x4E0D;&#x7B49;&#x4E8E;&#x771F;&#x6B63;&#x7684;&#x6570;&#x503C;;</li>
+<li>&#x5982;:1000 0011, &#x5176;&#x6700;&#x9AD8;&#x4F4D;1&#x4EE3;&#x8868;&#x8D1F;, &#x5176;&#x771F;&#x6B63;&#x6570;&#x503C;&#x662F;-3&#x800C;&#x4E0D;&#x662F;&#x5F62;&#x5F0F;&#x503C;131;</li>
+<li>&#x5C06;&#x7B26;&#x53F7;&#x4F4D;&#x7684;&#x673A;&#x5668;&#x6570;&#x5BF9;&#x5E94;&#x7684;&#x771F;&#x6B63;&#x7684;&#x6570;&#x503C;&#x79F0;&#x4E3A;&#x673A;&#x5668;&#x6570;&#x7684;&#x771F;&#x503C;;</li>
+<li>&#x5982;: 0000 0001&#x7684;&#x771F;&#x503C;&#x662F;: +1; 1000 0001&#x7684;&#x771F;&#x503C;&#x662F;: -1;</li>
+</ul>
+</li>
+</ol>
+<p>==&#x539F;&#x7801;, &#x53CD;&#x7801;, &#x8865;&#x7801;&#x7684;&#x57FA;&#x7840;&#x6982;&#x5FF5;&#x548C;&#x8BA1;&#x7B97;&#x65B9;&#x6CD5;==</p>
+<ol>
+<li><p>&#x539F;&#x7801;</p>
+<ul>
+<li>&#x539F;&#x7801;&#x5C31;&#x662F;&#x7B26;&#x53F7;&#x4F4D;&#x52A0;&#x4E0A;&#x771F;&#x503C;&#x7684;&#x7EDD;&#x5BF9;&#x503C;</li>
+<li>&#x7B2C;&#x4E00;&#x4F4D;&#x4E3A;&#x7B26;&#x53F7;&#x4F4D;,&#x6240;&#x4EE5;8&#x4F4D;&#x4E8C;&#x8FDB;&#x5236;&#x7684;&#x8303;&#x56F4;&#x4E3A;: [1111 111, 0111 111]; [-127, 127]</li>
+<li>&#x4E0A;&#x9762;&#x7684;&#x8303;&#x56F4;&#x7F3A;-128? &#x540E;&#x9762;&#x89E3;&#x91CA;.</li>
+<li>&#x6700;&#x7B26;&#x5408;&#x4EBA;&#x8111;&#x7684;&#x65B9;&#x5F0F;;</li>
+</ul>
+</li>
+<li><p>&#x53CD;&#x7801;</p>
+<ul>
+<li>&#x6B63;&#x6570;&#x7684;&#x53CD;&#x7801;&#x662F;&#x5176;&#x672C;&#x8EAB;;</li>
+<li><p>&#x8D1F;&#x6570;&#x7684;&#x53CD;&#x7801;&#x662F;&#x5728;&#x5176;&#x53CD;&#x7801;&#x7684;&#x57FA;&#x7840;&#x4E0A;, &#x7B26;&#x53F7;&#x4F4D;&#x4E0D;&#x53D8;, &#x5176;&#x4F59;&#x4F4D;&#x53D6;&#x53CD;:&#x5982;</p>
+<ul>
+<li>[+1] = [0000 0001]&#x539F; = [0000 0001]&#x53CD;</li>
+<li>[-1] = [1000 0001]&#x539F; = [1111 1110]&#x53CD;</li>
+</ul>
+</li>
+<li><p>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x53CD;&#x7801;&#x8868;&#x793A;&#x8D1F;&#x6570;, &#x4EBA;&#x8111;&#x65E0;&#x6CD5;&#x76F4;&#x63A5;&#x89C2;&#x770B;;</p>
+</li>
+</ul>
+</li>
+<li><p>&#x8865;&#x7801;</p>
+<ul>
+<li>&#x6B63;&#x6570;&#x7684;&#x8865;&#x7801;&#x662F;&#x5176;&#x672C;&#x8EAB;;</li>
+<li><p>&#x8D1F;&#x6570;&#x662F;&#x5176;&#x53CD;&#x7801;+1, &#x5982;&#x4E0B;:</p>
+<ul>
+<li>[+1] = [0000 0001]&#x539F; = [0000 0001]&#x53CD; = [0000 0001]&#x8865;</li>
+<li><p>[-1] = [1000 0001]&#x539F; = [1111 1110]&#x53CD; = [1111 1111]&#x8865;</p>
+<h3 id="&#x4F7F;&#x7528;&#x539F;&#x7801;-&#x53CD;&#x7801;-&#x8865;&#x7801;&#x7684;&#x539F;&#x56E0;"><a href="#&#x4F7F;&#x7528;&#x539F;&#x7801;-&#x53CD;&#x7801;-&#x8865;&#x7801;&#x7684;&#x539F;&#x56E0;" class="headerlink" title="&#x4F7F;&#x7528;&#x539F;&#x7801;,&#x53CD;&#x7801;,&#x8865;&#x7801;&#x7684;&#x539F;&#x56E0;"></a>&#x4F7F;&#x7528;&#x539F;&#x7801;,&#x53CD;&#x7801;,&#x8865;&#x7801;&#x7684;&#x539F;&#x56E0;</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>&#x5BF9;&#x4E8E;&#x6B63;&#x6570;&#x90FD;&#x662F;&#x4E00;&#x6837;&#x7684;,&#x6240;&#x4EE5;&#x5FFD;&#x7565;;</p>
+</li>
+<li><p>&#x5BF9;&#x4E8E;&#x8D1F;&#x6570;,&#x4E0D;&#x540C;, &#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x5B58;&#x5728;&#x5462;?</p>
+<ul>
+<li>&#x5BF9;&#x4E8E;&#x4EBA;&#x8111;, &#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x7B2C;&#x4E00;&#x4F4D;&#x662F;&#x7B26;&#x53F7;&#x4F4D;, &#x5728;&#x8BA1;&#x7B97;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x6839;&#x636E;&#x7B26;&#x53F7;&#x4F4D;,&#x9009;&#x62E9;&#x5BF9;&#x771F;&#x503C;&#x533A;&#x57DF;&#x7684;&#x52A0;&#x51CF;;</li>
+<li>&#x5BF9;&#x4E8E;&#x8BA1;&#x7B97;&#x673A;,&#x52A0;&#x51CF;&#x4E58;&#x9664;&#x5DF2;&#x7ECF;&#x662F;&#x6700;&#x57FA;&#x7840;&#x7684;&#x8FD0;&#x7B97;, &#x8981;&#x8BBE;&#x8BA1;&#x7684;&#x5C3D;&#x91CF;&#x7B80;&#x5355;, &#x8BA1;&#x7B97;&#x673A;&#x8FA8;&#x522B;&#x201D;&#x7B26;&#x53F7;&#x4F4D;&#x201D;&#x663E;&#x7136;&#x4F1A;&#x8BA9;&#x57FA;&#x7840;&#x7535;&#x8DEF; &#x53D8;&#x7684;&#x590D;&#x6742;, &#x4E8E;&#x662F;&#x4EBA;&#x4EEC;&#x5F00;&#x59CB;&#x8003;&#x8651;&#x8BA9;&#x7B26;&#x53F7;&#x4F4D;&#x4E5F;&#x53C2;&#x4E0E;&#x8FD0;&#x7B97;&#x7684;&#x65B9;&#x6CD5;;</li>
+<li>&#x6839;&#x636E;&#x8FD0;&#x7B97;&#x89C4;&#x5219;, 1-1 = 1 + (-1) = 0; &#x5982;&#x679C;&#x673A;&#x5668;&#x53EA;&#x6709;&#x52A0;&#x6CD5;&#x6CA1;&#x6709;&#x51CF;&#x6CD5;, &#x8BA1;&#x7B97;&#x673A;&#x8FD0;&#x7B97;&#x7684;&#x8BBE;&#x8BA1;&#x5C31;&#x66F4;&#x7B80;&#x5355;&#x4E86;;</li>
+<li><p>&#x4EBA;&#x4EEC;&#x7EE7;&#x7EED;&#x63A2;&#x7D22;&#x5C06;&#x7B26;&#x53F7;&#x4F4D;&#x53C2;&#x4E0E;&#x8FD0;&#x7B97;, &#x5E76;&#x4E14;&#x53EA;&#x4FDD;&#x7559;&#x52A0;&#x6CD5;&#x7684;&#x65B9;&#x6CD5;:</p>
+<ul>
+<li>1 - 1 = 1 + (-1) = [0000 0001]&#x539F; + [1000 0001]&#x539F; = [1000 0010]&#x539F; = -2 &#x5982;&#x679C;&#x7528;&#x539F;&#x7801;&#x8868;&#x793A;,&#x8BA9;&#x7B26;&#x53F7;&#x4F4D;&#x53C2;&#x4E0E;&#x8FD0;&#x7B97;, &#x663E;&#x7136;&#x5BF9;&#x4E8E;&#x51CF;&#x6CD5;&#x6765;&#x8BF4;, &#x7ED3;&#x679C;&#x4E0D;&#x6B63;&#x786E;, &#x8FD9;&#x4E5F;&#x5C31;&#x662F;&#x8BA1;&#x7B97;&#x673A;&#x4E2D;&#x4E0D;&#x4F7F;&#x7528; &#x539F;&#x7801;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x6570;, &#x4E3A;&#x4E86;&#x89E3;&#x51B3;&#x539F;&#x7801;&#x505A;&#x51CF;&#x6CD5;&#x7684;&#x95EE;&#x9898;, &#x51FA;&#x73B0;&#x4E86;&#x53CD;&#x7801;;</li>
+<li>1 - 1 = 1 + (-1) = [0000 0001]&#x53CD; + [1111 1110]&#x53CD; = [1111 1111]&#x53CD; = [1000 0000]&#x539F; = -0 &#x53D1;&#x73B0;&#x4F7F;&#x7528;&#x53CD;&#x7801;&#x8BA1;&#x7B97;&#x51CF;&#x6CD5;, &#x7ED3;&#x679C;&#x7684;&#x771F;&#x503C;&#x90E8;&#x5206;&#x662F;&#x6B63;&#x786E;&#x7684;, &#x4F46;&#x662F;&#x786E;&#x51FA;&#x73B0;&#x4E86;-0, &#x800C;&#x4E14;-0&#x662F;&#x6CA1;&#x6709;&#x7528;, &#x5E76;&#x4E14;&#x4F1A;&#x6709; [0000 0000]&#x539F; &#x548C; [1000 0000]&#x539F; &#x4FE9;&#x4E2A;&#x7F16;&#x7801;&#x8868;&#x793A;0; &#x4E8E;&#x662F;&#x51FA;&#x73B0;&#x4E86;&#x8865;&#x7801;, &#x89E3;&#x51B3;&#x4E86;0&#x7684;&#x7B26;&#x53F7;&#x95EE;&#x9898;, &#x4EE5;&#x53CA;&#x4FE9;&#x4E2A;&#x7F16;&#x7801;&#x7684;&#x95EE;&#x9898;,</li>
+<li>1-1 = 1 + (-1) = [0000 0001]&#x8865;+[1111 1111]&#x8865; = [0000 0000]&#x8865; = 0 (-1)+(-127) = [1111 1111]&#x8865; + [1000 0001]&#x8865; = [1000 0000]&#x8865; = -128; -1-127&#x7684;&#x7ED3;&#x679C;&#x662F;-128, &#x5728;&#x7528;&#x8865;&#x7801;&#x8FD0;&#x7B97;&#x7684;&#x7ED3;&#x679C;&#x4E2D;, [1000 0000]&#x8865; &#x5C31;&#x662F;-128, &#x5B9E;&#x9645;&#x5C31;&#x662F;-0&#x7684;&#x8865;&#x7801;, &#x6240;&#x4EE5;-128&#x5E76;&#x6CA1;&#x6709;&#x539F;&#x7801;&#x548C;&#x53CD;&#x7801;&#x8868;&#x793A;.</li>
+</ul>
+</li>
+<li><p>&#x4F7F;&#x7528;&#x8865;&#x7801;, &#x4E0D;&#x4EC5;&#x4EC5;&#x4FEE;&#x590D;&#x4E86;0&#x7684;&#x7B26;&#x53F7;&#x4EE5;&#x53CA;&#x5B58;&#x5728;&#x4FE9;&#x4E2A;&#x7F16;&#x7801;&#x7684;&#x95EE;&#x9898;, &#x800C;&#x4E14;&#x8FD8;&#x80FD;&#x591F;&#x591A;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x6700;&#x4F4E;&#x6570;, &#x8FD9;&#x5C31;&#x662F;&#x4E3A;&#x4EC0;&#x4E48;8&#x4F4D;&#x4E8C;&#x8FDB;&#x5236;, &#x4F7F;&#x7528;&#x539F;&#x7801;&#x6216;&#x53CD;&#x7801;&#x8868;&#x793A;&#x7684;&#x8303;&#x56F4;&#x662F;[-127, 127], &#x800C;&#x4F7F;&#x7528;&#x8865;&#x7801;&#x8868;&#x793A;&#x7684;&#x8303;&#x56F4;&#x662F;[-128, 127];</p>
+</li>
+<li>&#x673A;&#x5668;&#x4F7F;&#x7528;&#x8865;&#x7801;, &#x6240;&#x4EE5;&#x5BF9;&#x4E8E;&#x7F16;&#x7A0B;&#x4E2D;&#x5E38;&#x7528;&#x5230;&#x7684;32&#x4F4D;int&#x7C7B;&#x578B;, &#x53EF;&#x4EE5;&#x8868;&#x793A;&#x8303;&#x56F4;: [-2^31, 2^31 -1], &#x56E0;&#x4E3A;&#x7B2C;&#x4E00;&#x4F4D;&#x8868;&#x793A;&#x7B26;&#x53F7;&#x4F4D;,&#x4F7F;&#x7528;&#x8865;&#x7801;&#x8868;&#x793A;&#x65F6;&#x53EF;&#x4EE5;&#x591A;&#x4FDD;&#x5B58;&#x4E00;&#x4E2A;&#x6700;&#x5C0F;&#x503C;;</li>
+</ul>
+</li>
+</ol>
+<h3 id="&#x539F;&#x7801;-&#x53CD;&#x7801;-&#x8865;&#x7801;-&#x518D;&#x6DF1;&#x5165;"><a href="#&#x539F;&#x7801;-&#x53CD;&#x7801;-&#x8865;&#x7801;-&#x518D;&#x6DF1;&#x5165;" class="headerlink" title="&#x539F;&#x7801;,&#x53CD;&#x7801;, &#x8865;&#x7801; &#x518D;&#x6DF1;&#x5165;"></a>&#x539F;&#x7801;,&#x53CD;&#x7801;, &#x8865;&#x7801; &#x518D;&#x6DF1;&#x5165;</h3><pre><code>&#x53C2;&#x8003;&#x7F51;&#x5740;:&#x535A;&#x5BA2;&#x56ED;&#x5DF2;&#x8F6C;&#x8F7D;
+</code></pre><h2 id="&#x5927;&#x7AEF;&#x5C0F;&#x7AEF;"><a href="#&#x5927;&#x7AEF;&#x5C0F;&#x7AEF;" class="headerlink" title="&#x5927;&#x7AEF;&#x5C0F;&#x7AEF;"></a>&#x5927;&#x7AEF;&#x5C0F;&#x7AEF;</h2><ul>
+<li>&#x5C0F;&#x7AEF;: &#x4F4E;&#x4F4D;&#x5B57;&#x8282;&#x5B58;&#x653E;&#x5728;&#x5185;&#x5B58;&#x7684;&#x4F4E;&#x5730;&#x5740;&#x7AEF;, &#x9AD8;&#x4F4D;&#x5B57;&#x8282;&#x5B58;&#x653E;&#x5728;&#x5185;&#x5B58;&#x7684;&#x9AD8;&#x5730;&#x5740;&#x7AEF;;</li>
+<li>&#x5927;&#x7AEF;: &#x9AD8;&#x4F4D;&#x5B57;&#x8282;&#x5B58;&#x653E;&#x5728;&#x5185;&#x5B58;&#x7684;&#x4F4E;&#x5730;&#x5740;&#x7AEF;, &#x4F4E;&#x4F4D;&#x5B57;&#x8282;&#x5B58;&#x653E;&#x5728;&#x5185;&#x5B58;&#x7684;&#x4F4E;&#x5730;&#x5740;&#x7AEF;;</li>
+<li>&#x7F51;&#x7EDC;&#x5B57;&#x8282;&#x5E8F;: &#x5927;&#x7AEF;&#x6A21;&#x5F0F;;</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x7B97;&#x6CD5;</span></span><br><span class="line"><span class="keyword">union</span> {</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> b;</span><br><span class="line">}c;</span><br><span class="line">c.a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="number">1</span> == c.b) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;&#x5C0F;&#x7AEF;&#x5E8F;&quot;</span>);</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;&#x5927;&#x7AEF;&#x5E8F;&quot;</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/cpp/">cpp</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/06/09/c_base/" data-title="原码,反码,补码, 大小端 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/06/27/command_find/" title="">
+  <strong>上一篇：</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/05/27/git_learn/"  title="git命令记录">
+ <strong>下一篇：</strong><br/> 
+ <span>git命令记录
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原码-反码-补码-详解"><span class="toc-number">1.</span> <span class="toc-text">原码, 反码, 补码 详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#机器数与真值"><span class="toc-number">1.1.</span> <span class="toc-text">机器数与真值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用原码-反码-补码的原因"><span class="toc-number">1.2.</span> <span class="toc-text">使用原码,反码,补码的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原码-反码-补码-再深入"><span class="toc-number">1.3.</span> <span class="toc-text">原码,反码, 补码 再深入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大端小端"><span class="toc-number">2.</span> <span class="toc-text">大端小端</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cmd/" title="cmd">cmd<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PS1/" title="PS1">PS1<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
