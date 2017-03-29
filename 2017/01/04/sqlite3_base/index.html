@@ -1,0 +1,634 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>sqlite基础 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="sqlite &amp;#x547D;&amp;#x4EE4;DDL &amp;#x6570;&amp;#x636E;&amp;#x5B9A;&amp;#x4E49;&amp;#x8BED;&amp;#x8A00;
+create &amp;#x521B;&amp;#x5EFA;&amp;#x4E00;&amp;#x4E2A;&amp;#x8868;,&amp;#x4E00;&amp;#x4E2A;&amp;#x8868;&amp;#x7684;&amp;#x89C6;&amp;#x56FE;, &amp;#x6216;&amp;#x6570;&amp;#x636E;&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlite基础">
+<meta property="og:url" content="http://yoursite.com/2017/01/04/sqlite3_base/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="sqlite &amp;#x547D;&amp;#x4EE4;DDL &amp;#x6570;&amp;#x636E;&amp;#x5B9A;&amp;#x4E49;&amp;#x8BED;&amp;#x8A00;
+create &amp;#x521B;&amp;#x5EFA;&amp;#x4E00;&amp;#x4E2A;&amp;#x8868;,&amp;#x4E00;&amp;#x4E2A;&amp;#x8868;&amp;#x7684;&amp;#x89C6;&amp;#x56FE;, &amp;#x6216;&amp;#x6570;&amp;#x636E;&amp;#">
+<meta property="og:updated_time" content="2017-01-06T15:36:39.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sqlite基础">
+<meta name="twitter:description" content="sqlite &amp;#x547D;&amp;#x4EE4;DDL &amp;#x6570;&amp;#x636E;&amp;#x5B9A;&amp;#x4E49;&amp;#x8BED;&amp;#x8A00;
+create &amp;#x521B;&amp;#x5EFA;&amp;#x4E00;&amp;#x4E2A;&amp;#x8868;,&amp;#x4E00;&amp;#x4E2A;&amp;#x8868;&amp;#x7684;&amp;#x89C6;&amp;#x56FE;, &amp;#x6216;&amp;#x6570;&amp;#x636E;&amp;#">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/01/04/sqlite3_base/" title="sqlite基础" itemprop="url">sqlite基础</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2017-01-04T15:58:24.564Z" itemprop="datePublished"> Published 2017-01-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-命令"><span class="toc-number">1.</span> <span class="toc-text">sqlite 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DDL-数据定义语言"><span class="toc-number">1.1.</span> <span class="toc-text">DDL 数据定义语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DML-数据操作语言"><span class="toc-number">1.2.</span> <span class="toc-text">DML 数据操作语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DQL-数据查询语言"><span class="toc-number">1.3.</span> <span class="toc-text">DQL 数据查询语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点命令"><span class="toc-number">1.4.</span> <span class="toc-text">点命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite语法"><span class="toc-number">2.</span> <span class="toc-text">sqlite语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-数据类型"><span class="toc-number">3.</span> <span class="toc-text">sqlite 数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储类型"><span class="toc-number">3.1.</span> <span class="toc-text">存储类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#亲和类型"><span class="toc-number">3.2.</span> <span class="toc-text">亲和类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#亲和类型及类型名称"><span class="toc-number">3.3.</span> <span class="toc-text">亲和类型及类型名称</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-使用"><span class="toc-number">4.</span> <span class="toc-text">sqlite 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">4.1.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除表"><span class="toc-number">4.2.</span> <span class="toc-text">删除表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插入数据"><span class="toc-number">4.3.</span> <span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#select-语句-显示表中数据"><span class="toc-number">4.4.</span> <span class="toc-text">select 语句, 显示表中数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#查看表中信息"><span class="toc-number">4.4.1.</span> <span class="toc-text">查看表中信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看数据库的表"><span class="toc-number">4.4.2.</span> <span class="toc-text">查看数据库的表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算术运算符"><span class="toc-number">4.4.3.</span> <span class="toc-text">算术运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#比较运算符"><span class="toc-number">4.4.4.</span> <span class="toc-text">比较运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#逻辑运算符"><span class="toc-number">4.4.5.</span> <span class="toc-text">逻辑运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#位运算符"><span class="toc-number">4.4.6.</span> <span class="toc-text">位运算符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sqlite-表达式"><span class="toc-number">4.5.</span> <span class="toc-text">sqlite 表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#update语句"><span class="toc-number">4.6.</span> <span class="toc-text">update语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete语句"><span class="toc-number">4.7.</span> <span class="toc-text">delete语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#like-子句"><span class="toc-number">4.8.</span> <span class="toc-text">like 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glob-子句"><span class="toc-number">4.9.</span> <span class="toc-text">glob 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#limit-子句"><span class="toc-number">4.10.</span> <span class="toc-text">limit 子句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本语法"><span class="toc-number">4.10.1.</span> <span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例"><span class="toc-number">4.10.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#order-by-子句"><span class="toc-number">4.11.</span> <span class="toc-text">order by 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group-by-子句"><span class="toc-number">4.12.</span> <span class="toc-text">group by 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#having-子句"><span class="toc-number">4.13.</span> <span class="toc-text">having 子句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语法"><span class="toc-number">4.13.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-1"><span class="toc-number">4.13.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#distinct-子句"><span class="toc-number">4.14.</span> <span class="toc-text">distinct 子句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语法-1"><span class="toc-number">4.14.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">4.14.2.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="sqlite-&#x547D;&#x4EE4;"><a href="#sqlite-&#x547D;&#x4EE4;" class="headerlink" title="sqlite &#x547D;&#x4EE4;"></a>sqlite &#x547D;&#x4EE4;</h2><h3 id="DDL-&#x6570;&#x636E;&#x5B9A;&#x4E49;&#x8BED;&#x8A00;"><a href="#DDL-&#x6570;&#x636E;&#x5B9A;&#x4E49;&#x8BED;&#x8A00;" class="headerlink" title="DDL &#x6570;&#x636E;&#x5B9A;&#x4E49;&#x8BED;&#x8A00;"></a>DDL &#x6570;&#x636E;&#x5B9A;&#x4E49;&#x8BED;&#x8A00;</h3><ol>
+<li>create &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8868;,&#x4E00;&#x4E2A;&#x8868;&#x7684;&#x89C6;&#x56FE;, &#x6216;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x7684;&#x5176;&#x4ED6;&#x5BF9;&#x8C61;</li>
+<li>alter  &#x4FEE;&#x6539;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x7684;&#x67D0;&#x4E2A;&#x5DF2;&#x6709;&#x7684;&#x6570;&#x636E;&#x5E93;&#x5BF9;&#x8C61;, &#x6BD4;&#x5982;&#x4E00;&#x4E2A;&#x8868;</li>
+<li>drop   &#x5220;&#x9664;&#x8868;&#x6216;&#x89C6;&#x56FE;, &#x6216;&#x5176;&#x4ED6;&#x5BF9;&#x8C61;</li>
+</ol>
+<h3 id="DML-&#x6570;&#x636E;&#x64CD;&#x4F5C;&#x8BED;&#x8A00;"><a href="#DML-&#x6570;&#x636E;&#x64CD;&#x4F5C;&#x8BED;&#x8A00;" class="headerlink" title="DML &#x6570;&#x636E;&#x64CD;&#x4F5C;&#x8BED;&#x8A00;"></a>DML &#x6570;&#x636E;&#x64CD;&#x4F5C;&#x8BED;&#x8A00;</h3><ol>
+<li>insert &#x521B;&#x5EFA;&#x4E00;&#x6761;&#x8BB0;&#x5F55;</li>
+<li>update &#x4FEE;&#x6539;&#x8BB0;&#x5F55;</li>
+<li>delete &#x5220;&#x9664;&#x8BB0;&#x5F55;</li>
+</ol>
+<h3 id="DQL-&#x6570;&#x636E;&#x67E5;&#x8BE2;&#x8BED;&#x8A00;"><a href="#DQL-&#x6570;&#x636E;&#x67E5;&#x8BE2;&#x8BED;&#x8A00;" class="headerlink" title="DQL &#x6570;&#x636E;&#x67E5;&#x8BE2;&#x8BED;&#x8A00;"></a>DQL &#x6570;&#x636E;&#x67E5;&#x8BE2;&#x8BED;&#x8A00;</h3><p>select &#x68C0;&#x7D22;&#x8BB0;&#x5F55;</p>
+<h3 id="&#x70B9;&#x547D;&#x4EE4;"><a href="#&#x70B9;&#x547D;&#x4EE4;" class="headerlink" title="&#x70B9;&#x547D;&#x4EE4;"></a>&#x70B9;&#x547D;&#x4EE4;</h3><ol>
+<li>.help &#x67E5;&#x770B;&#x5E2E;&#x52A9;</li>
+<li>.backup &#x53EF;&#x4EE5;&#x5907;&#x4EFD;</li>
+<li>.tables &#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x91CC;&#x9762;&#x7684;&#x8868;</li>
+<li>.schema tab_name : &#x67E5;&#x770B;&#x8868;&#x7ED3;&#x6784;</li>
+<li>&#x2026;&#x5176;&#x4ED6;</li>
+</ol>
+<h2 id="sqlite&#x8BED;&#x6CD5;"><a href="#sqlite&#x8BED;&#x6CD5;" class="headerlink" title="sqlite&#x8BED;&#x6CD5;"></a>sqlite&#x8BED;&#x6CD5;</h2><ol>
+<li>&#x4E0D;&#x533A;&#x5206;&#x5927;&#x5C0F;&#x5199;, &#x4F46;&#x6709;&#x4E9B;&#x547D;&#x4EE4;&#x5927;&#x5C0F;&#x5199;&#x654F;&#x611F;,&#x5982;GLOB &#x548C;glob;</li>
+<li>&#x6CE8;&#x91CA;: &#x2013; &#x6CE8;&#x91CA; &#x6216; /<em> &#x6CE8;&#x91CA; </em>/</li>
+</ol>
+<h2 id="sqlite-&#x6570;&#x636E;&#x7C7B;&#x578B;"><a href="#sqlite-&#x6570;&#x636E;&#x7C7B;&#x578B;" class="headerlink" title="sqlite &#x6570;&#x636E;&#x7C7B;&#x578B;"></a>sqlite &#x6570;&#x636E;&#x7C7B;&#x578B;</h2><h3 id="&#x5B58;&#x50A8;&#x7C7B;&#x578B;"><a href="#&#x5B58;&#x50A8;&#x7C7B;&#x578B;" class="headerlink" title="&#x5B58;&#x50A8;&#x7C7B;&#x578B;"></a>&#x5B58;&#x50A8;&#x7C7B;&#x578B;</h3><ol>
+<li>NULL    : NULL&#x503C;;</li>
+<li>integer : &#x5E26;&#x7B26;&#x53F7;&#x7684;&#x6574;&#x6570;, &#x6839;&#x636E;&#x5927;&#x5C0F;&#x5B58;&#x50A8;&#x5728;1,2,3,4,6&#x6216;8&#x5B57;&#x8282;&#x4E2D;;</li>
+<li>real    : 8&#x5B57;&#x8282;&#x7684;IEEE&#x6D6E;&#x70B9;&#x6570;&#x5B57;;</li>
+<li>text    : &#x6587;&#x672C;&#x5B57;&#x7B26;&#x4E32;;</li>
+<li>blob    : &#x6839;&#x636E;&#x8F93;&#x5165;&#x5B58;&#x50A8;;</li>
+</ol>
+<h3 id="&#x4EB2;&#x548C;&#x7C7B;&#x578B;"><a href="#&#x4EB2;&#x548C;&#x7C7B;&#x578B;" class="headerlink" title="&#x4EB2;&#x548C;&#x7C7B;&#x578B;"></a>&#x4EB2;&#x548C;&#x7C7B;&#x578B;</h3><p>&#x5F53;&#x6570;&#x636E;&#x63D2;&#x5165;&#x65F6;, &#x8BE5;&#x5B57;&#x6BB5;&#x7684;&#x6570;&#x636E;&#x4F1A;&#x4F18;&#x5148;&#x91C7;&#x7528;&#x4EB2;&#x7F18;&#x7C7B;&#x578B;&#x4F5C;&#x4E3A;&#x8BE5;&#x503C;&#x7684;&#x5B58;&#x50A8;&#x65B9;&#x5F0F;</p>
+<ol>
+<li>text    : &#x6570;&#x503C;&#x578B;&#x6570;&#x636E;&#x5728;&#x88AB;&#x63D2;&#x5165;&#x524D;, &#x9700;&#x8981;&#x5148;&#x88AB;&#x8F6C;&#x6362;&#x4E3A;&#x6587;&#x672C;&#x683C;&#x5F0F;, &#x4E4B;&#x540E;&#x518D;&#x63D2;&#x5165;&#x5230;&#x76EE;&#x6807;&#x5B57;&#x6BB5;&#x4E2D;;</li>
+<li>numeric : &#x5F53;&#x6587;&#x672C;&#x6570;&#x636E;&#x88AB;&#x63D2;&#x5165;&#x5230;&#x5230;&#x6B64;&#x5B57;&#x6BB5;&#x65F6;, &#x5982;&#x679C;&#x8F6C;&#x6362;&#x64CD;&#x4F5C;&#x4E0D;&#x4F1A;&#x5BFC;&#x81F4;&#x6570;&#x636E;&#x4FE1;&#x606F;&#x4E22;&#x5931;&#x4EE5;&#x53CA;&#x5B8C;&#x5168;&#x53EF;&#x9006;, &#x5219;&#x8F6C;&#x6362;&#x4E3A;real<pre><code>&#x6216;integer&#x7C7B;&#x578B;&#x7684;&#x6570;&#x636E;, &#x5982;&#x679C;&#x5931;&#x8D25;,&#x5219;&#x4EE5;text&#x5B58;&#x50A8;;&#x5982;&apos;3000.00&apos;&#x7684;&#x6D6E;&#x70B9;&#x6570;, &#x4E5F;&#x4F1A;&#x5B58;&#x50A8;&#x672A;real&#x6216;integer;
+</code></pre></li>
+<li>integer : &#x540C;&#x4E0A;, &#x5DEE;&#x522B;&#x5728;&#x4E8E;&#x8F6C;&#x6362;&#x64CD;&#x4F5C;;</li>
+<li>real    : &#x540C;numeric, &#x5DEE;&#x522B;&#x5728;&#x4E8E;&#x4E0D;&#x4F1A;&#x8F6C;&#x6362;&#x2019;3000.00&#x2019;&#x7684;&#x5F62;&#x5F0F;;</li>
+<li>none    : &#x4E0D;&#x505A;&#x8F6C;&#x6362;;</li>
+</ol>
+<h3 id="&#x4EB2;&#x548C;&#x7C7B;&#x578B;&#x53CA;&#x7C7B;&#x578B;&#x540D;&#x79F0;"><a href="#&#x4EB2;&#x548C;&#x7C7B;&#x578B;&#x53CA;&#x7C7B;&#x578B;&#x540D;&#x79F0;" class="headerlink" title="&#x4EB2;&#x548C;&#x7C7B;&#x578B;&#x53CA;&#x7C7B;&#x578B;&#x540D;&#x79F0;"></a>&#x4EB2;&#x548C;&#x7C7B;&#x578B;&#x53CA;&#x7C7B;&#x578B;&#x540D;&#x79F0;</h3><ol>
+<li>int,integer,tinyint,smallint,mediumint,bigint,unsigned big int, int2, int8 : integer;</li>
+<li>character(20), varchar(255), varying, character(255), nchar(55), native character(70),<br>nvarchar(100), text, clob: text;</li>
+<li>blob, no datatype specified: none;</li>
+<li>real, double, double precision, float: real;</li>
+<li>numeric, decimal(10,5), boolean(0, 1) date, datetime: numeric;</li>
+</ol>
+<h2 id="sqlite-&#x4F7F;&#x7528;"><a href="#sqlite-&#x4F7F;&#x7528;" class="headerlink" title="sqlite &#x4F7F;&#x7528;"></a>sqlite &#x4F7F;&#x7528;</h2><h3 id="&#x521B;&#x5EFA;&#x8868;"><a href="#&#x521B;&#x5EFA;&#x8868;" class="headerlink" title="&#x521B;&#x5EFA;&#x8868;"></a>&#x521B;&#x5EFA;&#x8868;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x4F8B;&#x5B50;</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> company(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>),</span><br><span class="line">salary <span class="built_in">real</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="&#x5220;&#x9664;&#x8868;"><a href="#&#x5220;&#x9664;&#x8868;" class="headerlink" title="&#x5220;&#x9664;&#x8868;"></a>&#x5220;&#x9664;&#x8868;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">name</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="&#x63D2;&#x5165;&#x6570;&#x636E;"><a href="#&#x63D2;&#x5165;&#x6570;&#x636E;" class="headerlink" title="&#x63D2;&#x5165;&#x6570;&#x636E;"></a>&#x63D2;&#x5165;&#x6570;&#x636E;</h3><ol>
+<li>insert into table_name (column1, column2, column3, &#x2026;) values(value1, value2, value3, &#x2026;)</li>
+<li>insert into table_name values (value1, value2,value3, ..) : &#x4E3A;&#x6240;&#x6709;&#x5217;&#x6DFB;&#x52A0;&#x503C;,&#x4E14;&#x987A;&#x5E8F;&#x6309;&#x5B9A;&#x4E49;&#x7684;&#x6765;</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x7B2C;&#x4E00;&#x79CD;&#x63D2;&#x5165;</span></span><br><span class="line"><span class="comment">-- &#x5BF9;&#x4E8E;&#x975E;&#x7A7A;&#x9879;&#x5FC5;&#x987B;&#x63D2;&#x5165;</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">&apos;paul&apos;</span>, <span class="number">32</span>, <span class="string">&apos;california&apos;</span>, <span class="number">20000.0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">&apos;allen&apos;</span>, <span class="number">22</span>, <span class="string">&apos;texas&apos;</span>, <span class="number">20000.0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">3</span>, <span class="string">&apos;teddy&apos;</span>, <span class="number">42</span>, <span class="string">&apos;norway&apos;</span>, <span class="number">15000.0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">4</span>, <span class="string">&apos;mark&apos;</span>, <span class="number">38</span>, <span class="string">&apos;rich-mond&apos;</span>, <span class="number">65000.0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">5</span>, <span class="string">&apos;david&apos;</span>, <span class="number">42</span>, <span class="string">&apos;texas&apos;</span>, <span class="number">85000.0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">6</span>, <span class="string">&apos;kim&apos;</span>, <span class="number">42</span>, <span class="string">&apos;south-hall&apos;</span>, <span class="number">40000.0</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">id</span>, <span class="keyword">name</span>, age) <span class="keyword">values</span>(<span class="number">8</span>, <span class="string">&apos;wade&apos;</span>, <span class="number">33</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x7B2C;&#x4E8C;&#x79CD;&#x63D2;&#x5165;</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company <span class="keyword">values</span> (<span class="number">7</span>, <span class="string">&apos;james&apos;</span>, <span class="number">33</span>, <span class="string">&apos;houston&apos;</span>, <span class="number">10000.0</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="select-&#x8BED;&#x53E5;-&#x663E;&#x793A;&#x8868;&#x4E2D;&#x6570;&#x636E;"><a href="#select-&#x8BED;&#x53E5;-&#x663E;&#x793A;&#x8868;&#x4E2D;&#x6570;&#x636E;" class="headerlink" title="select &#x8BED;&#x53E5;, &#x663E;&#x793A;&#x8868;&#x4E2D;&#x6570;&#x636E;"></a>select &#x8BED;&#x53E5;, &#x663E;&#x793A;&#x8868;&#x4E2D;&#x6570;&#x636E;</h3><h4 id="&#x67E5;&#x770B;&#x8868;&#x4E2D;&#x4FE1;&#x606F;"><a href="#&#x67E5;&#x770B;&#x8868;&#x4E2D;&#x4FE1;&#x606F;" class="headerlink" title="&#x67E5;&#x770B;&#x8868;&#x4E2D;&#x4FE1;&#x606F;"></a>&#x67E5;&#x770B;&#x8868;&#x4E2D;&#x4FE1;&#x606F;</h4><ol>
+<li>&#x6709;&#x9009;&#x62E9;&#x7684;&#x67E5;&#x770B;: select column1, column2, columnN from table_name;</li>
+<li>&#x67E5;&#x770B;&#x6240;&#x6709;&#x6570;&#x636E;: select * from table_name;</li>
+<li>&#x4E3A;&#x53CB;&#x597D;&#x7684;&#x67E5;&#x770B;&#x6570;&#x636E;, &#x53EF;&#x4EE5;&#x4F7F;&#x7528;:<ul>
+<li>.header on</li>
+<li>.mode column</li>
+<li>.width 10,20,10</li>
+</ul>
+</li>
+</ol>
+<h4 id="&#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x7684;&#x8868;"><a href="#&#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x7684;&#x8868;" class="headerlink" title="&#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x7684;&#x8868;"></a>&#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x7684;&#x8868;</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x67E5;&#x770B;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x521B;&#x5EFA;&#x7684;&#x8868;</span></span><br><span class="line"><span class="keyword">select</span> tbl_name <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> <span class="keyword">type</span>=<span class="string">&apos;table&apos;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5217;&#x51FA;&#x8868;&#x4E2D;&#x7684;&#x5B8C;&#x6574;&#x4FE1;&#x606F;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sql</span> <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> <span class="keyword">type</span>=<span class="string">&apos;table&apos;</span> <span class="keyword">and</span> tbl_name=<span class="string">&apos;company&apos;</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="&#x7B97;&#x672F;&#x8FD0;&#x7B97;&#x7B26;"><a href="#&#x7B97;&#x672F;&#x8FD0;&#x7B97;&#x7B26;" class="headerlink" title="&#x7B97;&#x672F;&#x8FD0;&#x7B97;&#x7B26;"></a>&#x7B97;&#x672F;&#x8FD0;&#x7B97;&#x7B26;</h4><p><code>+ - * / %</code></p>
+<h4 id="&#x6BD4;&#x8F83;&#x8FD0;&#x7B97;&#x7B26;"><a href="#&#x6BD4;&#x8F83;&#x8FD0;&#x7B97;&#x7B26;" class="headerlink" title="&#x6BD4;&#x8F83;&#x8FD0;&#x7B97;&#x7B26;"></a>&#x6BD4;&#x8F83;&#x8FD0;&#x7B97;&#x7B26;</h4><ol>
+<li><code>== = != &lt;&gt;</code> : &#x662F;&#x5426;&#x76F8;&#x7B49;&#x6216;&#x4E0D;&#x7B49;&#x7684;;</li>
+<li><code>&gt; &lt; &gt;= &lt;= !&lt; !&gt;</code> :&#x5927;&#x5C0F;&#x6BD4;&#x8F83;;</li>
+</ol>
+<h4 id="&#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x7B26;"><a href="#&#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x7B26;" class="headerlink" title="&#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x7B26;"></a>&#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x7B26;</h4><ol>
+<li>AND      : &#x591A;&#x4E2A;&#x6761;&#x4EF6;&#x5E76;&#x5B58;;</li>
+<li>BETWEEN  : &#x7ED9;&#x5B9A;&#x4E00;&#x4E2A;&#x8303;&#x56F4;;</li>
+<li>EXISTS   : &#x5728;&#x6EE1;&#x8DB3;&#x4E00;&#x5B9A;&#x6761;&#x4EF6;&#x7684;&#x6307;&#x5B9A;&#x8868;&#x4E2D;&#x641C;&#x7D22;&#x884C;&#x7684;&#x5B58;&#x5728;;</li>
+<li>IN       : &#x6307;&#x5B9A;&#x503C;&#x4E0E;&#x4E00;&#x7CFB;&#x5217;&#x6307;&#x5B9A;&#x5217;&#x8868;&#x7684;&#x503C;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;;</li>
+<li>NOT IN   : &#x4E0E;IN&#x76F8;&#x53CD;;</li>
+<li>LIKE     : &#x7528;&#x4E8E;&#x628A;&#x67D0;&#x4E2A;&#x503C;&#x4E0E;&#x4F7F;&#x7528;&#x901A;&#x914D;&#x7B26;&#x8FD0;&#x7B97;&#x7B26;&#x7684;&#x8FD1;&#x4F3C;&#x503C;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;;</li>
+<li>GLOB     : &#x4E0E;LIKE&#x7C7B;&#x4F3C;,&#x4F46;&#x662F;&#x5927;&#x5C0F;&#x5199;&#x654F;&#x611F;;</li>
+<li>NOT      : &#x903B;&#x8F91;&#x8FD0;&#x7B97;&#x7B26;&#x7684;&#x5BF9;&#x7ACB;&#x9762;, &#x5982;NOT EXISTS, NOT BETWEEN, NOT IN&#x7B49;;</li>
+<li>OR       : &#x6216;;</li>
+<li>IS NULL : &#x4E0E;NULL&#x503C;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#x7684;&#x7ED3;&#x679C;;</li>
+<li>IS      : &#x4E0E; = &#x8FD0;&#x7B97;&#x7B26;&#x7C7B;&#x4F3C;;</li>
+<li>IS NOT  : &#x4E0E; != &#x7C7B;&#x4F3C;;</li>
+<li>||      : &#x8FDE;&#x63A5;&#x4FE9;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x5B57;&#x7B26;&#x4E32;, &#x5F97;&#x5230;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x5B57;&#x7B26;&#x4E32;;</li>
+</ol>
+<h4 id="&#x4F4D;&#x8FD0;&#x7B97;&#x7B26;"><a href="#&#x4F4D;&#x8FD0;&#x7B97;&#x7B26;" class="headerlink" title="&#x4F4D;&#x8FD0;&#x7B97;&#x7B26;"></a>&#x4F4D;&#x8FD0;&#x7B97;&#x7B26;</h4><p><code>&amp; | ~ &gt;&gt; &lt;&lt;</code> : &#x4E0E;c&#x8BED;&#x8A00;&#x4E2D;&#x7C7B;&#x4F3C;</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> age &gt;= <span class="number">25</span> <span class="keyword">AND</span> salary &gt;= <span class="number">65000</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> age &gt;= <span class="number">25</span> <span class="keyword">OR</span> salary &gt;= <span class="number">65000</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> salary <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">name</span> <span class="keyword">LIKE</span> <span class="string">&apos;ki%&apos;</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">name</span> <span class="keyword">LIKE</span> <span class="string">&apos;ki*&apos;</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> age <span class="keyword">IN</span>(<span class="number">32</span>, <span class="number">40</span>);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> age <span class="keyword">NOT</span> <span class="keyword">IN</span>(<span class="number">32</span>, <span class="number">40</span>);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> age <span class="keyword">BETWEEN</span> <span class="number">25</span> <span class="keyword">AND</span> <span class="number">27</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="sqlite-&#x8868;&#x8FBE;&#x5F0F;"><a href="#sqlite-&#x8868;&#x8FBE;&#x5F0F;" class="headerlink" title="sqlite &#x8868;&#x8FBE;&#x5F0F;"></a>sqlite &#x8868;&#x8FBE;&#x5F0F;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x5E03;&#x5C14;&#x8868;&#x8FBE;&#x5F0F;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> salary=<span class="number">10000</span>;</span><br><span class="line"><span class="comment">-- &#x6570;&#x503C;&#x8868;&#x8FBE;&#x5F0F;</span></span><br><span class="line"><span class="keyword">select</span> (<span class="number">3</span>+<span class="number">5</span>) <span class="keyword">as</span> addition;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">as</span> <span class="string">&quot;records&quot;</span> <span class="keyword">from</span> company;</span><br><span class="line"><span class="comment">-- &#x65E5;&#x671F;&#x8868;&#x8FBE;&#x5F0F;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">current_timestamp</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="update&#x8BED;&#x53E5;"><a href="#update&#x8BED;&#x53E5;" class="headerlink" title="update&#x8BED;&#x53E5;"></a>update&#x8BED;&#x53E5;</h3><p><code>&#x7528;&#x4E8E;&#x4FEE;&#x6539;&#x8868;&#x4E2D;&#x7684;&#x5DF2;&#x6709;&#x7684;&#x8BB0;&#x5F55;, &#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5E26;&#x6709;where&#x5B50;&#x53E5;&#x7684;update&#x67E5;&#x8BE2;&#x6765;&#x66F4;&#x65B0;&#x9009;&#x5B9A;&#x884C;, &#x5426;&#x5219;&#x90FD;&#x4F1A;&#x66F4;&#x65B0;</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x66F4;&#x65B0;&#x4E00;&#x6761;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">update</span> company <span class="keyword">set</span> address=<span class="string">&apos;zhengning&apos;</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">6</span>;</span><br><span class="line"><span class="comment">-- &#x66F4;&#x65B0;&#x6240;&#x6709;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">update</span> company <span class="keyword">set</span> address=<span class="string">&apos;gansu&apos;</span>, salary=<span class="number">33333</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="delete&#x8BED;&#x53E5;"><a href="#delete&#x8BED;&#x53E5;" class="headerlink" title="delete&#x8BED;&#x53E5;"></a>delete&#x8BED;&#x53E5;</h3><p><code>&#x7528;&#x4E8E;&#x5220;&#x9664;&#x8868;&#x4E2D;&#x5DF2;&#x6709;&#x7684;&#x8BB0;&#x5F55;, &#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5E26;&#x6709;where&#x5B50;&#x53E5;&#x7684;delete&#x67E5;&#x8BE2;&#x6765;&#x5220;&#x9664;&#x8BB0;&#x5F55;, &#x5426;&#x5219;&#x4F1A;&#x5168;&#x90E8;&#x5220;&#x9664;</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x5220;&#x9664;&#x4E00;&#x6761;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">6</span>;</span><br><span class="line"><span class="comment">-- &#x5220;&#x9664;&#x6240;&#x6709;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company;</span><br></pre></td></tr></table></figure>
+<h3 id="like-&#x5B50;&#x53E5;"><a href="#like-&#x5B50;&#x53E5;" class="headerlink" title="like &#x5B50;&#x53E5;"></a>like &#x5B50;&#x53E5;</h3><p><code>&#x7528;&#x6765;&#x5339;&#x914D;&#x901A;&#x914D;&#x7B26;&#x6307;&#x5B9A;&#x6A21;&#x5F0F;&#x7684;&#x6587;&#x672C;&#x503C;. &#x5982;&#x679C;&#x641C;&#x7D22;&#x8868;&#x8FBE;&#x5F0F;&#x4E0E;&#x6A21;&#x5F0F;&#x8868;&#x8FBE;&#x5F0F;&#x5339;&#x914D;,&#x8FD4;&#x56DE;&#x771F;; &#x901A;&#x914D;&#x7B26;&#x5982;&#x4E0B;:</code></p>
+<ul>
+<li>&#x767E;&#x5206;&#x53F7;(%) : &#x4EE3;&#x8868;0&#x4E2A;, 1&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x6570;&#x5B57;&#x6216;&#x5B57;&#x7B26;;</li>
+<li>&#x4E0B;&#x5212;&#x7EBF;(_) : &#x4EE3;&#x8868;&#x4E00;&#x4E2A;&#x5355;&#x4E00;&#x7684;&#x6570;&#x5B57;&#x6216;&#x5B57;&#x7B26;;</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x901A;&#x7528;&#x5F0F;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> table_name <span class="keyword">where</span> <span class="keyword">column</span> <span class="keyword">like</span> [<span class="string">&apos;xxxx%&apos;</span> <span class="keyword">or</span> <span class="string">&apos;%xxxx%&apos;</span> <span class="keyword">or</span> <span class="string">&apos;xxxx_&apos;</span> <span class="keyword">or</span> <span class="string">&apos;_xxxx&apos;</span> <span class="keyword">or</span> <span class="string">&apos;_xxxx_&apos;</span>]</span><br><span class="line"><span class="comment">-- &#x4E00;&#x4E9B;&#x4F8B;&#x5B50;</span></span><br><span class="line"><span class="comment">-- &#x67E5;&#x627E;&#x4EE5;200&#x5F00;&#x5934;&#x7684;&#x4EFB;&#x610F;&#x503C;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> salary <span class="keyword">like</span> <span class="string">&apos;200%&apos;</span></span><br><span class="line"><span class="comment">-- &#x67E5;&#x627E;&#x7B2C;&#x4E8C;&#x4F4D;&#x4E3A;2, &#x4E14;&#x4EE5;3&#x7ED3;&#x5C3E;&#x7684;&#x4EFB;&#x610F;&#x503C;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> salary <span class="keyword">like</span> <span class="string">&apos;_2%3&apos;</span></span><br></pre></td></tr></table></figure>
+<h3 id="glob-&#x5B50;&#x53E5;"><a href="#glob-&#x5B50;&#x53E5;" class="headerlink" title="glob &#x5B50;&#x53E5;"></a>glob &#x5B50;&#x53E5;</h3><p><code>&#x7528;&#x6765;&#x5339;&#x914D;&#x901A;&#x914D;&#x7B26;&#x6307;&#x5B9A;&#x6A21;&#x5F0F;&#x7684;&#x6587;&#x672C;&#x503C;. &#x4E0E;like&#x4E0D;&#x540C;&#x7684;&#x662F;, GLOB &#x662F;&#x5927;&#x5C0F;&#x5199;&#x654F;&#x611F;&#x7684;; &#x901A;&#x914D;&#x7B26;&#x5982;&#x4E0B;:</code></p>
+<ul>
+<li>&#x661F;&#x53F7;(*) : &#x4EE3;&#x8868;0&#x4E2A;, 1&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x5B57;&#x7B26;&#x6216;&#x6570;&#x5B57;;</li>
+<li>&#x95EE;&#x597D;(?) : &#x4E00;&#x4E2A;&#x5355;&#x4E00;&#x7684;&#x6570;&#x5B57;&#x6216;&#x5B57;&#x7B26;;</li>
+<li>&#x4F8B;&#x5B50;&#x540C;&#x4E0A;;</li>
+</ul>
+<h3 id="limit-&#x5B50;&#x53E5;"><a href="#limit-&#x5B50;&#x53E5;" class="headerlink" title="limit &#x5B50;&#x53E5;"></a>limit &#x5B50;&#x53E5;</h3><h4 id="&#x57FA;&#x672C;&#x8BED;&#x6CD5;"><a href="#&#x57FA;&#x672C;&#x8BED;&#x6CD5;" class="headerlink" title="&#x57FA;&#x672C;&#x8BED;&#x6CD5;"></a>&#x57FA;&#x672C;&#x8BED;&#x6CD5;</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x57FA;&#x672C;&#x7684;</span></span><br><span class="line"><span class="keyword">select</span> column1, column2, columnN <span class="keyword">from</span> tab_name <span class="keyword">limit</span> [<span class="keyword">no</span> <span class="keyword">of</span> <span class="keyword">rows</span>];</span><br><span class="line"><span class="comment">-- &#x8FD4;&#x56DE;&#x4ECE;&#x4E0B;&#x4E00;&#x884C;&#x5F00;&#x59CB;&#x76F4;&#x5230;&#x7ED9;&#x5B9A;&#x7684;offset&#x4E3A;&#x6B62;&#x7684;&#x6240;&#x6709;&#x884C;</span></span><br><span class="line"><span class="keyword">select</span> column1, column2, columnN <span class="keyword">from</span> tab_name <span class="keyword">limit</span> [<span class="keyword">no</span> <span class="keyword">of</span> <span class="keyword">rows</span>] <span class="keyword">offset</span> [<span class="keyword">row</span> <span class="keyword">num</span>];</span><br></pre></td></tr></table></figure>
+<h4 id="&#x5B9E;&#x4F8B;"><a href="#&#x5B9E;&#x4F8B;" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">limit</span> <span class="number">6</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">limit</span> <span class="number">3</span> <span class="keyword">offset</span> <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="order-by-&#x5B50;&#x53E5;"><a href="#order-by-&#x5B50;&#x53E5;" class="headerlink" title="order by &#x5B50;&#x53E5;"></a>order by &#x5B50;&#x53E5;</h3><p><code>select column-list from table_name [where condition] [order by column1, column2, ] [asc(&#x5347;)|desc(&#x964D;)]</code></p>
+<p>&#x5B9E;&#x4F8B;:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x6309;&#x85AA;&#x6C34;&#x5347;&#x5E8F;&#x6392;&#x5217;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">order</span> <span class="keyword">by</span> salary <span class="keyword">asc</span>;</span><br><span class="line"><span class="comment">-- &#x6309;&#x85AA;&#x6C34;&#x964D;&#x5E8F;&#x6392;&#x5217;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">order</span> <span class="keyword">by</span> salary <span class="keyword">desc</span>;</span><br><span class="line"><span class="comment">-- name, &#x85AA;&#x6C34;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">name</span>, salary <span class="keyword">asc</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="group-by-&#x5B50;&#x53E5;"><a href="#group-by-&#x5B50;&#x53E5;" class="headerlink" title="group by &#x5B50;&#x53E5;"></a>group by &#x5B50;&#x53E5;</h3><p><code>select column-list from table where [conditions] group by column1,columnN order by column1,columnN</code></p>
+<p>&#x5B9E;&#x4F8B;:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x5982;&#x679C;&#x60F3;&#x4E86;&#x89E3;&#x5BA2;&#x6237;&#x7684;&#x5DE5;&#x8D44;&#x603B;&#x989D;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">into</span> company <span class="keyword">values</span>(<span class="number">9</span>, <span class="string">&apos;teddy&apos;</span>, <span class="number">42</span>, <span class="string">&apos;ggg&apos;</span>, <span class="number">90000</span>);</span><br><span class="line"><span class="comment">-- &#x6DFB;&#x52A0;&#x4E00;&#x6761;&#x8BB0;&#x5F55;&#x5C31;&#x53EF;&#x4EE5;&#x770B;&#x7684;&#x66F4;&#x900F;&#x5F7B;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">name</span>,<span class="keyword">sum</span>(salary) <span class="keyword">from</span> company <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">name</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x4E0E;order by&#x4E00;&#x8D77;&#x4F7F;&#x7528;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span>,<span class="keyword">sum</span>(salary) <span class="keyword">from</span> company <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">name</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">name</span> <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="having-&#x5B50;&#x53E5;"><a href="#having-&#x5B50;&#x53E5;" class="headerlink" title="having &#x5B50;&#x53E5;"></a>having &#x5B50;&#x53E5;</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x5141;&#x8BB8;&#x6307;&#x5B9A;&#x6761;&#x4EF6;&#x6765;&#x8FC7;&#x6EE4;&#x5C06;&#x51FA;&#x73B0;&#x5728;&#x6700;&#x7EC8;&#x7ED3;&#x679C;&#x4E2D;&#x7684;&#x5206;&#x7EC4;&#x7ED3;&#x679C;. where&#x5B50;&#x53E5;&#x5728;&#x6240;&#x9009;&#x5217;&#x4E0A;&#x8BBE;&#x7F6E;&#x6761;&#x4EF6;, &#x800C;having&#x5B50;&#x53E5;&#x5219;&#x5728;&#x7531;</span><br><span class="line">group by&#x5B50;&#x53E5;&#x521B;&#x5EFA;&#x7684;&#x5206;&#x7EC4;&#x4E0A;&#x8BBE;&#x7F6E;&#x6761;&#x4EF6;.</span><br></pre></td></tr></table></figure>
+<h4 id="&#x8BED;&#x6CD5;"><a href="#&#x8BED;&#x6CD5;" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h4><p><code>&#x5728;select&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;: select from where group by having order by, &#x5FC5;&#x987B;&#x5728;group by&#x4E4B;&#x540E;, order by&#x4E4B;&#x524D;.</code></p>
+<h4 id="&#x5B9E;&#x4F8B;-1"><a href="#&#x5B9E;&#x4F8B;-1" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x663E;&#x793A;&#x540D;&#x79F0;&#x8BA1;&#x6570;&#x5C0F;&#x4E8E;2&#x7684;&#x6240;&#x6709;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">name</span> <span class="keyword">having</span> <span class="keyword">count</span>(<span class="keyword">name</span>)&lt;<span class="number">2</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company <span class="keyword">values</span>(<span class="number">10</span>, <span class="string">&apos;wade&apos;</span>, <span class="number">34</span>, <span class="string">&apos;waiami&apos;</span>, <span class="number">33333</span>);</span><br><span class="line"><span class="comment">-- &#x6DFB;&#x52A0;&#x4E0A;&#x6761;&#x8BB0;&#x5F55;&#x540E;&#x518D;&#x89C2;&#x5BDF;&#x6548;&#x679C;</span></span><br></pre></td></tr></table></figure>
+<h3 id="distinct-&#x5B50;&#x53E5;"><a href="#distinct-&#x5B50;&#x53E5;" class="headerlink" title="distinct &#x5B50;&#x53E5;"></a>distinct &#x5B50;&#x53E5;</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">distinct&#x5173;&#x952E;&#x5B57;&#x548C;select&#x4E00;&#x8D77;&#x4F7F;&#x7528;, &#x6765;&#x6D88;&#x9664;&#x6240;&#x6709;&#x91CD;&#x590D;&#x7684;&#x8BB0;&#x5F55;, &#x5E76;&#x53EA;&#x83B7;&#x53D6;&#x552F;&#x4E00;&#x4E00;&#x6B21;&#x8BB0;&#x5F55;. &#x6709;&#x53EF;&#x80FD;&#x51FA;&#x73B0;&#x4E00;&#x79CD;&#x60C5;&#x51B5;,</span><br><span class="line">&#x5728;&#x4E00;&#x4E2A;&#x8868;&#x4E2D;&#x6709;&#x591A;&#x4E2A;&#x91CD;&#x590D;&#x7684;&#x8BB0;&#x5F55;. &#x5F53;&#x63D0;&#x53D6;&#x8FD9;&#x6837;&#x7684;&#x8BB0;&#x5F55;&#x65F6;, distinct&#x5173;&#x952E;&#x5B57;&#x5C31;&#x663E;&#x5F97;&#x6709;&#x610F;&#x4E49;, &#x5B83;&#x53EA;&#x83B7;&#x53D6;&#x552F;&#x4E00;&#x4E00;&#x6B21;&#x8BB0;&#x5F55;,</span><br><span class="line">&#x800C;&#x4E0D;&#x662F;&#x91CD;&#x590D;&#x83B7;&#x53D6;.</span><br></pre></td></tr></table></figure>
+<h4 id="&#x8BED;&#x6CD5;-1"><a href="#&#x8BED;&#x6CD5;-1" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h4><p><code>select distinct column1,column2,columnN from table_name where [condition]</code></p>
+<h4 id="&#x4F8B;&#x5B50;"><a href="#&#x4F8B;&#x5B50;" class="headerlink" title="&#x4F8B;&#x5B50;"></a>&#x4F8B;&#x5B50;</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x8FD4;&#x56DE;&#x7684;&#x8BB0;&#x5F55;&#x4E2D;&#x6709;&#x91CD;&#x590D;&#x7684;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> company;</span><br><span class="line"><span class="comment">-- &#x8FD4;&#x56DE;&#x4E0D;&#x91CD;&#x590D;&#x7684;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> <span class="keyword">name</span> <span class="keyword">from</span> company;</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/sqlite/">sqlite</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/01/04/sqlite3_base/" data-title="sqlite基础 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/01/06/sqlite3_advanced1/" title="sqlite高级-1">
+  <strong>上一篇：</strong><br/>
+  <span>
+  sqlite高级-1</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/12/20/base64/"  title="base64 编解码">
+ <strong>下一篇：</strong><br/> 
+ <span>base64 编解码
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-命令"><span class="toc-number">1.</span> <span class="toc-text">sqlite 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DDL-数据定义语言"><span class="toc-number">1.1.</span> <span class="toc-text">DDL 数据定义语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DML-数据操作语言"><span class="toc-number">1.2.</span> <span class="toc-text">DML 数据操作语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DQL-数据查询语言"><span class="toc-number">1.3.</span> <span class="toc-text">DQL 数据查询语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点命令"><span class="toc-number">1.4.</span> <span class="toc-text">点命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite语法"><span class="toc-number">2.</span> <span class="toc-text">sqlite语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-数据类型"><span class="toc-number">3.</span> <span class="toc-text">sqlite 数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储类型"><span class="toc-number">3.1.</span> <span class="toc-text">存储类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#亲和类型"><span class="toc-number">3.2.</span> <span class="toc-text">亲和类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#亲和类型及类型名称"><span class="toc-number">3.3.</span> <span class="toc-text">亲和类型及类型名称</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-使用"><span class="toc-number">4.</span> <span class="toc-text">sqlite 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">4.1.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除表"><span class="toc-number">4.2.</span> <span class="toc-text">删除表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插入数据"><span class="toc-number">4.3.</span> <span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#select-语句-显示表中数据"><span class="toc-number">4.4.</span> <span class="toc-text">select 语句, 显示表中数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#查看表中信息"><span class="toc-number">4.4.1.</span> <span class="toc-text">查看表中信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看数据库的表"><span class="toc-number">4.4.2.</span> <span class="toc-text">查看数据库的表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算术运算符"><span class="toc-number">4.4.3.</span> <span class="toc-text">算术运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#比较运算符"><span class="toc-number">4.4.4.</span> <span class="toc-text">比较运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#逻辑运算符"><span class="toc-number">4.4.5.</span> <span class="toc-text">逻辑运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#位运算符"><span class="toc-number">4.4.6.</span> <span class="toc-text">位运算符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sqlite-表达式"><span class="toc-number">4.5.</span> <span class="toc-text">sqlite 表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#update语句"><span class="toc-number">4.6.</span> <span class="toc-text">update语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete语句"><span class="toc-number">4.7.</span> <span class="toc-text">delete语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#like-子句"><span class="toc-number">4.8.</span> <span class="toc-text">like 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glob-子句"><span class="toc-number">4.9.</span> <span class="toc-text">glob 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#limit-子句"><span class="toc-number">4.10.</span> <span class="toc-text">limit 子句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本语法"><span class="toc-number">4.10.1.</span> <span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例"><span class="toc-number">4.10.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#order-by-子句"><span class="toc-number">4.11.</span> <span class="toc-text">order by 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group-by-子句"><span class="toc-number">4.12.</span> <span class="toc-text">group by 子句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#having-子句"><span class="toc-number">4.13.</span> <span class="toc-text">having 子句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语法"><span class="toc-number">4.13.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例-1"><span class="toc-number">4.13.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#distinct-子句"><span class="toc-number">4.14.</span> <span class="toc-text">distinct 子句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语法-1"><span class="toc-number">4.14.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">4.14.2.</span> <span class="toc-text">例子</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gis/" title="gis">gis<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/excel/" title="excel">excel<sup>1</sup></a></li>
+			
+		
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
