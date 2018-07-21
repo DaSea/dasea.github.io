@@ -1,532 +1,845 @@
+<!DOCTYPE html>
 
- <!DOCTYPE HTML>
-<html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8">
+
+
+
+
+
+
+
+
+
+
+
   
-    <title>linux安装后的基本配置 | 兼容</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="DaSea">
-    
 
-    
-    <meta name="description" content="neovim or vim&amp;#x4E00;&amp;#x4E9B;&amp;#x5FC5;&amp;#x987B;&amp;#x5305;&amp;#xFF0C;&amp;#x5728;deepin,ubuntu&amp;#x4E0B;&amp;#x9762;&amp;#x7F16;&amp;#x8BD1;&amp;#x7528;&amp;#x7684;1$ sudo apt-get install libtool libtool-bin autoconf automake cmake g+">
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="neovim or vim一些必须包，在deepin,ubuntu下面编译用的1$ sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl xsel enca id-utils 安装vim时需要的一些包12$sudo apt install libncurses5-dev">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux安装后的基本配置">
 <meta property="og:url" content="http://yoursite.com/2018/06/03/linux_config/index.html">
 <meta property="og:site_name" content="兼容">
-<meta property="og:description" content="neovim or vim&amp;#x4E00;&amp;#x4E9B;&amp;#x5FC5;&amp;#x987B;&amp;#x5305;&amp;#xFF0C;&amp;#x5728;deepin,ubuntu&amp;#x4E0B;&amp;#x9762;&amp;#x7F16;&amp;#x8BD1;&amp;#x7528;&amp;#x7684;1$ sudo apt-get install libtool libtool-bin autoconf automake cmake g+">
+<meta property="og:description" content="neovim or vim一些必须包，在deepin,ubuntu下面编译用的1$ sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl xsel enca id-utils 安装vim时需要的一些包12$sudo apt install libncurses5-dev">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-06-03T04:28:32.540Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux安装后的基本配置">
-<meta name="twitter:description" content="neovim or vim&amp;#x4E00;&amp;#x4E9B;&amp;#x5FC5;&amp;#x987B;&amp;#x5305;&amp;#xFF0C;&amp;#x5728;deepin,ubuntu&amp;#x4E0B;&amp;#x9762;&amp;#x7F16;&amp;#x8BD1;&amp;#x7528;&amp;#x7684;1$ sudo apt-get install libtool libtool-bin autoconf automake cmake g+">
+<meta name="twitter:description" content="neovim or vim一些必须包，在deepin,ubuntu下面编译用的1$ sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl xsel enca id-utils 安装vim时需要的一些包12$sudo apt install libncurses5-dev">
 
-    
-    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    <link rel="stylesheet" href="/css/style.css">
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/03/linux_config/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>linux安装后的基本配置 | 兼容</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
 </head>
 
-  <body>
-    <header>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">兼容</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
       
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
-				<h2 class="blog-motto">这是一场不停的追逐!</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">首页</a></li>
-					
-						<li><a href="/archives">归档</a></li>
-					
-						<li><a href="/about">关于</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:yoursite.com">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
+        <h1 class="site-subtitle" itemprop="description">这是一场不停的追逐!</h1>
+      
     
-      <a href="/2018/06/03/linux_config/" title="linux安装后的基本配置" itemprop="url">linux安装后的基本配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
-		
-  <p class="article-time">
-    <time datetime="2018-06-03T04:28:32.540Z" itemprop="datePublished"> Published 2018-06-03</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#neovim-or-vim"><span class="toc-number">1.</span> <span class="toc-text">neovim or vim</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些必须包，在deepin-ubuntu下面编译用的"><span class="toc-number">1.1.</span> <span class="toc-text">一些必须包，在deepin,ubuntu下面编译用的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装vim时需要的一些包"><span class="toc-number">1.2.</span> <span class="toc-text">安装vim时需要的一些包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">1.3.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#直接安装"><span class="toc-number">1.3.1.</span> <span class="toc-text">直接安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从源码安装"><span class="toc-number">1.3.2.</span> <span class="toc-text">从源码安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装配置"><span class="toc-number">1.3.3.</span> <span class="toc-text">安装配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于fstab文件"><span class="toc-number">1.4.</span> <span class="toc-text">关于fstab文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件配置"><span class="toc-number">1.4.1.</span> <span class="toc-text">文件配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有时ntfs分区现实只读文件系统，系统提示超级块损坏"><span class="toc-number">1.4.2.</span> <span class="toc-text">有时ntfs分区现实只读文件系统，系统提示超级块损坏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看用UID与GID"><span class="toc-number">1.4.3.</span> <span class="toc-text">查看用UID与GID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#个人目录中文转英文"><span class="toc-number">1.5.</span> <span class="toc-text">个人目录中文转英文</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通过修改系统语言"><span class="toc-number">1.5.1.</span> <span class="toc-text">通过修改系统语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过修改系统配置文件"><span class="toc-number">1.5.2.</span> <span class="toc-text">通过修改系统配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建ppt幻灯片壁纸-gnome"><span class="toc-number">1.6.</span> <span class="toc-text">创建ppt幻灯片壁纸(gnome)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ppt-xml内容"><span class="toc-number">1.6.1.</span> <span class="toc-text">ppt.xml内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ppt-bg-xml内容"><span class="toc-number">1.6.2.</span> <span class="toc-text">ppt_bg.xml内容</span></a></li></ol></li></ol></li></ol>
-		
-		</div>
-		
-		<h1 id="neovim-or-vim"><a href="/2018/06/03/linux_config/#neovim-or-vim" class="headerlink" title="neovim or vim"></a>neovim or vim</h1><h2 id="&#x4E00;&#x4E9B;&#x5FC5;&#x987B;&#x5305;&#xFF0C;&#x5728;deepin-ubuntu&#x4E0B;&#x9762;&#x7F16;&#x8BD1;&#x7528;&#x7684;"><a href="/2018/06/03/linux_config/#&#x4E00;&#x4E9B;&#x5FC5;&#x987B;&#x5305;&#xFF0C;&#x5728;deepin-ubuntu&#x4E0B;&#x9762;&#x7F16;&#x8BD1;&#x7528;&#x7684;" class="headerlink" title="&#x4E00;&#x4E9B;&#x5FC5;&#x987B;&#x5305;&#xFF0C;&#x5728;deepin,ubuntu&#x4E0B;&#x9762;&#x7F16;&#x8BD1;&#x7528;&#x7684;"></a>&#x4E00;&#x4E9B;&#x5FC5;&#x987B;&#x5305;&#xFF0C;&#x5728;deepin,ubuntu&#x4E0B;&#x9762;&#x7F16;&#x8BD1;&#x7528;&#x7684;</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl xsel enca id-utils</span><br></pre></td></tr></table></figure>
-<h2 id="&#x5B89;&#x88C5;vim&#x65F6;&#x9700;&#x8981;&#x7684;&#x4E00;&#x4E9B;&#x5305;"><a href="/2018/06/03/linux_config/#&#x5B89;&#x88C5;vim&#x65F6;&#x9700;&#x8981;&#x7684;&#x4E00;&#x4E9B;&#x5305;" class="headerlink" title="&#x5B89;&#x88C5;vim&#x65F6;&#x9700;&#x8981;&#x7684;&#x4E00;&#x4E9B;&#x5305;"></a>&#x5B89;&#x88C5;vim&#x65F6;&#x9700;&#x8981;&#x7684;&#x4E00;&#x4E9B;&#x5305;</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt install libncurses5-dev libgtk2.0-dev lua5.1 libluajit-5.1-2 liblua5.1-0-dev luajit python-dev</span><br><span class="line"><span class="variable">$sudo</span> ln -s libluajit-5.1.so.2.0.4 libluajit-5.1.so</span><br></pre></td></tr></table></figure>
-<h2 id="&#x5B89;&#x88C5;"><a href="/2018/06/03/linux_config/#&#x5B89;&#x88C5;" class="headerlink" title="&#x5B89;&#x88C5;"></a>&#x5B89;&#x88C5;</h2><h3 id="&#x76F4;&#x63A5;&#x5B89;&#x88C5;"><a href="/2018/06/03/linux_config/#&#x76F4;&#x63A5;&#x5B89;&#x88C5;" class="headerlink" title="&#x76F4;&#x63A5;&#x5B89;&#x88C5;"></a>&#x76F4;&#x63A5;&#x5B89;&#x88C5;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># debain</span></span><br><span class="line"><span class="variable">$sudo</span> apt-get install neovim</span><br><span class="line"><span class="comment"># &#x9996;&#x5148;&#x9700;&#x8981;&#x5B89;&#x88C5;pip&#x6216;pip3</span></span><br><span class="line"><span class="variable">$sudo</span> pip install neovim</span><br><span class="line"></span><br><span class="line"><span class="comment"># arch,manjaro</span></span><br><span class="line"><span class="variable">$sudo</span> pacman -S neovim</span><br><span class="line"><span class="comment"># python&#x652F;&#x6301;</span></span><br><span class="line"><span class="variable">$sudo</span> pacman -S python2-neovim python-neovim</span><br></pre></td></tr></table></figure>
-<h3 id="&#x4ECE;&#x6E90;&#x7801;&#x5B89;&#x88C5;"><a href="/2018/06/03/linux_config/#&#x4ECE;&#x6E90;&#x7801;&#x5B89;&#x88C5;" class="headerlink" title="&#x4ECE;&#x6E90;&#x7801;&#x5B89;&#x88C5;"></a>&#x4ECE;&#x6E90;&#x7801;&#x5B89;&#x88C5;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$git</span> <span class="built_in">clone</span> --depth 1 https://github.com/neovim/neovim.git</span><br><span class="line"><span class="variable">$cd</span> neovim</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x521B;&#x5EFA;&#x7B2C;&#x4E09;&#x65B9;&#x63D2;&#x4EF6;</span></span><br><span class="line"><span class="variable">$mkdir</span> .deps</span><br><span class="line"><span class="variable">$cd</span> .deps</span><br><span class="line"><span class="variable">$cmake</span> ../third-party</span><br><span class="line"><span class="variable">$make</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x6784;&#x5EFA;&#x4E3B;&#x4F53;</span></span><br><span class="line"><span class="variable">$cd</span> ..</span><br><span class="line"><span class="variable">$mkdir</span> build</span><br><span class="line"><span class="variable">$cd</span> build</span><br><span class="line"><span class="variable">$cmake</span> .. -DMIN_LOG_LEVEL=0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span></span><br><span class="line"><span class="variable">$make</span></span><br><span class="line"><span class="variable">$sudo</span> make install</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B89;&#x88C5;&#x914D;&#x7F6E;"><a href="/2018/06/03/linux_config/#&#x5B89;&#x88C5;&#x914D;&#x7F6E;" class="headerlink" title="&#x5B89;&#x88C5;&#x914D;&#x7F6E;"></a>&#x5B89;&#x88C5;&#x914D;&#x7F6E;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$git</span> <span class="built_in">clone</span> https://github.com/DaSea/dotfiles.git .dotfiles</span><br><span class="line"><span class="variable">$git</span> submodule update --init --recursive</span><br><span class="line"><span class="variable">$ln</span> -s .dotfiles/dotsyncrc ~/.dotsyncrc</span><br><span class="line">$./.dotfiles/dotsync/bin/dotsync -L</span><br></pre></td></tr></table></figure>
-<h2 id="&#x5173;&#x4E8E;fstab&#x6587;&#x4EF6;"><a href="/2018/06/03/linux_config/#&#x5173;&#x4E8E;fstab&#x6587;&#x4EF6;" class="headerlink" title="&#x5173;&#x4E8E;fstab&#x6587;&#x4EF6;"></a>&#x5173;&#x4E8E;fstab&#x6587;&#x4EF6;</h2><h3 id="&#x6587;&#x4EF6;&#x914D;&#x7F6E;"><a href="/2018/06/03/linux_config/#&#x6587;&#x4EF6;&#x914D;&#x7F6E;" class="headerlink" title="&#x6587;&#x4EF6;&#x914D;&#x7F6E;"></a>&#x6587;&#x4EF6;&#x914D;&#x7F6E;</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">## deepin&#x548C;ubuntu&#x4E0A;&#x9762;&#x53EF;&#x7528;</span><br><span class="line"># ntf work</span><br><span class="line">UUID=&quot;000D30A1000C5B09&quot; /media/work ntfs-3g defaults 0 2</span><br><span class="line"># ntfs download</span><br><span class="line">UUID=&quot;000D8D4E0007D8B4&quot; /media/download ntfs-3g defaults 0 2</span><br><span class="line"># ntfs entertainment</span><br><span class="line">UUID=&quot;02CCBFB1CCBF9CFB&quot; /media/entertainment ntfs-3g defaults 0 2</span><br><span class="line"></span><br><span class="line">## manjaro&#x4E0A;&#x4F7F;&#x7528;</span><br><span class="line"># ntf work</span><br><span class="line">UUID=&quot;000D30A1000C5B09&quot; /media/work ntfs-3g uid=1000,gid=1000,dmask=011,fmask=111 0 0</span><br><span class="line"># ntfs download</span><br><span class="line">UUID=&quot;000D8D4E0007D8B4&quot; /media/download ntfs-3g uid=1000,gid=1000,dmask=011,fmask=111 0 0</span><br><span class="line"># ntfs entertainment</span><br><span class="line">UUID=&quot;02CCBFB1CCBF9CFB&quot; /media/entertainment ntfs-3g uid=1000,gid=1000,dmask=011,fmask=111 0 0</span><br></pre></td></tr></table></figure>
-<h3 id="&#x6709;&#x65F6;ntfs&#x5206;&#x533A;&#x73B0;&#x5B9E;&#x53EA;&#x8BFB;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x7CFB;&#x7EDF;&#x63D0;&#x793A;&#x8D85;&#x7EA7;&#x5757;&#x635F;&#x574F;"><a href="/2018/06/03/linux_config/#&#x6709;&#x65F6;ntfs&#x5206;&#x533A;&#x73B0;&#x5B9E;&#x53EA;&#x8BFB;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x7CFB;&#x7EDF;&#x63D0;&#x793A;&#x8D85;&#x7EA7;&#x5757;&#x635F;&#x574F;" class="headerlink" title="&#x6709;&#x65F6;ntfs&#x5206;&#x533A;&#x73B0;&#x5B9E;&#x53EA;&#x8BFB;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x7CFB;&#x7EDF;&#x63D0;&#x793A;&#x8D85;&#x7EA7;&#x5757;&#x635F;&#x574F;"></a>&#x6709;&#x65F6;ntfs&#x5206;&#x533A;&#x73B0;&#x5B9E;&#x53EA;&#x8BFB;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x7CFB;&#x7EDF;&#x63D0;&#x793A;&#x8D85;&#x7EA7;&#x5757;&#x635F;&#x574F;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x4F7F;&#x7528;ntfsfix&#x8FDB;&#x884C;&#x4FEE;&#x590D;</span></span><br><span class="line"><span class="variable">$sudo</span> ntfsfix -b -d /dev/sdb2</span><br><span class="line"><span class="comment"># Note:&#x4FEE;&#x590D;&#x6210;&#x529F;&#x540E;&#x7528;mount&#x91CD;&#x65B0;&#x6302;&#x8F7D;</span></span><br><span class="line"><span class="variable">$sudo</span> mount -a</span><br></pre></td></tr></table></figure>
-<h3 id="&#x67E5;&#x770B;&#x7528;UID&#x4E0E;GID"><a href="/2018/06/03/linux_config/#&#x67E5;&#x770B;&#x7528;UID&#x4E0E;GID" class="headerlink" title="&#x67E5;&#x770B;&#x7528;UID&#x4E0E;GID"></a>&#x67E5;&#x770B;&#x7528;UID&#x4E0E;GID</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x4F7F;&#x7528;id&#x547D;&#x4EE4;</span></span><br><span class="line"><span class="variable">$id</span> -a</span><br></pre></td></tr></table></figure>
-<h2 id="&#x4E2A;&#x4EBA;&#x76EE;&#x5F55;&#x4E2D;&#x6587;&#x8F6C;&#x82F1;&#x6587;"><a href="/2018/06/03/linux_config/#&#x4E2A;&#x4EBA;&#x76EE;&#x5F55;&#x4E2D;&#x6587;&#x8F6C;&#x82F1;&#x6587;" class="headerlink" title="&#x4E2A;&#x4EBA;&#x76EE;&#x5F55;&#x4E2D;&#x6587;&#x8F6C;&#x82F1;&#x6587;"></a>&#x4E2A;&#x4EBA;&#x76EE;&#x5F55;&#x4E2D;&#x6587;&#x8F6C;&#x82F1;&#x6587;</h2><h3 id="&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x8BED;&#x8A00;"><a href="/2018/06/03/linux_config/#&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x8BED;&#x8A00;" class="headerlink" title="&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x8BED;&#x8A00;"></a>&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x8BED;&#x8A00;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x67E5;&#x770B;&#x5F53;&#x524D;&#x8BED;&#x8A00;</span></span><br><span class="line"><span class="variable">$echo</span> <span class="variable">$LANG</span></span><br><span class="line"><span class="comment"># &#x4FEE;&#x6539;&#x8BED;&#x8A00;&#x4E3A;en_US</span></span><br><span class="line"><span class="variable">$export</span> LANG=en_US</span><br><span class="line"><span class="comment"># &#x901A;&#x8FC7;xdg-user-dirs-gtk-update</span></span><br><span class="line"><span class="variable">$xgd</span>-user-dirs-gtk-update</span><br><span class="line"><span class="comment"># &#x8FD8;&#x539F;&#x7CFB;&#x7EDF;&#x8BED;&#x8A00;</span></span><br><span class="line"><span class="variable">$export</span> LANG=zh_CN.UTF-8</span><br></pre></td></tr></table></figure>
-<h3 id="&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x914D;&#x7F6E;&#x6587;&#x4EF6;"><a href="/2018/06/03/linux_config/#&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x914D;&#x7F6E;&#x6587;&#x4EF6;" class="headerlink" title="&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x914D;&#x7F6E;&#x6587;&#x4EF6;"></a>&#x901A;&#x8FC7;&#x4FEE;&#x6539;&#x7CFB;&#x7EDF;&#x914D;&#x7F6E;&#x6587;&#x4EF6;</h3><ol>
-<li>&#x5C06;&#x4E2D;&#x6587;&#x76EE;&#x5F55;&#x91CD;&#x547D;&#x540D;&#x4E3A;&#x82F1;&#x6587;;</li>
-<li>&#x4FEE;&#x6539;<code>~/.config/user-dirs.dirs</code>,&#x5C06;&#x5176;&#x4E2D;&#x7684;&#x4E2D;&#x6587;&#x8F6C;&#x6362;&#x4E3A;&#x82F1;&#x6587;;</li>
-</ol>
-<h2 id="&#x521B;&#x5EFA;ppt&#x5E7B;&#x706F;&#x7247;&#x58C1;&#x7EB8;-gnome"><a href="/2018/06/03/linux_config/#&#x521B;&#x5EFA;ppt&#x5E7B;&#x706F;&#x7247;&#x58C1;&#x7EB8;-gnome" class="headerlink" title="&#x521B;&#x5EFA;ppt&#x5E7B;&#x706F;&#x7247;&#x58C1;&#x7EB8;(gnome)"></a>&#x521B;&#x5EFA;ppt&#x5E7B;&#x706F;&#x7247;&#x58C1;&#x7EB8;(gnome)</h2><p>&#x53C2;&#x8003;: <a href="https://linux.cn/article-9571-1.html?pr" target="_blank" rel="noopener">&#x5982;&#x4F55;&#x8BBE;&#x7F6E; GNOME &#x663E;&#x793A;&#x81EA;&#x5B9A;&#x4E49;&#x5E7B;&#x706F;&#x7247;</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .<span class="built_in">local</span>/share/gnome-background-properties</span><br><span class="line">$ nvim ppt.xml</span><br></pre></td></tr></table></figure>
-<h3 id="ppt-xml&#x5185;&#x5BB9;"><a href="/2018/06/03/linux_config/#ppt-xml&#x5185;&#x5BB9;" class="headerlink" title="ppt.xml&#x5185;&#x5BB9;"></a>ppt.xml&#x5185;&#x5BB9;</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line"><span class="meta">&lt;!DOCTYPE wallpapers SYSTEM &quot;gnome-wp-list.dtd&quot;&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wallpapers</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">wallpaper</span> <span class="attr">deleted</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">name</span>&gt;</span>Opensource.com Wallpapers<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">filename</span>&gt;</span>/home/dasea/Pictures/ppt_bg.xml<span class="tag">&lt;/<span class="name">filename</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">options</span>&gt;</span>zoom<span class="tag">&lt;/<span class="name">options</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">wallpaper</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">wallpapers</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="ppt-bg-xml&#x5185;&#x5BB9;"><a href="/2018/06/03/linux_config/#ppt-bg-xml&#x5185;&#x5BB9;" class="headerlink" title="ppt_bg.xml&#x5185;&#x5BB9;"></a>ppt_bg.xml&#x5185;&#x5BB9;</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">background</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">starttime</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- &#x8D77;&#x59CB;&#x65F6;&#x95F4; --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">year</span>&gt;</span>2018<span class="tag">&lt;/<span class="name">year</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">month</span>&gt;</span>05<span class="tag">&lt;/<span class="name">month</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">day</span>&gt;</span>26<span class="tag">&lt;/<span class="name">day</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">hour</span>&gt;</span>6<span class="tag">&lt;/<span class="name">hour</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">minute</span>&gt;</span>00<span class="tag">&lt;/<span class="name">minute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">second</span>&gt;</span>00<span class="tag">&lt;/<span class="name">second</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">starttime</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">static</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Duration in seconds to display the background --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>1800.0<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">file</span>&gt;</span>/home/dasea/Pictures/39.jpg<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">static</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">transition</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Duration of the transition in seconds, default is 2 seconds --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>900<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">from</span>&gt;</span>/home/dasea/Pictures/41.jpg<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">to</span>&gt;</span>/home/dasea/Pictures/373.jpg<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">transition</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">static</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>1800.0<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">file</span>&gt;</span>/home/dasea/Pictures/background.jpeg<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">static</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">transition</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>900<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">from</span>&gt;</span>/home/dasea/Pictures/pc0319.jpg<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">to</span>&gt;</span>/home/dasea/Pictures/32.jpg<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">transition</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">background</span>&gt;</span></span><br></pre></td></tr></table></figure>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/linux/">linux</a>
   </div>
 
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://yoursite.com/2018/06/03/linux_config/" data-title="linux安装后的基本配置 | 兼容" data-tsina="null" class="share clearfix">
-	  </div>
-	
-	</div>
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
 
+      
+      
+    </ul>
+  
 
-</footer>
+  
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
-
-<div class="next">
-<a href="/2018/05/06/git_learn/"  title="git命令记录">
- <strong>下一篇：</strong><br/> 
- <span>git命令记录
-</span>
-</a>
-</div>
-
+  
 </nav>
 
-	
 
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#neovim-or-vim"><span class="toc-number">1.</span> <span class="toc-text">neovim or vim</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些必须包，在deepin-ubuntu下面编译用的"><span class="toc-number">1.1.</span> <span class="toc-text">一些必须包，在deepin,ubuntu下面编译用的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装vim时需要的一些包"><span class="toc-number">1.2.</span> <span class="toc-text">安装vim时需要的一些包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">1.3.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#直接安装"><span class="toc-number">1.3.1.</span> <span class="toc-text">直接安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从源码安装"><span class="toc-number">1.3.2.</span> <span class="toc-text">从源码安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装配置"><span class="toc-number">1.3.3.</span> <span class="toc-text">安装配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于fstab文件"><span class="toc-number">1.4.</span> <span class="toc-text">关于fstab文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件配置"><span class="toc-number">1.4.1.</span> <span class="toc-text">文件配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有时ntfs分区现实只读文件系统，系统提示超级块损坏"><span class="toc-number">1.4.2.</span> <span class="toc-text">有时ntfs分区现实只读文件系统，系统提示超级块损坏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看用UID与GID"><span class="toc-number">1.4.3.</span> <span class="toc-text">查看用UID与GID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#个人目录中文转英文"><span class="toc-number">1.5.</span> <span class="toc-text">个人目录中文转英文</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通过修改系统语言"><span class="toc-number">1.5.1.</span> <span class="toc-text">通过修改系统语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过修改系统配置文件"><span class="toc-number">1.5.2.</span> <span class="toc-text">通过修改系统配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建ppt幻灯片壁纸-gnome"><span class="toc-number">1.6.</span> <span class="toc-text">创建ppt幻灯片壁纸(gnome)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ppt-xml内容"><span class="toc-number">1.6.1.</span> <span class="toc-text">ppt.xml内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ppt-bg-xml内容"><span class="toc-number">1.6.2.</span> <span class="toc-text">ppt_bg.xml内容</span></a></li></ol></li></ol></li></ol>
- 
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/03/linux_config/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DaSea">
+      <meta itemprop="description" content="Fucking Code!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="兼容">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">linux安装后的基本配置
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-03 12:28:32" itemprop="dateCreated datePublished" datetime="2018-06-03T12:28:32+08:00">2018-06-03</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="neovim-or-vim"><a href="/2018/06/03/linux_config/#neovim-or-vim" class="headerlink" title="neovim or vim"></a>neovim or vim</h1><h2 id="一些必须包，在deepin-ubuntu下面编译用的"><a href="/2018/06/03/linux_config/#一些必须包，在deepin-ubuntu下面编译用的" class="headerlink" title="一些必须包，在deepin,ubuntu下面编译用的"></a>一些必须包，在deepin,ubuntu下面编译用的</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl xsel enca id-utils</span><br></pre></td></tr></table></figure>
+<h2 id="安装vim时需要的一些包"><a href="/2018/06/03/linux_config/#安装vim时需要的一些包" class="headerlink" title="安装vim时需要的一些包"></a>安装vim时需要的一些包</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt install libncurses5-dev libgtk2.0-dev lua5.1 libluajit-5.1-2 liblua5.1-0-dev luajit python-dev</span><br><span class="line"><span class="variable">$sudo</span> ln -s libluajit-5.1.so.2.0.4 libluajit-5.1.so</span><br></pre></td></tr></table></figure>
+<h2 id="安装"><a href="/2018/06/03/linux_config/#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="直接安装"><a href="/2018/06/03/linux_config/#直接安装" class="headerlink" title="直接安装"></a>直接安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># debain</span></span><br><span class="line"><span class="variable">$sudo</span> apt-get install neovim</span><br><span class="line"><span class="comment"># 首先需要安装pip或pip3</span></span><br><span class="line"><span class="variable">$sudo</span> pip install neovim</span><br><span class="line"></span><br><span class="line"><span class="comment"># arch,manjaro</span></span><br><span class="line"><span class="variable">$sudo</span> pacman -S neovim</span><br><span class="line"><span class="comment"># python支持</span></span><br><span class="line"><span class="variable">$sudo</span> pacman -S python2-neovim python-neovim</span><br></pre></td></tr></table></figure>
+<h3 id="从源码安装"><a href="/2018/06/03/linux_config/#从源码安装" class="headerlink" title="从源码安装"></a>从源码安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$git</span> <span class="built_in">clone</span> --depth 1 https://github.com/neovim/neovim.git</span><br><span class="line"><span class="variable">$cd</span> neovim</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建第三方插件</span></span><br><span class="line"><span class="variable">$mkdir</span> .deps</span><br><span class="line"><span class="variable">$cd</span> .deps</span><br><span class="line"><span class="variable">$cmake</span> ../third-party</span><br><span class="line"><span class="variable">$make</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建主体</span></span><br><span class="line"><span class="variable">$cd</span> ..</span><br><span class="line"><span class="variable">$mkdir</span> build</span><br><span class="line"><span class="variable">$cd</span> build</span><br><span class="line"><span class="variable">$cmake</span> .. -DMIN_LOG_LEVEL=0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span></span><br><span class="line"><span class="variable">$make</span></span><br><span class="line"><span class="variable">$sudo</span> make install</span><br></pre></td></tr></table></figure>
+<h3 id="安装配置"><a href="/2018/06/03/linux_config/#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$git</span> <span class="built_in">clone</span> https://github.com/DaSea/dotfiles.git .dotfiles</span><br><span class="line"><span class="variable">$git</span> submodule update --init --recursive</span><br><span class="line"><span class="variable">$ln</span> -s .dotfiles/dotsyncrc ~/.dotsyncrc</span><br><span class="line">$./.dotfiles/dotsync/bin/dotsync -L</span><br></pre></td></tr></table></figure>
+<h2 id="关于fstab文件"><a href="/2018/06/03/linux_config/#关于fstab文件" class="headerlink" title="关于fstab文件"></a>关于fstab文件</h2><h3 id="文件配置"><a href="/2018/06/03/linux_config/#文件配置" class="headerlink" title="文件配置"></a>文件配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">## deepin和ubuntu上面可用</span><br><span class="line"># ntf work</span><br><span class="line">UUID=&quot;000D30A1000C5B09&quot; /media/work ntfs-3g defaults 0 2</span><br><span class="line"># ntfs download</span><br><span class="line">UUID=&quot;000D8D4E0007D8B4&quot; /media/download ntfs-3g defaults 0 2</span><br><span class="line"># ntfs entertainment</span><br><span class="line">UUID=&quot;02CCBFB1CCBF9CFB&quot; /media/entertainment ntfs-3g defaults 0 2</span><br><span class="line"></span><br><span class="line">## manjaro上使用</span><br><span class="line"># ntf work</span><br><span class="line">UUID=&quot;000D30A1000C5B09&quot; /media/work ntfs-3g uid=1000,gid=1000,dmask=011,fmask=111 0 0</span><br><span class="line"># ntfs download</span><br><span class="line">UUID=&quot;000D8D4E0007D8B4&quot; /media/download ntfs-3g uid=1000,gid=1000,dmask=011,fmask=111 0 0</span><br><span class="line"># ntfs entertainment</span><br><span class="line">UUID=&quot;02CCBFB1CCBF9CFB&quot; /media/entertainment ntfs-3g uid=1000,gid=1000,dmask=011,fmask=111 0 0</span><br></pre></td></tr></table></figure>
+<h3 id="有时ntfs分区现实只读文件系统，系统提示超级块损坏"><a href="/2018/06/03/linux_config/#有时ntfs分区现实只读文件系统，系统提示超级块损坏" class="headerlink" title="有时ntfs分区现实只读文件系统，系统提示超级块损坏"></a>有时ntfs分区现实只读文件系统，系统提示超级块损坏</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用ntfsfix进行修复</span></span><br><span class="line"><span class="variable">$sudo</span> ntfsfix -b -d /dev/sdb2</span><br><span class="line"><span class="comment"># Note:修复成功后用mount重新挂载</span></span><br><span class="line"><span class="variable">$sudo</span> mount -a</span><br></pre></td></tr></table></figure>
+<h3 id="查看用UID与GID"><a href="/2018/06/03/linux_config/#查看用UID与GID" class="headerlink" title="查看用UID与GID"></a>查看用UID与GID</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用id命令</span></span><br><span class="line"><span class="variable">$id</span> -a</span><br></pre></td></tr></table></figure>
+<h2 id="个人目录中文转英文"><a href="/2018/06/03/linux_config/#个人目录中文转英文" class="headerlink" title="个人目录中文转英文"></a>个人目录中文转英文</h2><h3 id="通过修改系统语言"><a href="/2018/06/03/linux_config/#通过修改系统语言" class="headerlink" title="通过修改系统语言"></a>通过修改系统语言</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看当前语言</span></span><br><span class="line"><span class="variable">$echo</span> <span class="variable">$LANG</span></span><br><span class="line"><span class="comment"># 修改语言为en_US</span></span><br><span class="line"><span class="variable">$export</span> LANG=en_US</span><br><span class="line"><span class="comment"># 通过xdg-user-dirs-gtk-update</span></span><br><span class="line"><span class="variable">$xgd</span>-user-dirs-gtk-update</span><br><span class="line"><span class="comment"># 还原系统语言</span></span><br><span class="line"><span class="variable">$export</span> LANG=zh_CN.UTF-8</span><br></pre></td></tr></table></figure>
+<h3 id="通过修改系统配置文件"><a href="/2018/06/03/linux_config/#通过修改系统配置文件" class="headerlink" title="通过修改系统配置文件"></a>通过修改系统配置文件</h3><ol>
+<li>将中文目录重命名为英文;</li>
+<li>修改<code>~/.config/user-dirs.dirs</code>,将其中的中文转换为英文;</li>
+</ol>
+<h2 id="创建ppt幻灯片壁纸-gnome"><a href="/2018/06/03/linux_config/#创建ppt幻灯片壁纸-gnome" class="headerlink" title="创建ppt幻灯片壁纸(gnome)"></a>创建ppt幻灯片壁纸(gnome)</h2><p>参考: <a href="https://linux.cn/article-9571-1.html?pr" target="_blank" rel="noopener">如何设置 GNOME 显示自定义幻灯片</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .<span class="built_in">local</span>/share/gnome-background-properties</span><br><span class="line">$ nvim ppt.xml</span><br></pre></td></tr></table></figure>
+<h3 id="ppt-xml内容"><a href="/2018/06/03/linux_config/#ppt-xml内容" class="headerlink" title="ppt.xml内容"></a>ppt.xml内容</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="meta">&lt;!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wallpapers</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">wallpaper</span> <span class="attr">deleted</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">name</span>&gt;</span>Opensource.com Wallpapers<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">filename</span>&gt;</span>/home/dasea/Pictures/ppt_bg.xml<span class="tag">&lt;/<span class="name">filename</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">options</span>&gt;</span>zoom<span class="tag">&lt;/<span class="name">options</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">wallpaper</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">wallpapers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="ppt-bg-xml内容"><a href="/2018/06/03/linux_config/#ppt-bg-xml内容" class="headerlink" title="ppt_bg.xml内容"></a>ppt_bg.xml内容</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">background</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">starttime</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 起始时间 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">year</span>&gt;</span>2018<span class="tag">&lt;/<span class="name">year</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">month</span>&gt;</span>05<span class="tag">&lt;/<span class="name">month</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">day</span>&gt;</span>26<span class="tag">&lt;/<span class="name">day</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">hour</span>&gt;</span>6<span class="tag">&lt;/<span class="name">hour</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">minute</span>&gt;</span>00<span class="tag">&lt;/<span class="name">minute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">second</span>&gt;</span>00<span class="tag">&lt;/<span class="name">second</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">starttime</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">static</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Duration in seconds to display the background --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>1800.0<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">file</span>&gt;</span>/home/dasea/Pictures/39.jpg<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">static</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">transition</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Duration of the transition in seconds, default is 2 seconds --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>900<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">from</span>&gt;</span>/home/dasea/Pictures/41.jpg<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">to</span>&gt;</span>/home/dasea/Pictures/373.jpg<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">transition</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">static</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>1800.0<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">file</span>&gt;</span>/home/dasea/Pictures/background.jpeg<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">static</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">transition</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">duration</span>&gt;</span>900<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">from</span>&gt;</span>/home/dasea/Pictures/pc0319.jpg<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">to</span>&gt;</span>/home/dasea/Pictures/32.jpg<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">transition</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">background</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/06/git_learn/" rel="next" title="git命令记录">
+                <i class="fa fa-chevron-left"></i> git命令记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/21/hexo_learn/" rel="prev" title="hexo之使用记录">
+                hexo之使用记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
+
+          </div>
+          
 
   
 
+
+
+        </div>
+        
+          
   
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-  <div class="linkslist">
-  <p class="asidetitle">Links</p>
-    <ul>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
-    </ul>
-</div>
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> Talk is cheap, show me code! <br/>
-			</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</div>
-			
-		
+  </div>
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
-		
-		<a href="/about" target="_blank" title="DaSea">DaSea</a>
-		
-		
-		</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-  
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
       
-      $('#toc.toc-aside').css('display', 'none');
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">DaSea</p>
+              <p class="site-description motion-element" itemprop="description">Fucking Code!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/DaSea" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#neovim-or-vim"><span class="nav-number">1.</span> <span class="nav-text">neovim or vim</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些必须包，在deepin-ubuntu下面编译用的"><span class="nav-number">1.1.</span> <span class="nav-text">一些必须包，在deepin,ubuntu下面编译用的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装vim时需要的一些包"><span class="nav-number">1.2.</span> <span class="nav-text">安装vim时需要的一些包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.3.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接安装"><span class="nav-number">1.3.1.</span> <span class="nav-text">直接安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从源码安装"><span class="nav-number">1.3.2.</span> <span class="nav-text">从源码安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装配置"><span class="nav-number">1.3.3.</span> <span class="nav-text">安装配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于fstab文件"><span class="nav-number">1.4.</span> <span class="nav-text">关于fstab文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件配置"><span class="nav-number">1.4.1.</span> <span class="nav-text">文件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有时ntfs分区现实只读文件系统，系统提示超级块损坏"><span class="nav-number">1.4.2.</span> <span class="nav-text">有时ntfs分区现实只读文件系统，系统提示超级块损坏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看用UID与GID"><span class="nav-number">1.4.3.</span> <span class="nav-text">查看用UID与GID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#个人目录中文转英文"><span class="nav-number">1.5.</span> <span class="nav-text">个人目录中文转英文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过修改系统语言"><span class="nav-number">1.5.1.</span> <span class="nav-text">通过修改系统语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过修改系统配置文件"><span class="nav-number">1.5.2.</span> <span class="nav-text">通过修改系统配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建ppt幻灯片壁纸-gnome"><span class="nav-number">1.6.</span> <span class="nav-text">创建ppt幻灯片壁纸(gnome)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ppt-xml内容"><span class="nav-number">1.6.1.</span> <span class="nav-text">ppt.xml内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ppt-bg-xml内容"><span class="nav-number">1.6.2.</span> <span class="nav-text">ppt_bg.xml内容</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
         
-    }
-  });
-});
-</script>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaSea</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
   }
-}); 
 </script>
 
 
 
-<!-- Analytics Begin -->
 
 
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 
 
-<!-- Analytics End -->
-
-<!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
 
 
-<!-- MathJax End -->
 
-<!-- Tiny_search Begin -->
 
-<!-- Tiny_search End -->
 
-  </body>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
 </html>

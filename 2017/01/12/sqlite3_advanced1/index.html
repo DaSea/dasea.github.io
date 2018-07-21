@@ -1,600 +1,905 @@
+<!DOCTYPE html>
 
- <!DOCTYPE HTML>
-<html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8">
+
+
+
+
+
+
+
+
+
+
+
   
-    <title>sqlite高级-1 | 兼容</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="DaSea">
-    
 
-    
-    <meta name="description" content="sqlite pragma&amp;#x4EE5;&amp;#x540E;&amp;#x8FFD;&amp;#x52A0; sqlite &amp;#x7EA6;&amp;#x675F;NOT NULL &amp;#x7EA6;&amp;#x675F;&amp;#x9ED8;&amp;#x8BA4;&amp;#x60C5;&amp;#x51B5;&amp;#x4E0B;, &amp;#x5217;&amp;#x53EF;&amp;#x4EE5;&amp;#x4FDD;&amp;#x5B58;&amp;#x4E3A;NULL&amp;#x503C;; &amp;#">
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="sqlite pragma以后追加 sqlite 约束NOT NULL 约束默认情况下, 列可以保存为NULL值; 如果不想, 则设置为NOT NULL;NULL和没有数据是不一样的, 代表未知的数据,如下: 12345678create table employee(id int primary key not nullname text not nullage int not nulladdr">
 <meta name="keywords" content="sqlite">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sqlite高级-1">
 <meta property="og:url" content="http://yoursite.com/2017/01/12/sqlite3_advanced1/index.html">
 <meta property="og:site_name" content="兼容">
-<meta property="og:description" content="sqlite pragma&amp;#x4EE5;&amp;#x540E;&amp;#x8FFD;&amp;#x52A0; sqlite &amp;#x7EA6;&amp;#x675F;NOT NULL &amp;#x7EA6;&amp;#x675F;&amp;#x9ED8;&amp;#x8BA4;&amp;#x60C5;&amp;#x51B5;&amp;#x4E0B;, &amp;#x5217;&amp;#x53EF;&amp;#x4EE5;&amp;#x4FDD;&amp;#x5B58;&amp;#x4E3A;NULL&amp;#x503C;; &amp;#">
+<meta property="og:description" content="sqlite pragma以后追加 sqlite 约束NOT NULL 约束默认情况下, 列可以保存为NULL值; 如果不想, 则设置为NOT NULL;NULL和没有数据是不一样的, 代表未知的数据,如下: 12345678create table employee(id int primary key not nullname text not nullage int not nulladdr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-01-12T04:17:15.598Z">
+<meta property="og:updated_time" content="2017-01-12T04:17:15.599Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sqlite高级-1">
-<meta name="twitter:description" content="sqlite pragma&amp;#x4EE5;&amp;#x540E;&amp;#x8FFD;&amp;#x52A0; sqlite &amp;#x7EA6;&amp;#x675F;NOT NULL &amp;#x7EA6;&amp;#x675F;&amp;#x9ED8;&amp;#x8BA4;&amp;#x60C5;&amp;#x51B5;&amp;#x4E0B;, &amp;#x5217;&amp;#x53EF;&amp;#x4EE5;&amp;#x4FDD;&amp;#x5B58;&amp;#x4E3A;NULL&amp;#x503C;; &amp;#">
+<meta name="twitter:description" content="sqlite pragma以后追加 sqlite 约束NOT NULL 约束默认情况下, 列可以保存为NULL值; 如果不想, 则设置为NOT NULL;NULL和没有数据是不一样的, 代表未知的数据,如下: 12345678create table employee(id int primary key not nullname text not nullage int not nulladdr">
 
-    
-    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    <link rel="stylesheet" href="/css/style.css">
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/01/12/sqlite3_advanced1/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>sqlite高级-1 | 兼容</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
 </head>
 
-  <body>
-    <header>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">兼容</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
       
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
-				<h2 class="blog-motto">这是一场不停的追逐!</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">首页</a></li>
-					
-						<li><a href="/archives">归档</a></li>
-					
-						<li><a href="/about">关于</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:yoursite.com">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
+        <h1 class="site-subtitle" itemprop="description">这是一场不停的追逐!</h1>
+      
     
-      <a href="/2017/01/12/sqlite3_advanced1/" title="sqlite高级-1" itemprop="url">sqlite高级-1</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
-		
-  <p class="article-time">
-    <time datetime="2017-01-12T04:17:15.599Z" itemprop="datePublished"> Published 2017-01-12</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-pragma"><span class="toc-number">1.</span> <span class="toc-text">sqlite pragma</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-约束"><span class="toc-number">2.</span> <span class="toc-text">sqlite 约束</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NOT-NULL-约束"><span class="toc-number">2.1.</span> <span class="toc-text">NOT NULL 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#default-约束"><span class="toc-number">2.2.</span> <span class="toc-text">default 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unique-约束"><span class="toc-number">2.3.</span> <span class="toc-text">unique 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#primary-key-约束"><span class="toc-number">2.4.</span> <span class="toc-text">primary key 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#check-约束"><span class="toc-number">2.5.</span> <span class="toc-text">check 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除约束"><span class="toc-number">2.6.</span> <span class="toc-text">删除约束</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-joins"><span class="toc-number">3.</span> <span class="toc-text">sqlite joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#交叉连接"><span class="toc-number">3.1.</span> <span class="toc-text">交叉连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内连接"><span class="toc-number">3.2.</span> <span class="toc-text">内连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外连接"><span class="toc-number">3.3.</span> <span class="toc-text">外连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-unions子句"><span class="toc-number">4.</span> <span class="toc-text">sqlite unions子句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#union-all子句"><span class="toc-number">4.1.</span> <span class="toc-text">union all子句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-null-值"><span class="toc-number">5.</span> <span class="toc-text">sqlite null 值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-实例"><span class="toc-number">5.1.</span> <span class="toc-text">语法, 实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#is-not-null运算符"><span class="toc-number">5.2.</span> <span class="toc-text">is not null运算符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-别名"><span class="toc-number">6.</span> <span class="toc-text">sqlite 别名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-number">6.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-number">6.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-触发器-trigger"><span class="toc-number">7.</span> <span class="toc-text">sqlite 触发器(trigger)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-1"><span class="toc-number">7.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-1"><span class="toc-number">7.2.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列出触发器和删除触发器"><span class="toc-number">7.3.</span> <span class="toc-text">列出触发器和删除触发器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-索引-index"><span class="toc-number">8.</span> <span class="toc-text">sqlite 索引(index)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引-create-index"><span class="toc-number">8.1.</span> <span class="toc-text">创建索引(create index)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单列索引"><span class="toc-number">8.1.1.</span> <span class="toc-text">单列索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#唯一索引"><span class="toc-number">8.1.2.</span> <span class="toc-text">唯一索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#组合索引"><span class="toc-number">8.1.3.</span> <span class="toc-text">组合索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#隐式索引"><span class="toc-number">8.1.4.</span> <span class="toc-text">隐式索引</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除索引"><span class="toc-number">8.2.</span> <span class="toc-text">删除索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以下情况避免使用索引"><span class="toc-number">8.3.</span> <span class="toc-text">以下情况避免使用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-2"><span class="toc-number">8.4.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-indexed-by"><span class="toc-number">9.</span> <span class="toc-text">sqlite indexed by</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-2"><span class="toc-number">9.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-3"><span class="toc-number">9.2.</span> <span class="toc-text">实例</span></a></li></ol></li></ol>
-		
-		</div>
-		
-		<h2 id="sqlite-pragma"><a href="#sqlite-pragma" class="headerlink" title="sqlite pragma"></a>sqlite pragma</h2><p>&#x4EE5;&#x540E;&#x8FFD;&#x52A0;</p>
-<h2 id="sqlite-&#x7EA6;&#x675F;"><a href="#sqlite-&#x7EA6;&#x675F;" class="headerlink" title="sqlite &#x7EA6;&#x675F;"></a>sqlite &#x7EA6;&#x675F;</h2><h3 id="NOT-NULL-&#x7EA6;&#x675F;"><a href="#NOT-NULL-&#x7EA6;&#x675F;" class="headerlink" title="NOT NULL &#x7EA6;&#x675F;"></a>NOT NULL &#x7EA6;&#x675F;</h3><p>&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;, &#x5217;&#x53EF;&#x4EE5;&#x4FDD;&#x5B58;&#x4E3A;NULL&#x503C;; &#x5982;&#x679C;&#x4E0D;&#x60F3;, &#x5219;&#x8BBE;&#x7F6E;&#x4E3A;NOT NULL;NULL&#x548C;&#x6CA1;&#x6709;&#x6570;&#x636E;&#x662F;&#x4E0D;&#x4E00;&#x6837;&#x7684;, &#x4EE3;&#x8868;&#x672A;&#x77E5;&#x7684;&#x6570;&#x636E;,<br>&#x5982;&#x4E0B;:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> employee(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>)</span><br><span class="line">salary <span class="built_in">real</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- id, name, age&#x4E0D;&#x63A5;&#x53D7;null&#x503C;;</span></span><br></pre></td></tr></table></figure>
-<h3 id="default-&#x7EA6;&#x675F;"><a href="#default-&#x7EA6;&#x675F;" class="headerlink" title="default &#x7EA6;&#x675F;"></a>default &#x7EA6;&#x675F;</h3><p>&#x5728;insert&#x65F6;&#x6CA1;&#x6709;&#x63D0;&#x4F9B;&#x7279;&#x5B9A;&#x7684;&#x503C;&#x65F6;, &#x63D0;&#x4F9B;&#x4E00;&#x4E2A;&#x9ED8;&#x8BA4;&#x503C;, &#x5982;&#x4E0B;:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> employee(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>)</span><br><span class="line">salary <span class="built_in">real</span> <span class="keyword">default</span> <span class="number">40000</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h3 id="unique-&#x7EA6;&#x675F;"><a href="#unique-&#x7EA6;&#x675F;" class="headerlink" title="unique &#x7EA6;&#x675F;"></a>unique &#x7EA6;&#x675F;</h3><p>&#x9632;&#x6B62;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7684;&#x5217;&#x51FA;&#x73B0;&#x5217;&#x4E2A;&#x8BB0;&#x5F55;&#x76F8;&#x540C;&#x7684;&#x503C;, &#x5982;&#x4E0B;:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> employee(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">unique</span></span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>)</span><br><span class="line">salary <span class="built_in">real</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- &#x9632;&#x6B62;&#x96C7;&#x4F63;&#x76F8;&#x540C;&#x540D;&#x79F0;&#x7684;&#x4EBA;</span></span><br></pre></td></tr></table></figure>
-<h3 id="primary-key-&#x7EA6;&#x675F;"><a href="#primary-key-&#x7EA6;&#x675F;" class="headerlink" title="primary key &#x7EA6;&#x675F;"></a>primary key &#x7EA6;&#x675F;</h3><ol>
-<li>&#x7EA6;&#x675F;&#x552F;&#x4E00;&#x6807;&#x8BC6;&#x6570;&#x636E;&#x5E93;&#x8868;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x8BB0;&#x5F55;. &#x5728;&#x4E00;&#x4E2A;&#x8868;&#x4E2D;&#x53EF;&#x4EE5;&#x6709;&#x591A;&#x4E2A;unique&#x5217;, &#x4F46;&#x662F;&#x53EA;&#x80FD;&#x6709;&#x4E00;&#x4E2A;&#x4E3B;&#x952E;.</li>
-<li>&#x901A;&#x8FC7;&#x4E3B;&#x952E;&#x6765;&#x5F15;&#x7528;&#x8868;&#x4E2D;&#x7684;&#x884C;. &#x53EF;&#x5C06;&#x4E3B;&#x952E;&#x8BBE;&#x4E3A;&#x5176;&#x4ED6;&#x8868;&#x7684;&#x5916;&#x952E;, &#x6765;&#x521B;&#x5EFA;&#x8868;&#x7684;&#x5173;&#x7CFB;.</li>
-<li>&#x5728;<code>sqlite</code>&#x4E2D;, &#x4E3B;&#x952E;&#x53EF;&#x4EE5;&#x4E3A;NULL, &#x4E0E;&#x5176;&#x4ED6;&#x6570;&#x636E;&#x5E93;&#x4E0D;&#x540C;&#x7684;&#x5730;&#x65B9;.</li>
-<li>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x8868;&#x5728;&#x4EFB;&#x4F55;&#x5B57;&#x6BB5;&#x4E0A;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;&#x4E3B;&#x952E;, &#x90A3;&#x4E48;&#x8BE5;&#x5B57;&#x6BB5;&#x5C31;&#x4E0D;&#x80FD;&#x6709;&#x4FE9;&#x4E2A;&#x8BB0;&#x5F55;&#x76F8;&#x540C;&#x7684;&#x503C;;</li>
-</ol>
-<h3 id="check-&#x7EA6;&#x675F;"><a href="#check-&#x7EA6;&#x675F;" class="headerlink" title="check &#x7EA6;&#x675F;"></a>check &#x7EA6;&#x675F;</h3><p>&#x542F;&#x7528;&#x8F93;&#x5165;&#x4E00;&#x6761;&#x8BB0;&#x5F55;&#x8981;&#x68C0;&#x67E5;&#x503C;&#x7684;&#x6761;&#x4EF6;. &#x5982;&#x679C;&#x4E3A;false, &#x5219;&#x4E0D;&#x80FD;&#x521B;&#x5EFA;.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> company3(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">salary <span class="built_in">real</span> <span class="keyword">check</span>(salary&gt;<span class="number">0</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5220;&#x9664;&#x7EA6;&#x675F;"><a href="#&#x5220;&#x9664;&#x7EA6;&#x675F;" class="headerlink" title="&#x5220;&#x9664;&#x7EA6;&#x675F;"></a>&#x5220;&#x9664;&#x7EA6;&#x675F;</h3><ol>
-<li>sqlite&#x652F;&#x6301;alter table&#x7684;&#x6709;&#x9650;&#x5B50;&#x96C6;.</li>
-<li>&#x5728;sqlite&#x4E2D;, alter table&#x547D;&#x4EE4;&#x5141;&#x8BB8;&#x7528;&#x6237;&#x91CD;&#x547D;&#x540D;&#x8868;, &#x6216;&#x5411;&#x73B0;&#x6709;&#x8868;&#x4E2D;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x5217;.</li>
-<li>&#x91CD;&#x547D;&#x540D;&#x5217;, &#x5220;&#x9664;&#x4E00;&#x5217;, &#x6216;&#x4ECE;&#x4E00;&#x4E2A;&#x8868;&#x4E2D;&#x6DFB;&#x52A0;&#x6216;&#x5220;&#x9664;&#x7EA6;&#x675F;&#x5217;&#x90FD;&#x662F;&#x4E0D;&#x53EF;&#x80FD;&#x7684;.</li>
-</ol>
-<h2 id="sqlite-joins"><a href="#sqlite-joins" class="headerlink" title="sqlite joins"></a>sqlite joins</h2><p>joins&#x5B50;&#x53E5;&#x7528;&#x4E8E;&#x7ED3;&#x5408;&#x4FE9;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x8868;&#x7684;&#x8BB0;&#x5F55;.<br>&#x5047;&#x8BBE;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x6709;&#x8868;company, department, &#x5F80;department&#x4E2D;&#x63D2;&#x5165;&#x5982;&#x4E0B;&#x8BB0;&#x5F55;:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> department <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">&apos;IT Billing&apos;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> department <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">&apos;Engineering&apos;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> department <span class="keyword">values</span>(<span class="number">3</span>, <span class="string">&apos;Finance&apos;</span>, <span class="number">7</span>);</span><br></pre></td></tr></table></figure></p>
-<h3 id="&#x4EA4;&#x53C9;&#x8FDE;&#x63A5;"><a href="#&#x4EA4;&#x53C9;&#x8FDE;&#x63A5;" class="headerlink" title="&#x4EA4;&#x53C9;&#x8FDE;&#x63A5;"></a>&#x4EA4;&#x53C9;&#x8FDE;&#x63A5;</h3><p>&#x628A;&#x7B2C;&#x4E00;&#x4E2A;&#x8868;&#x7684;&#x6BCF;&#x4E00;&#x884C;&#x4E0E;&#x7B2C;&#x4E8C;&#x4E2A;&#x8868;&#x7684;&#x6BCF;&#x4E00;&#x884C;&#x8FDB;&#x884C;&#x5339;&#x914D;. &#x5982;&#x679C;&#x7B2C;&#x4E00;&#x8868;&#x6709;n&#x884C;x&#x5217;, &#x7B2C;&#x4E8C;&#x4E2A;&#x8868;&#x6709;m&#x884C;y&#x5217;, &#x5219;&#x4F1A;&#x4EA7;&#x751F;n*m&#x884C;<br>x+y&#x5217;&#x7684;&#x7ED3;&#x679C;&#x8868;, &#x5982;&#x4E0B;;</p>
-<p><code>select * from company cross join department;</code></p>
-<h3 id="&#x5185;&#x8FDE;&#x63A5;"><a href="#&#x5185;&#x8FDE;&#x63A5;" class="headerlink" title="&#x5185;&#x8FDE;&#x63A5;"></a>&#x5185;&#x8FDE;&#x63A5;</h3><p>&#x6839;&#x636E;&#x8FDE;&#x63A5;&#x6761;&#x4EF6;&#x7ED3;&#x5408;&#x4FE9;&#x4E2A;&#x8868;. &#x67E5;&#x8BE2;&#x4F1A;&#x628A;table1&#x4E2D;&#x7684;&#x6BCF;&#x4E00;&#x884C;&#x4E0E;table2&#x4E2D;&#x7684;&#x6BCF;&#x4E00;&#x884C;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;, &#x5982;&#x679C;&#x6EE1;&#x8DB3;&#x8FDE;&#x63A5;&#x6761;&#x4EF6;,<br>&#x5C31;&#x4F1A;&#x8FDB;&#x884C;&#x5408;&#x5E76;. &#x5185;&#x8FDE;&#x63A5;&#x662F;&#x9ED8;&#x8BA4;&#x8FDE;&#x63A5;, inner&#x53EF;&#x4EE5;&#x7701;&#x7565;. &#x5982;&#x4E0B;:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 [<span class="keyword">inner</span>] <span class="keyword">join</span> table2 <span class="keyword">on</span> condition_expression</span><br><span class="line"><span class="comment">-- &#x4E3A;&#x4E86;&#x907F;&#x514D;&#x5197;&#x4F59;, &#x5E76;&#x4FDD;&#x6301;&#x8F83;&#x77ED;&#x7684;&#x63AA;&#x8F9E;, &#x53EF;&#x4EE5;&#x4F7F;&#x7528;using&#x8868;&#x8FBE;&#x5F0F;</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 [<span class="keyword">inner</span>] <span class="keyword">join</span> table2 <span class="keyword">using</span>(column1 ...)</span><br><span class="line"><span class="comment">-- &#x81EA;&#x7136;&#x8FDE;&#x63A5;(natural join) &#x7C7B;&#x4F3C;&#x4E8E;join ... using , &#x53EA;&#x662F;&#x5B83;&#x81EA;&#x4F1A;&#x81EA;&#x52A8;&#x6D4B;&#x8BD5;&#x5B58;&#x5728;&#x4FE9;&#x4E2A;&#x8868;&#x4E2D;&#x6BCF;&#x4E00;&#x5217;&#x7684;&#x503C;&#x4E4B;&#x95F4;&#x76F8;&#x7B49;&#x503C;.</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 <span class="keyword">natural</span> <span class="keyword">join</span> table2;</span><br><span class="line"></span><br><span class="line"><span class="comment">--&#x4F8B;&#x5B50;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id=department.id;</span><br><span class="line"><span class="comment">-- &#x4E0A;&#x9762;&#x4EA7;&#x751F;&#x7684;&#x6548;&#x679C;&#x7C7B;&#x4F3C;&#x4E8E;&#x5982;&#x4E0B;&#x4EA7;&#x751F;&#x7684;&#x6548;&#x679C;:</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">natural</span> <span class="keyword">join</span> department;</span><br><span class="line"><span class="comment">-- using: id &#x4FE9;&#x4E2A;&#x8868;&#x90FD;&#x6709;, &#x6240;&#x4EE5;&#x6B63;&#x786E;, &#x8FDE;&#x63A5;&#x540E;id&#x5217;&#x5408;&#x5E76;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>);</span><br><span class="line"><span class="comment">-- error: &#x7531;&#x4E8E;name, dept&#x4E0D;&#x662F;&#x4FE9;&#x4E2A;&#x8868;&#x5171;&#x6709;&#x7684;.</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, dept);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">name</span>, dept);</span><br></pre></td></tr></table></figure></p>
-<h3 id="&#x5916;&#x8FDE;&#x63A5;"><a href="#&#x5916;&#x8FDE;&#x63A5;" class="headerlink" title="&#x5916;&#x8FDE;&#x63A5;"></a>&#x5916;&#x8FDE;&#x63A5;</h3><ol>
-<li>&#x5916;&#x8FDE;&#x63A5;&#x662F;&#x5185;&#x8FDE;&#x63A5;&#x7684;&#x6269;&#x5C55;, sqlite&#x652F;&#x6301;SQL&#x6807;&#x51C6;left, right, full&#x4E09;&#x79CD;&#x7684;&#x5DE6;&#x5916;&#x8FDE;&#x63A5;(left outer join).</li>
-<li>&#x57FA;&#x672C;&#x540C;&#x4E0A;</li>
-</ol>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> table2 <span class="keyword">on</span> condition_expression</span><br><span class="line"><span class="comment">-- &#x4E3A;&#x4E86;&#x907F;&#x514D;&#x5197;&#x4F59;, &#x5E76;&#x4FDD;&#x6301;&#x8F83;&#x77ED;&#x7684;&#x63AA;&#x8F9E;, &#x53EF;&#x4EE5;&#x4F7F;&#x7528;using&#x8868;&#x8FBE;&#x5F0F;</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> table2 <span class="keyword">using</span>(column1 ...)</span><br><span class="line"></span><br><span class="line"><span class="comment">--&#x4F8B;&#x5B50;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id=department.id;</span><br><span class="line"><span class="comment">-- using: id &#x4FE9;&#x4E2A;&#x8868;&#x90FD;&#x6709;, &#x6240;&#x4EE5;&#x6B63;&#x786E;, &#x8FDE;&#x63A5;&#x540E;id&#x5217;&#x5408;&#x5E76;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>);</span><br><span class="line"><span class="comment">-- error: &#x7531;&#x4E8E;name, dept&#x4E0D;&#x662F;&#x4FE9;&#x4E2A;&#x8868;&#x5171;&#x6709;&#x7684;.</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, dept);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">name</span>, dept);</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-unions&#x5B50;&#x53E5;"><a href="#sqlite-unions&#x5B50;&#x53E5;" class="headerlink" title="sqlite unions&#x5B50;&#x53E5;"></a>sqlite unions&#x5B50;&#x53E5;</h2><p>UNION&#x5B50;&#x53E5;/&#x8FD0;&#x7B97;&#x7B26;&#x7528;&#x4E8E;&#x5408;&#x5E76;&#x4FE9;&#x4E2A;&#x6216;&#x591A;&#x4E2A;select&#x8BED;&#x53E5;&#x7684;&#x7ED3;&#x679C;, &#x4E0D;&#x8FD4;&#x56DE;&#x4EFB;&#x4F55;&#x91CD;&#x590D;&#x7684;&#x884C;.<br>&#x4E3A;&#x4E86;&#x4F7F;&#x7528;UNION, &#x6BCF;&#x4E2A;select&#x88AB;&#x9009;&#x62E9;&#x7684;&#x5217;&#x6570;&#x5FC5;&#x987B;&#x662F;&#x76F8;&#x540C;&#x7684;, &#x76F8;&#x540C;&#x6570;&#x76EE;&#x7684;&#x5217;&#x8868;&#x8FBE;&#x5F0F;, &#x76F8;&#x540C;&#x7684;&#x6570;&#x636E;&#x7C7B;&#x578B;,<br>&#x5E76;&#x786E;&#x4FDD;&#x4ED6;&#x4EEC;&#x6709;&#x76F8;&#x540C;&#x7684;&#x987A;&#x5E8F;, &#x4F46;&#x4ED6;&#x4EEC;&#x4E0D;&#x5FC5;&#x6709;&#x76F8;&#x540C;&#x7684;&#x957F;&#x5EA6;.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x8BED;&#x6CD5;</span></span><br><span class="line"><span class="keyword">select</span> column1 [,column2] <span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition] <span class="keyword">union</span> <span class="keyword">select</span> column1 [,column2]</span><br><span class="line"><span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5B9E;&#x4F8B;</span></span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id</span><br><span class="line"><span class="keyword">union</span></span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id;</span><br></pre></td></tr></table></figure></p>
-<h3 id="union-all&#x5B50;&#x53E5;"><a href="#union-all&#x5B50;&#x53E5;" class="headerlink" title="union all&#x5B50;&#x53E5;"></a>union all&#x5B50;&#x53E5;</h3><p>&#x540C;&#x4E0A;, &#x4F46;&#x662F;&#x4F1A;&#x8FD4;&#x56DE;&#x91CD;&#x590D;&#x7684;&#x884C;<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x8BED;&#x6CD5;</span></span><br><span class="line"><span class="keyword">select</span> column1 [,column2] <span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition]</span><br><span class="line"><span class="keyword">union</span> all</span><br><span class="line"><span class="keyword">select</span> column1 [,column2] <span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5B9E;&#x4F8B;</span></span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id</span><br><span class="line"><span class="keyword">union</span> all</span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id;</span><br></pre></td></tr></table></figure></p>
-<h2 id="sqlite-null-&#x503C;"><a href="#sqlite-null-&#x503C;" class="headerlink" title="sqlite null &#x503C;"></a>sqlite null &#x503C;</h2><p>sqlite&#x7684;null&#x662F;&#x7528;&#x6765;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x7F3A;&#x5931;&#x503C;&#x7684;&#x9879;. &#x8868;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;NULL&#x503C;&#x662F;&#x5728;&#x5B57;&#x6BB5;&#x4E2D;&#x663E;&#x793A;&#x4E3A;&#x7A7A;&#x767D;&#x7684;&#x4E00;&#x4E2A;&#x503C;.<br>&#x5E26;&#x6709;null&#x503C;&#x7684;&#x5B57;&#x6BB5;&#x662F;&#x4E00;&#x4E2A;&#x4E0D;&#x5E26;&#x6709;&#x503C;&#x7684;&#x5B57;&#x6BB5;. null&#x503C;&#x548C;&#x96F6;&#x503C;&#x6216;&#x5305;&#x542B;&#x7A7A;&#x683C;&#x7684;&#x5B57;&#x6BB5;&#x662F;&#x4E0D;&#x540C;&#x7684;.</p>
-<h3 id="&#x8BED;&#x6CD5;-&#x5B9E;&#x4F8B;"><a href="#&#x8BED;&#x6CD5;-&#x5B9E;&#x4F8B;" class="headerlink" title="&#x8BED;&#x6CD5;, &#x5B9E;&#x4F8B;"></a>&#x8BED;&#x6CD5;, &#x5B9E;&#x4F8B;</h3><p>&#x53C2;&#x7167;&#x521B;&#x5EFA;&#x8868;</p>
-<h3 id="is-not-null&#x8FD0;&#x7B97;&#x7B26;"><a href="#is-not-null&#x8FD0;&#x7B97;&#x7B26;" class="headerlink" title="is not null&#x8FD0;&#x7B97;&#x7B26;"></a>is not null&#x8FD0;&#x7B97;&#x7B26;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> salary <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-&#x522B;&#x540D;"><a href="#sqlite-&#x522B;&#x540D;" class="headerlink" title="sqlite &#x522B;&#x540D;"></a>sqlite &#x522B;&#x540D;</h2><p>&#x53EF;&#x4EE5;&#x6682;&#x65F6;&#x628A;&#x8868;&#x6216;&#x5217;&#x91CD;&#x547D;&#x540D;&#x4E3A;&#x53E6;&#x4E00;&#x4E2A;&#x540D;&#x5B57;, &#x5C31;&#x662F;&#x522B;&#x540D;. &#x4F7F;&#x7528;&#x8868;&#x522B;&#x540D;&#x662F;&#x6307;&#x5728;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7684;sqlite&#x8BED;&#x53E5;&#x4E2D;&#x91CD;&#x547D;&#x540D;&#x8868;.<br>&#x91CD;&#x547D;&#x540D;&#x662F;&#x4E34;&#x65F6;&#x7684;&#x6539;&#x53D8;, &#x6570;&#x636E;&#x5E93;&#x4E2D;&#x5B9E;&#x673A;&#x7684;&#x8868;&#x662F;&#x4E0D;&#x4F1A;&#x6539;&#x53D8;&#x7684;. &#x5217;&#x522B;&#x540D;&#x540C;&#x8868;&#x522B;&#x540D;.</p>
-<h3 id="&#x8BED;&#x6CD5;"><a href="#&#x8BED;&#x6CD5;" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x8868;&#x522B;&#x540D;</span></span><br><span class="line"><span class="keyword">select</span> column1, column2, ... <span class="keyword">from</span> table_name <span class="keyword">as</span> alias_name <span class="keyword">where</span> [condition]</span><br><span class="line"><span class="comment">-- &#x5217;&#x522B;&#x540D;</span></span><br><span class="line"><span class="keyword">select</span> column1 <span class="keyword">as</span> alias_name <span class="keyword">from</span> table_name <span class="keyword">where</span> [condition]</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B9E;&#x4F8B;"><a href="#&#x5B9E;&#x4F8B;" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x8868;&#x522B;&#x540D;</span></span><br><span class="line"><span class="keyword">select</span> c.id, c.name, c.age, d.dept <span class="keyword">from</span> company <span class="keyword">as</span> c, department <span class="keyword">as</span> d <span class="keyword">where</span> c.id=d.emp_id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5217;&#x522B;&#x540D;</span></span><br><span class="line"><span class="keyword">select</span> c.id <span class="keyword">as</span> company_id, c.name <span class="keyword">as</span> company_name, c.age, d.dept <span class="keyword">from</span> company <span class="keyword">as</span> c,</span><br><span class="line">department <span class="keyword">as</span> d <span class="keyword">where</span> c.id = d.emp_id;</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-&#x89E6;&#x53D1;&#x5668;-trigger"><a href="#sqlite-&#x89E6;&#x53D1;&#x5668;-trigger" class="headerlink" title="sqlite &#x89E6;&#x53D1;&#x5668;(trigger)"></a>sqlite &#x89E6;&#x53D1;&#x5668;(trigger)</h2><p>&#x89E6;&#x53D1;&#x5668;&#x662F;&#x6570;&#x636E;&#x5E93;&#x7684;&#x56DE;&#x8C03;&#x51FD;&#x6570;, &#x5B83;&#x4F1A;&#x5728;&#x6307;&#x5B9A;&#x7684;&#x6570;&#x636E;&#x5E93;&#x4E8B;&#x4EF6;&#x53D1;&#x751F;&#x65F6;&#x81EA;&#x52A8;&#x6267;&#x884C;&#x6216;&#x8C03;&#x7528;. &#x4EE5;&#x4E0B;&#x662F;&#x76F8;&#x5173;&#x8981;&#x70B9;:</p>
-<ol>
-<li>&#x6307;&#x5B9A;&#x5728;&#x7279;&#x5B9A;&#x7684;&#x6570;&#x636E;&#x5E93;&#x8868;&#x53D1;&#x751F;delete, insert, &#x6216;update&#x65F6;&#x89E6;&#x53D1;, &#x6216;&#x5728;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x6307;&#x5B9A;&#x8868;&#x7684;&#x5217;&#x53D1;&#x751F;&#x66F4;&#x65B0;&#x662F;&#x89E6;&#x53D1;;</li>
-<li>&#x53EA;&#x652F;&#x6301;for each row&#x89E6;&#x53D1;&#x5668;, &#x6CA1;&#x6709;for each statement&#x89E6;&#x53D1;&#x5668;, &#x56E0;&#x6B64;for each row&#x662F;&#x53EF;&#x9009;&#x7684;.</li>
-<li>when &#x5B50;&#x53E5;&#x4E0E;&#x89E6;&#x53D1;&#x5668;&#x52A8;&#x4F5C;&#x53EF;&#x80FD;&#x8BBF;&#x95EE;&#x4F7F;&#x7528;&#x8868;&#x5355;new.column-name &#x548C; old.column-name&#x7684;&#x5F15;&#x7528;&#x63D2;&#x5165;,<br>&#x5220;&#x9664;&#x6216;&#x66F4;&#x65B0;&#x7684;&#x884C;&#x5143;&#x7D20;, &#x5176;&#x4E2D;column-name&#x662F;&#x4ECE;&#x4E0E;&#x89E6;&#x53D1;&#x5668;&#x5173;&#x8054;&#x7684;&#x8868;&#x7684;&#x5217;&#x7684;&#x540D;&#x79F0;.</li>
-<li>&#x5982;&#x679C;&#x63D0;&#x4F9B;when&#x5B50;&#x53E5;, &#x5219;&#x53EA;&#x9488;&#x5BF9;when&#x5B50;&#x53E5;&#x4E3A;&#x771F;&#x7684;&#x6307;&#x5B9A;&#x884C;&#x6267;&#x884C;sql&#x8BED;&#x53E5;. &#x5426;&#x5219;, &#x4E3A;&#x6240;&#x6709;&#x884C;&#x6267;&#x884C;.</li>
-<li>defore &#x6216; after &#x5173;&#x952E;&#x5B57;&#x51B3;&#x5B9A;&#x4F55;&#x65F6;&#x6267;&#x884C;&#x89E6;&#x53D1;&#x5668;&#x52A8;&#x4F5C;. &#x51B3;&#x5B9A;&#x662F;&#x5728;&#x5173;&#x8054;&#x884C;&#x7684;&#x63D2;&#x5165;, &#x4FEE;&#x6539;&#x6216;&#x5220;&#x9664;&#x4E4B;&#x524D;&#x6216;&#x4E4B;&#x540E;&#x6267;&#x884C;.</li>
-<li>&#x5F53;&#x89E6;&#x53D1;&#x5668;&#x5173;&#x8054;&#x7684;&#x8868;&#x5220;&#x9664;&#x65F6;, &#x81EA;&#x52A8;&#x5220;&#x9664;&#x89E6;&#x53D1;&#x5668;.</li>
-<li>&#x8981;&#x4FEE;&#x6539;&#x7684;&#x8868;&#x5FC5;&#x987B;&#x5B58;&#x5728;&#x4E0E;&#x540C;&#x4E00;&#x6570;&#x636E;&#x5E93;&#x4E2D;, &#x4F5C;&#x4E3A;&#x89E6;&#x53D1;&#x5668;&#x88AB;&#x9644;&#x52A0;&#x7684;&#x8868;&#x6216;&#x89C6;&#x56FE;, &#x4E14;&#x5FC5;&#x987B;&#x53EA;&#x4F7F;&#x7528;tabname,<br>&#x800C;&#x4E0D;&#x662F;database.tablename.</li>
-<li>&#x4E00;&#x4E2A;&#x7279;&#x6B8A;&#x7684;sql&#x51FD;&#x6570;raise() &#x7528;&#x4E8E;&#x89E6;&#x53D1;&#x5668;&#x7A0B;&#x5E8F;&#x5185;&#x629B;&#x51FA;&#x5F02;&#x5E38;.</li>
-</ol>
-<h3 id="&#x8BED;&#x6CD5;-1"><a href="#&#x8BED;&#x6CD5;-1" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x521B;&#x5EFA;&#x89E6;&#x53D1;&#x5668;</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> trigger_name [<span class="keyword">before</span> | <span class="keyword">after</span>] event_name <span class="keyword">on</span> table_name</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="comment">-- trigger &#x903B;&#x8F91;&#x4EE3;&#x7801;</span></span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> trigger_name [<span class="keyword">before</span> | <span class="keyword">after</span> ] <span class="keyword">update</span> <span class="keyword">of</span> column_name <span class="keyword">on</span> table_name</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="comment">-- &#x89E6;&#x53D1;&#x5668;&#x903B;&#x8F91;&#x4EE3;&#x7801;</span></span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B9E;&#x4F8B;-1"><a href="#&#x5B9E;&#x4F8B;-1" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x4E3A;company&#x8868;&#x7684;&#x6BCF;&#x4E00;&#x4E2A;&#x8BB0;&#x5F55;&#x4FDD;&#x6301;&#x5BA1;&#x8BA1;&#x8BD5;&#x9A8C;</span></span><br><span class="line"><span class="comment">-- &#x521B;&#x5EFA;&#x4E00;&#x4E2A;audit&#x8868;</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">audit</span>(emp_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>, entry_date <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x89E6;&#x53D1;&#x5668;</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> audit_log <span class="keyword">after</span> <span class="keyword">insert</span> <span class="keyword">on</span> company</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">audit</span>(emp_id, entry_date) <span class="keyword">values</span>(new.id, datetime(<span class="string">&apos;now&apos;</span>));</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5F80;company&#x4E2D;&#x63D2;&#x5165;&#x4E00;&#x6761;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company(<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">11</span>, <span class="string">&apos;feng&apos;</span>, <span class="number">28</span>, <span class="number">6722</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x6267;&#x884C;&#x4E0A;&#x6B65;&#x540E;, &#x4E5F;&#x4F1A;&#x5728;audit&#x4E2D;&#x63D2;&#x5165;&#x4E00;&#x4E2A;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">audit</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5217;&#x51FA;&#x89E6;&#x53D1;&#x5668;&#x548C;&#x5220;&#x9664;&#x89E6;&#x53D1;&#x5668;"><a href="#&#x5217;&#x51FA;&#x89E6;&#x53D1;&#x5668;&#x548C;&#x5220;&#x9664;&#x89E6;&#x53D1;&#x5668;" class="headerlink" title="&#x5217;&#x51FA;&#x89E6;&#x53D1;&#x5668;&#x548C;&#x5220;&#x9664;&#x89E6;&#x53D1;&#x5668;"></a>&#x5217;&#x51FA;&#x89E6;&#x53D1;&#x5668;&#x548C;&#x5220;&#x9664;&#x89E6;&#x53D1;&#x5668;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x5217;&#x51FA;</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> <span class="keyword">type</span>=<span class="string">&apos;trigger&apos;</span>;</span><br><span class="line"><span class="comment">-- &#x5220;&#x9664;</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">trigger</span> trigger_name</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-&#x7D22;&#x5F15;-index"><a href="#sqlite-&#x7D22;&#x5F15;-index" class="headerlink" title="sqlite &#x7D22;&#x5F15;(index)"></a>sqlite &#x7D22;&#x5F15;(index)</h2><ol>
-<li>&#x7D22;&#x5F15;&#x662F;&#x4E00;&#x79CD;&#x7279;&#x6B8A;&#x7684;&#x67E5;&#x627E;&#x8868;, &#x6570;&#x636E;&#x5E93;&#x641C;&#x7D22;&#x5F15;&#x64CE;&#x7528;&#x6765;&#x52A0;&#x5FEB;&#x6570;&#x636E;&#x68C0;&#x7D22;;</li>
-<li>&#x7D22;&#x5F15;&#x6709;&#x52A9;&#x4E8E;&#x52A0;&#x5FEB;select&#x67E5;&#x8BE2;&#x548C;where&#x5B50;&#x53E5;, &#x4F46;&#x662F;&#x4F1A;&#x51CF;&#x6162;update&#x548C;insert&#x8BED;&#x53E5;&#x65F6;&#x7684;&#x6570;&#x636E;&#x8F93;&#x5165;;</li>
-<li>&#x7D22;&#x5F15;&#x53EF;&#x4EE5;&#x521B;&#x5EFA;&#x548C;&#x5220;&#x9664;, &#x4E0D;&#x4F1A;&#x5F71;&#x54CD;&#x6E90;&#x6570;&#x636E;;</li>
-<li>&#x4F7F;&#x7528;create index&#x521B;&#x5EFA;&#x7D22;&#x5F15;, &#x5141;&#x8BB8;&#x547D;&#x540D;&#x7D22;&#x5F15;, &#x6307;&#x5B9A;&#x8868;&#x53CA;&#x8981;&#x7D22;&#x5F15;&#x7684;&#x4E00;&#x5217;&#x6216;&#x591A;&#x5217;, &#x5E76;&#x6307;&#x793A;&#x7D22;&#x5F15;&#x662F;&#x5347;&#x5E8F;&#x8FD8;&#x662F;&#x964D;&#x5E8F;;</li>
-<li>&#x7D22;&#x5F15;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x552F;&#x4E00;&#x7684;, &#x4E0E;unique&#x7EA6;&#x675F;&#x7C7B;&#x4F3C;, &#x5728;&#x5217;&#x4E0A;&#x6216;&#x5217;&#x7EC4;&#x5408;&#x4E0A;&#x9632;&#x6B62;&#x91CD;&#x590D;&#x6761;&#x76EE;;</li>
-</ol>
-<h3 id="&#x521B;&#x5EFA;&#x7D22;&#x5F15;-create-index"><a href="#&#x521B;&#x5EFA;&#x7D22;&#x5F15;-create-index" class="headerlink" title="&#x521B;&#x5EFA;&#x7D22;&#x5F15;(create index)"></a>&#x521B;&#x5EFA;&#x7D22;&#x5F15;(create index)</h3><ol>
-<li>&#x5982;&#x679C;&#x67E5;&#x8BE2;&#x4E00;&#x822C;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x5217;, &#x5219;&#x4F7F;&#x7528;&#x5355;&#x5217;&#x7D22;&#x5F15;;</li>
-<li>&#x5982;&#x679C;&#x4F7F;&#x7528;&#x591A;&#x5217;, &#x5219;&#x4F7F;&#x7528;&#x7EC4;&#x5408;&#x7D22;&#x5F15;;</li>
-</ol>
-<h4 id="&#x5355;&#x5217;&#x7D22;&#x5F15;"><a href="#&#x5355;&#x5217;&#x7D22;&#x5F15;" class="headerlink" title="&#x5355;&#x5217;&#x7D22;&#x5F15;"></a>&#x5355;&#x5217;&#x7D22;&#x5F15;</h4><p>&#x53EA;&#x57FA;&#x4E8E;&#x8868;&#x7684;&#x4E00;&#x4E2A;&#x5217;&#x4E0A;&#x521B;&#x5EFA;&#x7684;&#x7D22;&#x5F15;.<br><code>create index index_name on table_name(column_name);</code></p>
-<h4 id="&#x552F;&#x4E00;&#x7D22;&#x5F15;"><a href="#&#x552F;&#x4E00;&#x7D22;&#x5F15;" class="headerlink" title="&#x552F;&#x4E00;&#x7D22;&#x5F15;"></a>&#x552F;&#x4E00;&#x7D22;&#x5F15;</h4><p>&#x552F;&#x4E00;&#x7D22;&#x5F15;&#x4E0D;&#x5141;&#x8BB8;&#x4EFB;&#x4F55;&#x91CD;&#x590D;&#x7684;&#x503C;&#x63D2;&#x5165;&#x5230;&#x8868;&#x4E2D;<br><code>create unique index index_name on table_name(column_name);</code></p>
-<h4 id="&#x7EC4;&#x5408;&#x7D22;&#x5F15;"><a href="#&#x7EC4;&#x5408;&#x7D22;&#x5F15;" class="headerlink" title="&#x7EC4;&#x5408;&#x7D22;&#x5F15;"></a>&#x7EC4;&#x5408;&#x7D22;&#x5F15;</h4><p>&#x57FA;&#x4E8E;&#x8868;&#x7684;&#x4FE9;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x5217;&#x4E0A;&#x521B;&#x5EFA;&#x7684;&#x7D22;&#x5F15;<br><code>create index index_name on table_name(column1, column2);</code></p>
-<h4 id="&#x9690;&#x5F0F;&#x7D22;&#x5F15;"><a href="#&#x9690;&#x5F0F;&#x7D22;&#x5F15;" class="headerlink" title="&#x9690;&#x5F0F;&#x7D22;&#x5F15;"></a>&#x9690;&#x5F0F;&#x7D22;&#x5F15;</h4><p>&#x521B;&#x5EFA;&#x8868;&#x65F6;, &#x7531;&#x6570;&#x636E;&#x5E93;&#x670D;&#x52A1;&#x5668;&#x81EA;&#x52A8;&#x521B;&#x5EFA;&#x7684;&#x7D22;&#x5F15;. &#x7D22;&#x5F15;&#x81EA;&#x52A8;&#x521B;&#x5EFA;&#x4E3A;&#x4E3B;&#x952E;&#x7EA6;&#x675F;&#x548C;&#x552F;&#x4E00;&#x7EA6;&#x675F;.</p>
-<h3 id="&#x5220;&#x9664;&#x7D22;&#x5F15;"><a href="#&#x5220;&#x9664;&#x7D22;&#x5F15;" class="headerlink" title="&#x5220;&#x9664;&#x7D22;&#x5F15;"></a>&#x5220;&#x9664;&#x7D22;&#x5F15;</h3><p><code>drop index index_name</code></p>
-<h3 id="&#x4EE5;&#x4E0B;&#x60C5;&#x51B5;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x7D22;&#x5F15;"><a href="#&#x4EE5;&#x4E0B;&#x60C5;&#x51B5;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x7D22;&#x5F15;" class="headerlink" title="&#x4EE5;&#x4E0B;&#x60C5;&#x51B5;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x7D22;&#x5F15;"></a>&#x4EE5;&#x4E0B;&#x60C5;&#x51B5;&#x907F;&#x514D;&#x4F7F;&#x7528;&#x7D22;&#x5F15;</h3><ol>
-<li>&#x4E0D;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;&#x5728;&#x8F83;&#x5C0F;&#x7684;&#x8868;&#x4E0A;;</li>
-<li>&#x4E0D;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;&#x5728;&#x6709;&#x9891;&#x7E41;&#x7684;&#x5927;&#x6279;&#x91CF;&#x7684;&#x66F4;&#x65B0;&#x6216;&#x63D2;&#x5165;&#x64CD;&#x4F5C;&#x7684;&#x8868;&#x4E0A;;</li>
-<li>&#x4E0D;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;&#x5728;&#x542B;&#x6709;&#x5927;&#x91CF;&#x7684;null&#x503C;&#x7684;&#x5217;&#x4E0A;;</li>
-<li>&#x4E0D;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;&#x5728;&#x9891;&#x7E41;&#x64CD;&#x4F5C;&#x7684;&#x5217;&#x4E0A;;</li>
-</ol>
-<h3 id="&#x5B9E;&#x4F8B;-2"><a href="#&#x5B9E;&#x4F8B;-2" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> salary_index <span class="keyword">on</span> company(salary);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x67E5;&#x770B;&#x6240;&#x6709;&#x7D22;&#x5F15;</span></span><br><span class="line">.indices company</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5217;&#x51FA;&#x6570;&#x636E;&#x6240;&#x6709;&#x7684;&#x7D22;&#x5F15;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> <span class="keyword">type</span>=<span class="string">&apos;index&apos;</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-indexed-by"><a href="#sqlite-indexed-by" class="headerlink" title="sqlite indexed by"></a>sqlite indexed by</h2><p>&#x201C;indexed by index_name&#x201D; &#x5B50;&#x53E5;&#x89C4;&#x5B9A;&#x5FC5;&#x987B;&#x9700;&#x8981;&#x547D;&#x540D;&#x7684;&#x7D22;&#x5F15;&#x6765;&#x67E5;&#x627E;&#x524D;&#x9762;&#x8868;&#x4E2D;&#x503C;. &#x5982;&#x679C;&#x4E0D;&#x5B58;&#x5728;&#x6216;&#x4E0D;&#x80FD;&#x7528;&#x4E8E;&#x67E5;&#x8BE2;,<br>&#x8BED;&#x53E5;&#x5931;&#x8D25;. &#x201C;not indexed&#x201D; &#x5B50;&#x53E5;&#x89C4;&#x5B9A;&#x5F53;&#x8BBF;&#x95EE;&#x524D;&#x9762;&#x7684;&#x8868;&#x65F6;, &#x6CA1;&#x6709;&#x4F7F;&#x7528;&#x7D22;&#x5F15;. &#x7136;&#x800C;, &#x5373;&#x4F7F;&#x6307;&#x5B9A;&#x4E86;&#x201D;not indexed&#x201D;,<br>integer primary key&#x4ECD;&#x7136;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x67E5;&#x627E;&#x6761;&#x76EE;.</p>
-<h3 id="&#x8BED;&#x6CD5;-2"><a href="#&#x8BED;&#x6CD5;-2" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>|<span class="keyword">delete</span>|<span class="keyword">update</span> column1, column2 indexed <span class="keyword">by</span> (index_name)</span><br><span class="line">table_name <span class="keyword">where</span> (condition);</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B9E;&#x4F8B;-3"><a href="#&#x5B9E;&#x4F8B;-3" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x5047;&#x8BBE;&#x6709;&#x8868;</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> age_index <span class="keyword">on</span> company(age);</span><br><span class="line"><span class="comment">-- &#x4F7F;&#x7528;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company indexed <span class="keyword">by</span> age_index <span class="keyword">where</span> age&gt;<span class="number">30</span>;</span><br></pre></td></tr></table></figure>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/sqlite/">sqlite</a>
   </div>
 
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://yoursite.com/2017/01/12/sqlite3_advanced1/" data-title="sqlite高级-1 | 兼容" data-tsina="null" class="share clearfix">
-	  </div>
-	
-	</div>
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
 
+      
+      
+    </ul>
+  
 
-</footer>
+  
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/01/12/sqlite3_advanced2/" title="sqlite高级-2">
-  <strong>上一篇：</strong><br/>
-  <span>
-  sqlite高级-2</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2017/01/06/sqlite3_base/"  title="sqlite基础">
- <strong>下一篇：</strong><br/> 
- <span>sqlite基础
-</span>
-</a>
-</div>
-
+  
 </nav>
 
-	
 
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-pragma"><span class="toc-number">1.</span> <span class="toc-text">sqlite pragma</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-约束"><span class="toc-number">2.</span> <span class="toc-text">sqlite 约束</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NOT-NULL-约束"><span class="toc-number">2.1.</span> <span class="toc-text">NOT NULL 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#default-约束"><span class="toc-number">2.2.</span> <span class="toc-text">default 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unique-约束"><span class="toc-number">2.3.</span> <span class="toc-text">unique 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#primary-key-约束"><span class="toc-number">2.4.</span> <span class="toc-text">primary key 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#check-约束"><span class="toc-number">2.5.</span> <span class="toc-text">check 约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除约束"><span class="toc-number">2.6.</span> <span class="toc-text">删除约束</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-joins"><span class="toc-number">3.</span> <span class="toc-text">sqlite joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#交叉连接"><span class="toc-number">3.1.</span> <span class="toc-text">交叉连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内连接"><span class="toc-number">3.2.</span> <span class="toc-text">内连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外连接"><span class="toc-number">3.3.</span> <span class="toc-text">外连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-unions子句"><span class="toc-number">4.</span> <span class="toc-text">sqlite unions子句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#union-all子句"><span class="toc-number">4.1.</span> <span class="toc-text">union all子句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-null-值"><span class="toc-number">5.</span> <span class="toc-text">sqlite null 值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-实例"><span class="toc-number">5.1.</span> <span class="toc-text">语法, 实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#is-not-null运算符"><span class="toc-number">5.2.</span> <span class="toc-text">is not null运算符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-别名"><span class="toc-number">6.</span> <span class="toc-text">sqlite 别名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-number">6.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-number">6.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-触发器-trigger"><span class="toc-number">7.</span> <span class="toc-text">sqlite 触发器(trigger)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-1"><span class="toc-number">7.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-1"><span class="toc-number">7.2.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列出触发器和删除触发器"><span class="toc-number">7.3.</span> <span class="toc-text">列出触发器和删除触发器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-索引-index"><span class="toc-number">8.</span> <span class="toc-text">sqlite 索引(index)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引-create-index"><span class="toc-number">8.1.</span> <span class="toc-text">创建索引(create index)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单列索引"><span class="toc-number">8.1.1.</span> <span class="toc-text">单列索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#唯一索引"><span class="toc-number">8.1.2.</span> <span class="toc-text">唯一索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#组合索引"><span class="toc-number">8.1.3.</span> <span class="toc-text">组合索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#隐式索引"><span class="toc-number">8.1.4.</span> <span class="toc-text">隐式索引</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除索引"><span class="toc-number">8.2.</span> <span class="toc-text">删除索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以下情况避免使用索引"><span class="toc-number">8.3.</span> <span class="toc-text">以下情况避免使用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-2"><span class="toc-number">8.4.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-indexed-by"><span class="toc-number">9.</span> <span class="toc-text">sqlite indexed by</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-2"><span class="toc-number">9.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-3"><span class="toc-number">9.2.</span> <span class="toc-text">实例</span></a></li></ol></li></ol>
- 
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/12/sqlite3_advanced1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DaSea">
+      <meta itemprop="description" content="Fucking Code!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="兼容">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">sqlite高级-1
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-01-12 12:17:15" itemprop="dateCreated datePublished" datetime="2017-01-12T12:17:15+08:00">2017-01-12</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="sqlite-pragma"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-pragma" class="headerlink" title="sqlite pragma"></a>sqlite pragma</h2><p>以后追加</p>
+<h2 id="sqlite-约束"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-约束" class="headerlink" title="sqlite 约束"></a>sqlite 约束</h2><h3 id="NOT-NULL-约束"><a href="/2017/01/12/sqlite3_advanced1/#NOT-NULL-约束" class="headerlink" title="NOT NULL 约束"></a>NOT NULL 约束</h3><p>默认情况下, 列可以保存为NULL值; 如果不想, 则设置为NOT NULL;NULL和没有数据是不一样的, 代表未知的数据,<br>如下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> employee(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>)</span><br><span class="line">salary <span class="built_in">real</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- id, name, age不接受null值;</span></span><br></pre></td></tr></table></figure>
+<h3 id="default-约束"><a href="/2017/01/12/sqlite3_advanced1/#default-约束" class="headerlink" title="default 约束"></a>default 约束</h3><p>在insert时没有提供特定的值时, 提供一个默认值, 如下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> employee(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>)</span><br><span class="line">salary <span class="built_in">real</span> <span class="keyword">default</span> <span class="number">40000</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="unique-约束"><a href="/2017/01/12/sqlite3_advanced1/#unique-约束" class="headerlink" title="unique 约束"></a>unique 约束</h3><p>防止一个特定的列出现列个记录相同的值, 如下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> employee(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">unique</span></span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span></span><br><span class="line">address <span class="built_in">char</span>(<span class="number">50</span>)</span><br><span class="line">salary <span class="built_in">real</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 防止雇佣相同名称的人</span></span><br></pre></td></tr></table></figure>
+<h3 id="primary-key-约束"><a href="/2017/01/12/sqlite3_advanced1/#primary-key-约束" class="headerlink" title="primary key 约束"></a>primary key 约束</h3><ol>
+<li>约束唯一标识数据库表中的每个记录. 在一个表中可以有多个unique列, 但是只能有一个主键.</li>
+<li>通过主键来引用表中的行. 可将主键设为其他表的外键, 来创建表的关系.</li>
+<li>在<code>sqlite</code>中, 主键可以为NULL, 与其他数据库不同的地方.</li>
+<li>如果一个表在任何字段上定义了一个主键, 那么该字段就不能有俩个记录相同的值;</li>
+</ol>
+<h3 id="check-约束"><a href="/2017/01/12/sqlite3_advanced1/#check-约束" class="headerlink" title="check 约束"></a>check 约束</h3><p>启用输入一条记录要检查值的条件. 如果为false, 则不能创建.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> company3(</span><br><span class="line"><span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line"><span class="keyword">name</span> <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">age <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">salary <span class="built_in">real</span> <span class="keyword">check</span>(salary&gt;<span class="number">0</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="删除约束"><a href="/2017/01/12/sqlite3_advanced1/#删除约束" class="headerlink" title="删除约束"></a>删除约束</h3><ol>
+<li>sqlite支持alter table的有限子集.</li>
+<li>在sqlite中, alter table命令允许用户重命名表, 或向现有表中添加一个新的列.</li>
+<li>重命名列, 删除一列, 或从一个表中添加或删除约束列都是不可能的.</li>
+</ol>
+<h2 id="sqlite-joins"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-joins" class="headerlink" title="sqlite joins"></a>sqlite joins</h2><p>joins子句用于结合俩个或多个数据库中表的记录.<br>假设我们已经有表company, department, 往department中插入如下记录:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> department <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">'IT Billing'</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> department <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">'Engineering'</span>, <span class="number">2</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> department <span class="keyword">values</span>(<span class="number">3</span>, <span class="string">'Finance'</span>, <span class="number">7</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="交叉连接"><a href="/2017/01/12/sqlite3_advanced1/#交叉连接" class="headerlink" title="交叉连接"></a>交叉连接</h3><p>把第一个表的每一行与第二个表的每一行进行匹配. 如果第一表有n行x列, 第二个表有m行y列, 则会产生n*m行<br>x+y列的结果表, 如下;</p>
+<p><code>select * from company cross join department;</code></p>
+<h3 id="内连接"><a href="/2017/01/12/sqlite3_advanced1/#内连接" class="headerlink" title="内连接"></a>内连接</h3><p>根据连接条件结合俩个表. 查询会把table1中的每一行与table2中的每一行进行比较, 如果满足连接条件,<br>就会进行合并. 内连接是默认连接, inner可以省略. 如下:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 [<span class="keyword">inner</span>] <span class="keyword">join</span> table2 <span class="keyword">on</span> condition_expression</span><br><span class="line"><span class="comment">-- 为了避免冗余, 并保持较短的措辞, 可以使用using表达式</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 [<span class="keyword">inner</span>] <span class="keyword">join</span> table2 <span class="keyword">using</span>(column1 ...)</span><br><span class="line"><span class="comment">-- 自然连接(natural join) 类似于join ... using , 只是它自会自动测试存在俩个表中每一列的值之间相等值.</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 <span class="keyword">natural</span> <span class="keyword">join</span> table2;</span><br><span class="line"></span><br><span class="line"><span class="comment">--例子</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id=department.id;</span><br><span class="line"><span class="comment">-- 上面产生的效果类似于如下产生的效果:</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">natural</span> <span class="keyword">join</span> department;</span><br><span class="line"><span class="comment">-- using: id 俩个表都有, 所以正确, 连接后id列合并</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>);</span><br><span class="line"><span class="comment">-- error: 由于name, dept不是俩个表共有的.</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, dept);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">name</span>, dept);</span><br></pre></td></tr></table></figure></p>
+<h3 id="外连接"><a href="/2017/01/12/sqlite3_advanced1/#外连接" class="headerlink" title="外连接"></a>外连接</h3><ol>
+<li>外连接是内连接的扩展, sqlite支持SQL标准left, right, full三种的左外连接(left outer join).</li>
+<li>基本同上</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> table2 <span class="keyword">on</span> condition_expression</span><br><span class="line"><span class="comment">-- 为了避免冗余, 并保持较短的措辞, 可以使用using表达式</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">from</span> table1 <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> table2 <span class="keyword">using</span>(column1 ...)</span><br><span class="line"></span><br><span class="line"><span class="comment">--例子</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id=department.id;</span><br><span class="line"><span class="comment">-- using: id 俩个表都有, 所以正确, 连接后id列合并</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>);</span><br><span class="line"><span class="comment">-- error: 由于name, dept不是俩个表共有的.</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">id</span>, <span class="keyword">name</span>, dept);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">using</span>(<span class="keyword">name</span>, dept);</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-unions子句"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-unions子句" class="headerlink" title="sqlite unions子句"></a>sqlite unions子句</h2><p>UNION子句/运算符用于合并俩个或多个select语句的结果, 不返回任何重复的行.<br>为了使用UNION, 每个select被选择的列数必须是相同的, 相同数目的列表达式, 相同的数据类型,<br>并确保他们有相同的顺序, 但他们不必有相同的长度.<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="keyword">select</span> column1 [,column2] <span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition] <span class="keyword">union</span> <span class="keyword">select</span> column1 [,column2]</span><br><span class="line"><span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 实例</span></span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id</span><br><span class="line"><span class="keyword">union</span></span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id;</span><br></pre></td></tr></table></figure></p>
+<h3 id="union-all子句"><a href="/2017/01/12/sqlite3_advanced1/#union-all子句" class="headerlink" title="union all子句"></a>union all子句</h3><p>同上, 但是会返回重复的行<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="keyword">select</span> column1 [,column2] <span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition]</span><br><span class="line"><span class="keyword">union</span> all</span><br><span class="line"><span class="keyword">select</span> column1 [,column2] <span class="keyword">from</span> table1 [,table2] [<span class="keyword">where</span> condition]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 实例</span></span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">inner</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id</span><br><span class="line"><span class="keyword">union</span> all</span><br><span class="line"><span class="keyword">select</span> emp_id, <span class="keyword">name</span>, dept <span class="keyword">from</span> company <span class="keyword">left</span> <span class="keyword">outer</span> <span class="keyword">join</span> department <span class="keyword">on</span> company.id = department.emp_id;</span><br></pre></td></tr></table></figure></p>
+<h2 id="sqlite-null-值"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-null-值" class="headerlink" title="sqlite null 值"></a>sqlite null 值</h2><p>sqlite的null是用来表示一个缺失值的项. 表中的一个NULL值是在字段中显示为空白的一个值.<br>带有null值的字段是一个不带有值的字段. null值和零值或包含空格的字段是不同的.</p>
+<h3 id="语法-实例"><a href="/2017/01/12/sqlite3_advanced1/#语法-实例" class="headerlink" title="语法, 实例"></a>语法, 实例</h3><p>参照创建表</p>
+<h3 id="is-not-null运算符"><a href="/2017/01/12/sqlite3_advanced1/#is-not-null运算符" class="headerlink" title="is not null运算符"></a>is not null运算符</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> salary <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-别名"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-别名" class="headerlink" title="sqlite 别名"></a>sqlite 别名</h2><p>可以暂时把表或列重命名为另一个名字, 就是别名. 使用表别名是指在一个特定的sqlite语句中重命名表.<br>重命名是临时的改变, 数据库中实机的表是不会改变的. 列别名同表别名.</p>
+<h3 id="语法"><a href="/2017/01/12/sqlite3_advanced1/#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 表别名</span></span><br><span class="line"><span class="keyword">select</span> column1, column2, ... <span class="keyword">from</span> table_name <span class="keyword">as</span> alias_name <span class="keyword">where</span> [condition]</span><br><span class="line"><span class="comment">-- 列别名</span></span><br><span class="line"><span class="keyword">select</span> column1 <span class="keyword">as</span> alias_name <span class="keyword">from</span> table_name <span class="keyword">where</span> [condition]</span><br></pre></td></tr></table></figure>
+<h3 id="实例"><a href="/2017/01/12/sqlite3_advanced1/#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 表别名</span></span><br><span class="line"><span class="keyword">select</span> c.id, c.name, c.age, d.dept <span class="keyword">from</span> company <span class="keyword">as</span> c, department <span class="keyword">as</span> d <span class="keyword">where</span> c.id=d.emp_id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 列别名</span></span><br><span class="line"><span class="keyword">select</span> c.id <span class="keyword">as</span> company_id, c.name <span class="keyword">as</span> company_name, c.age, d.dept <span class="keyword">from</span> company <span class="keyword">as</span> c,</span><br><span class="line">department <span class="keyword">as</span> d <span class="keyword">where</span> c.id = d.emp_id;</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-触发器-trigger"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-触发器-trigger" class="headerlink" title="sqlite 触发器(trigger)"></a>sqlite 触发器(trigger)</h2><p>触发器是数据库的回调函数, 它会在指定的数据库事件发生时自动执行或调用. 以下是相关要点:</p>
+<ol>
+<li>指定在特定的数据库表发生delete, insert, 或update时触发, 或在一个或多个指定表的列发生更新是触发;</li>
+<li>只支持for each row触发器, 没有for each statement触发器, 因此for each row是可选的.</li>
+<li>when 子句与触发器动作可能访问使用表单new.column-name 和 old.column-name的引用插入,<br>删除或更新的行元素, 其中column-name是从与触发器关联的表的列的名称.</li>
+<li>如果提供when子句, 则只针对when子句为真的指定行执行sql语句. 否则, 为所有行执行.</li>
+<li>defore 或 after 关键字决定何时执行触发器动作. 决定是在关联行的插入, 修改或删除之前或之后执行.</li>
+<li>当触发器关联的表删除时, 自动删除触发器.</li>
+<li>要修改的表必须存在与同一数据库中, 作为触发器被附加的表或视图, 且必须只使用tabname,<br>而不是database.tablename.</li>
+<li>一个特殊的sql函数raise() 用于触发器程序内抛出异常.</li>
+</ol>
+<h3 id="语法-1"><a href="/2017/01/12/sqlite3_advanced1/#语法-1" class="headerlink" title="语法"></a>语法</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建触发器</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> trigger_name [<span class="keyword">before</span> | <span class="keyword">after</span>] event_name <span class="keyword">on</span> table_name</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="comment">-- trigger 逻辑代码</span></span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> trigger_name [<span class="keyword">before</span> | <span class="keyword">after</span> ] <span class="keyword">update</span> <span class="keyword">of</span> column_name <span class="keyword">on</span> table_name</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="comment">-- 触发器逻辑代码</span></span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="实例-1"><a href="/2017/01/12/sqlite3_advanced1/#实例-1" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 为company表的每一个记录保持审计试验</span></span><br><span class="line"><span class="comment">-- 创建一个audit表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">audit</span>(emp_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>, entry_date <span class="built_in">text</span> <span class="keyword">not</span> <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建一个触发器</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> audit_log <span class="keyword">after</span> <span class="keyword">insert</span> <span class="keyword">on</span> company</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">audit</span>(emp_id, entry_date) <span class="keyword">values</span>(new.id, datetime(<span class="string">'now'</span>));</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 往company中插入一条记录</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company(<span class="keyword">id</span>, <span class="keyword">name</span>, age, address, salary) <span class="keyword">values</span>(<span class="number">11</span>, <span class="string">'feng'</span>, <span class="number">28</span>, <span class="number">6722</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 执行上步后, 也会在audit中插入一个记录</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">audit</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="列出触发器和删除触发器"><a href="/2017/01/12/sqlite3_advanced1/#列出触发器和删除触发器" class="headerlink" title="列出触发器和删除触发器"></a>列出触发器和删除触发器</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 列出</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> <span class="keyword">type</span>=<span class="string">'trigger'</span>;</span><br><span class="line"><span class="comment">-- 删除</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">trigger</span> trigger_name</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-索引-index"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-索引-index" class="headerlink" title="sqlite 索引(index)"></a>sqlite 索引(index)</h2><ol>
+<li>索引是一种特殊的查找表, 数据库搜索引擎用来加快数据检索;</li>
+<li>索引有助于加快select查询和where子句, 但是会减慢update和insert语句时的数据输入;</li>
+<li>索引可以创建和删除, 不会影响源数据;</li>
+<li>使用create index创建索引, 允许命名索引, 指定表及要索引的一列或多列, 并指示索引是升序还是降序;</li>
+<li>索引也可以是唯一的, 与unique约束类似, 在列上或列组合上防止重复条目;</li>
+</ol>
+<h3 id="创建索引-create-index"><a href="/2017/01/12/sqlite3_advanced1/#创建索引-create-index" class="headerlink" title="创建索引(create index)"></a>创建索引(create index)</h3><ol>
+<li>如果查询一般使用一个列, 则使用单列索引;</li>
+<li>如果使用多列, 则使用组合索引;</li>
+</ol>
+<h4 id="单列索引"><a href="/2017/01/12/sqlite3_advanced1/#单列索引" class="headerlink" title="单列索引"></a>单列索引</h4><p>只基于表的一个列上创建的索引.<br><code>create index index_name on table_name(column_name);</code></p>
+<h4 id="唯一索引"><a href="/2017/01/12/sqlite3_advanced1/#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h4><p>唯一索引不允许任何重复的值插入到表中<br><code>create unique index index_name on table_name(column_name);</code></p>
+<h4 id="组合索引"><a href="/2017/01/12/sqlite3_advanced1/#组合索引" class="headerlink" title="组合索引"></a>组合索引</h4><p>基于表的俩个或多个列上创建的索引<br><code>create index index_name on table_name(column1, column2);</code></p>
+<h4 id="隐式索引"><a href="/2017/01/12/sqlite3_advanced1/#隐式索引" class="headerlink" title="隐式索引"></a>隐式索引</h4><p>创建表时, 由数据库服务器自动创建的索引. 索引自动创建为主键约束和唯一约束.</p>
+<h3 id="删除索引"><a href="/2017/01/12/sqlite3_advanced1/#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><p><code>drop index index_name</code></p>
+<h3 id="以下情况避免使用索引"><a href="/2017/01/12/sqlite3_advanced1/#以下情况避免使用索引" class="headerlink" title="以下情况避免使用索引"></a>以下情况避免使用索引</h3><ol>
+<li>不应该使用在较小的表上;</li>
+<li>不应该使用在有频繁的大批量的更新或插入操作的表上;</li>
+<li>不应该使用在含有大量的null值的列上;</li>
+<li>不应该使用在频繁操作的列上;</li>
+</ol>
+<h3 id="实例-2"><a href="/2017/01/12/sqlite3_advanced1/#实例-2" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> salary_index <span class="keyword">on</span> company(salary);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看所有索引</span></span><br><span class="line">.indices company</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 列出数据所有的索引</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> sqlite_master <span class="keyword">where</span> <span class="keyword">type</span>=<span class="string">'index'</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-indexed-by"><a href="/2017/01/12/sqlite3_advanced1/#sqlite-indexed-by" class="headerlink" title="sqlite indexed by"></a>sqlite indexed by</h2><p>“indexed by index_name” 子句规定必须需要命名的索引来查找前面表中值. 如果不存在或不能用于查询,<br>语句失败. “not indexed” 子句规定当访问前面的表时, 没有使用索引. 然而, 即使指定了”not indexed”,<br>integer primary key仍然可以用于查找条目.</p>
+<h3 id="语法-2"><a href="/2017/01/12/sqlite3_advanced1/#语法-2" class="headerlink" title="语法"></a>语法</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>|<span class="keyword">delete</span>|<span class="keyword">update</span> column1, column2 indexed <span class="keyword">by</span> (index_name)</span><br><span class="line">table_name <span class="keyword">where</span> (condition);</span><br></pre></td></tr></table></figure>
+<h3 id="实例-3"><a href="/2017/01/12/sqlite3_advanced1/#实例-3" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 假设有表</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> age_index <span class="keyword">on</span> company(age);</span><br><span class="line"><span class="comment">-- 使用</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company indexed <span class="keyword">by</span> age_index <span class="keyword">where</span> age&gt;<span class="number">30</span>;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sqlite/" rel="tag"># sqlite</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/06/sqlite3_base/" rel="next" title="sqlite基础">
+                <i class="fa fa-chevron-left"></i> sqlite基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/12/sqlite3_advanced2/" rel="prev" title="sqlite高级-2">
+                sqlite高级-2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
+
+          </div>
+          
 
   
 
+
+
+        </div>
+        
+          
   
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-  <div class="linkslist">
-  <p class="asidetitle">Links</p>
-    <ul>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
-    </ul>
-</div>
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> Talk is cheap, show me code! <br/>
-			</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</div>
-			
-		
+  </div>
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
-		
-		<a href="/about" target="_blank" title="DaSea">DaSea</a>
-		
-		
-		</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-  
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
       
-      $('#toc.toc-aside').css('display', 'none');
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">DaSea</p>
+              <p class="site-description motion-element" itemprop="description">Fucking Code!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/DaSea" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-pragma"><span class="nav-number">1.</span> <span class="nav-text">sqlite pragma</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-约束"><span class="nav-number">2.</span> <span class="nav-text">sqlite 约束</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NOT-NULL-约束"><span class="nav-number">2.1.</span> <span class="nav-text">NOT NULL 约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#default-约束"><span class="nav-number">2.2.</span> <span class="nav-text">default 约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unique-约束"><span class="nav-number">2.3.</span> <span class="nav-text">unique 约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#primary-key-约束"><span class="nav-number">2.4.</span> <span class="nav-text">primary key 约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#check-约束"><span class="nav-number">2.5.</span> <span class="nav-text">check 约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除约束"><span class="nav-number">2.6.</span> <span class="nav-text">删除约束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-joins"><span class="nav-number">3.</span> <span class="nav-text">sqlite joins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉连接"><span class="nav-number">3.1.</span> <span class="nav-text">交叉连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内连接"><span class="nav-number">3.2.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外连接"><span class="nav-number">3.3.</span> <span class="nav-text">外连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-unions子句"><span class="nav-number">4.</span> <span class="nav-text">sqlite unions子句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#union-all子句"><span class="nav-number">4.1.</span> <span class="nav-text">union all子句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-null-值"><span class="nav-number">5.</span> <span class="nav-text">sqlite null 值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法-实例"><span class="nav-number">5.1.</span> <span class="nav-text">语法, 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#is-not-null运算符"><span class="nav-number">5.2.</span> <span class="nav-text">is not null运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-别名"><span class="nav-number">6.</span> <span class="nav-text">sqlite 别名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">6.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">6.2.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-触发器-trigger"><span class="nav-number">7.</span> <span class="nav-text">sqlite 触发器(trigger)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法-1"><span class="nav-number">7.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-1"><span class="nav-number">7.2.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列出触发器和删除触发器"><span class="nav-number">7.3.</span> <span class="nav-text">列出触发器和删除触发器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-索引-index"><span class="nav-number">8.</span> <span class="nav-text">sqlite 索引(index)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建索引-create-index"><span class="nav-number">8.1.</span> <span class="nav-text">创建索引(create index)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单列索引"><span class="nav-number">8.1.1.</span> <span class="nav-text">单列索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#唯一索引"><span class="nav-number">8.1.2.</span> <span class="nav-text">唯一索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合索引"><span class="nav-number">8.1.3.</span> <span class="nav-text">组合索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#隐式索引"><span class="nav-number">8.1.4.</span> <span class="nav-text">隐式索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除索引"><span class="nav-number">8.2.</span> <span class="nav-text">删除索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以下情况避免使用索引"><span class="nav-number">8.3.</span> <span class="nav-text">以下情况避免使用索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-2"><span class="nav-number">8.4.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-indexed-by"><span class="nav-number">9.</span> <span class="nav-text">sqlite indexed by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法-2"><span class="nav-number">9.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-3"><span class="nav-number">9.2.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
         
-    }
-  });
-});
-</script>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaSea</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
   }
-}); 
 </script>
 
 
 
-<!-- Analytics Begin -->
 
 
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 
 
-<!-- Analytics End -->
-
-<!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
 
 
-<!-- MathJax End -->
 
-<!-- Tiny_search Begin -->
 
-<!-- Tiny_search End -->
 
-  </body>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
 </html>

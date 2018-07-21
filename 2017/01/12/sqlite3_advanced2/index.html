@@ -1,585 +1,890 @@
+<!DOCTYPE html>
 
- <!DOCTYPE HTML>
-<html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8">
+
+
+
+
+
+
+
+
+
+
+
   
-    <title>sqlite高级-2 | 兼容</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="DaSea">
-    
 
-    
-    <meta name="description" content="sqlite alter &amp;#x547D;&amp;#x4EE4;alter table&amp;#x547D;&amp;#x4EE4;&amp;#x4E0D;&amp;#x901A;&amp;#x8FC7;&amp;#x6267;&amp;#x884C;&amp;#x4E00;&amp;#x4E2A;&amp;#x5B8C;&amp;#x6574;&amp;#x7684;&amp;#x8F6C;&amp;#x50A8;&amp;#x548C;&amp;#x6570;&amp;#x636E;&amp;#x7684;&amp;#x91CD;&amp;#x8F7D;">
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="sqlite alter 命令alter table命令不通过执行一个完整的转储和数据的重载来修改已有的表.alter table语句来重命名表, 还可以在已有的表中添加额外的列.sqlite中, 除了重命名表和添加列外, 不支持其他操作 语法12345-- 重命名表alter table datebase_name.table_name rename to new_table_name;-- 添">
 <meta name="keywords" content="sqlite">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sqlite高级-2">
 <meta property="og:url" content="http://yoursite.com/2017/01/12/sqlite3_advanced2/index.html">
 <meta property="og:site_name" content="兼容">
-<meta property="og:description" content="sqlite alter &amp;#x547D;&amp;#x4EE4;alter table&amp;#x547D;&amp;#x4EE4;&amp;#x4E0D;&amp;#x901A;&amp;#x8FC7;&amp;#x6267;&amp;#x884C;&amp;#x4E00;&amp;#x4E2A;&amp;#x5B8C;&amp;#x6574;&amp;#x7684;&amp;#x8F6C;&amp;#x50A8;&amp;#x548C;&amp;#x6570;&amp;#x636E;&amp;#x7684;&amp;#x91CD;&amp;#x8F7D;">
+<meta property="og:description" content="sqlite alter 命令alter table命令不通过执行一个完整的转储和数据的重载来修改已有的表.alter table语句来重命名表, 还可以在已有的表中添加额外的列.sqlite中, 除了重命名表和添加列外, 不支持其他操作 语法12345-- 重命名表alter table datebase_name.table_name rename to new_table_name;-- 添">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-01-12T15:18:30.015Z">
+<meta property="og:updated_time" content="2017-01-12T15:18:30.016Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sqlite高级-2">
-<meta name="twitter:description" content="sqlite alter &amp;#x547D;&amp;#x4EE4;alter table&amp;#x547D;&amp;#x4EE4;&amp;#x4E0D;&amp;#x901A;&amp;#x8FC7;&amp;#x6267;&amp;#x884C;&amp;#x4E00;&amp;#x4E2A;&amp;#x5B8C;&amp;#x6574;&amp;#x7684;&amp;#x8F6C;&amp;#x50A8;&amp;#x548C;&amp;#x6570;&amp;#x636E;&amp;#x7684;&amp;#x91CD;&amp;#x8F7D;">
+<meta name="twitter:description" content="sqlite alter 命令alter table命令不通过执行一个完整的转储和数据的重载来修改已有的表.alter table语句来重命名表, 还可以在已有的表中添加额外的列.sqlite中, 除了重命名表和添加列外, 不支持其他操作 语法12345-- 重命名表alter table datebase_name.table_name rename to new_table_name;-- 添">
 
-    
-    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    <link rel="stylesheet" href="/css/style.css">
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/01/12/sqlite3_advanced2/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>sqlite高级-2 | 兼容</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
 </head>
 
-  <body>
-    <header>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">兼容</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
       
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
-				<h2 class="blog-motto">这是一场不停的追逐!</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">首页</a></li>
-					
-						<li><a href="/archives">归档</a></li>
-					
-						<li><a href="/about">关于</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:yoursite.com">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
+        <h1 class="site-subtitle" itemprop="description">这是一场不停的追逐!</h1>
+      
     
-      <a href="/2017/01/12/sqlite3_advanced2/" title="sqlite高级-2" itemprop="url">sqlite高级-2</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
-		
-  <p class="article-time">
-    <time datetime="2017-01-12T15:18:30.015Z" itemprop="datePublished"> Published 2017-01-12</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-alter-命令"><span class="toc-number">1.</span> <span class="toc-text">sqlite alter 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-number">1.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-number">1.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-truncate-table"><span class="toc-number">2.</span> <span class="toc-text">sqlite truncate table</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-1"><span class="toc-number">2.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-1"><span class="toc-number">2.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-视图-view"><span class="toc-number">3.</span> <span class="toc-text">sqlite 视图(view)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建视图"><span class="toc-number">3.1.</span> <span class="toc-text">创建视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-2"><span class="toc-number">3.2.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除视图"><span class="toc-number">3.3.</span> <span class="toc-text">删除视图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-事务-Transaction"><span class="toc-number">4.</span> <span class="toc-text">sqlite 事务(Transaction)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事务的属性"><span class="toc-number">4.1.</span> <span class="toc-text">事务的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事务控制"><span class="toc-number">4.2.</span> <span class="toc-text">事务控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-3"><span class="toc-number">4.3.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite子查询"><span class="toc-number">5.</span> <span class="toc-text">sqlite子查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#select语句中的子查询使用"><span class="toc-number">5.1.</span> <span class="toc-text">select语句中的子查询使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#insert语句中的子查询使用"><span class="toc-number">5.2.</span> <span class="toc-text">insert语句中的子查询使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#update语句中的子查询使用"><span class="toc-number">5.3.</span> <span class="toc-text">update语句中的子查询使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete语句中的子查询使用"><span class="toc-number">5.4.</span> <span class="toc-text">delete语句中的子查询使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-autoincrement-自动递增"><span class="toc-number">6.</span> <span class="toc-text">sqlite autoincrement(自动递增)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-Explain"><span class="toc-number">7.</span> <span class="toc-text">sqlite Explain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-vacuum"><span class="toc-number">8.</span> <span class="toc-text">sqlite vacuum</span></a></li></ol>
-		
-		</div>
-		
-		<h2 id="sqlite-alter-&#x547D;&#x4EE4;"><a href="#sqlite-alter-&#x547D;&#x4EE4;" class="headerlink" title="sqlite alter &#x547D;&#x4EE4;"></a>sqlite alter &#x547D;&#x4EE4;</h2><p><code>alter table</code>&#x547D;&#x4EE4;&#x4E0D;&#x901A;&#x8FC7;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x5B8C;&#x6574;&#x7684;&#x8F6C;&#x50A8;&#x548C;&#x6570;&#x636E;&#x7684;&#x91CD;&#x8F7D;&#x6765;&#x4FEE;&#x6539;&#x5DF2;&#x6709;&#x7684;&#x8868;.<br><code>alter table</code>&#x8BED;&#x53E5;&#x6765;&#x91CD;&#x547D;&#x540D;&#x8868;, &#x8FD8;&#x53EF;&#x4EE5;&#x5728;&#x5DF2;&#x6709;&#x7684;&#x8868;&#x4E2D;&#x6DFB;&#x52A0;&#x989D;&#x5916;&#x7684;&#x5217;.<br>sqlite&#x4E2D;, &#x9664;&#x4E86;&#x91CD;&#x547D;&#x540D;&#x8868;&#x548C;&#x6DFB;&#x52A0;&#x5217;&#x5916;, &#x4E0D;&#x652F;&#x6301;&#x5176;&#x4ED6;&#x64CD;&#x4F5C;</p>
-<h3 id="&#x8BED;&#x6CD5;"><a href="#&#x8BED;&#x6CD5;" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x91CD;&#x547D;&#x540D;&#x8868;</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> datebase_name.table_name <span class="keyword">rename</span> <span class="keyword">to</span> new_table_name;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x6DFB;&#x52A0;&#x65B0;&#x5217;</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> datebase_name.table_name <span class="keyword">add</span> <span class="keyword">column</span> column_def...;</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B9E;&#x4F8B;"><a href="#&#x5B9E;&#x4F8B;" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> company <span class="keyword">rename</span> <span class="keyword">to</span> old_company;</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> old_company <span class="keyword">add</span> <span class="keyword">column</span> sex <span class="built_in">char</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-truncate-table"><a href="#sqlite-truncate-table" class="headerlink" title="sqlite truncate table"></a>sqlite truncate table</h2><p>sqlite &#x4E2D;, &#x5E76;&#x6CA1;&#x6709;truncate table&#x547D;&#x4EE4;,&#x53EF;&#x4EE5;&#x4F7F;&#x7528;sqlte&#x7684;delete&#x547D;&#x4EE4;&#x5220;&#x9664;&#x8868;&#x4E2D;&#x5DF2;&#x6709;&#x7684;&#x6570;&#x636E;.<br>&#x4F46;&#x662F;&#x5982;&#x679C;&#x5220;&#x9664;&#x6574;&#x4E2A;&#x8868;,&#x5EFA;&#x8BAE;&#x4F7F;&#x7528;drop table&#x547D;&#x4EE4;.</p>
-<h3 id="&#x8BED;&#x6CD5;-1"><a href="#&#x8BED;&#x6CD5;-1" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> table_name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> table_name;</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B9E;&#x4F8B;-1"><a href="#&#x5B9E;&#x4F8B;-1" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company;</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-&#x89C6;&#x56FE;-view"><a href="#sqlite-&#x89C6;&#x56FE;-view" class="headerlink" title="sqlite &#x89C6;&#x56FE;(view)"></a>sqlite &#x89C6;&#x56FE;(view)</h2><ol>
-<li>&#x89C6;&#x56FE;(view)&#x662F;&#x901A;&#x8FC7;&#x76F8;&#x5173;&#x7684;&#x540D;&#x79F0;&#x5B58;&#x50A8;&#x5728;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;sqlite&#x8BED;&#x53E5;;</li>
-<li>&#x89C6;&#x56FE;(view)&#x662F;&#x4E00;&#x4E2A;&#x4EE5;&#x9884;&#x5B9A;&#x4E49;&#x7684;sqlite&#x67E5;&#x8BE2;&#x5F62;&#x5F0F;&#x5B58;&#x5728;&#x7684;&#x8868;&#x7684;&#x7EC4;&#x5408;;</li>
-<li>&#x89C6;&#x56FE;(view)&#x53EF;&#x4EE5;&#x5305;&#x542B;&#x4E00;&#x4E2A;&#x8868;&#x7684;&#x6240;&#x6709;&#x884C;&#x6216;&#x4ECE;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x8868;&#x9009;&#x5B9A;&#x884C;;</li>
-<li>&#x89C6;&#x56FE;&#x662F;&#x4E00;&#x79CD;&#x865A;&#x8868;, &#x5141;&#x8BB8;&#x7528;&#x6237;&#x5B9E;&#x73B0;&#x4EE5;&#x4E0B;&#x51E0;&#x70B9;:<ul>
-<li>&#x7528;&#x6237;&#x6216;&#x7528;&#x6237;&#x7EC4;&#x67E5;&#x627E;&#x7ED3;&#x6784;&#x6570;&#x636E;&#x7684;&#x65B9;&#x5F0F;&#x66F4;&#x81EA;&#x7136;&#x6216;&#x76F4;&#x89C2;</li>
-<li>&#x9650;&#x5236;&#x6570;&#x636E;&#x8BBF;&#x95EE;, &#x7528;&#x6237;&#x53EA;&#x80FD;&#x770B;&#x5230;&#x6709;&#x9650;&#x7684;&#x6570;&#x636E;, &#x800C;&#x4E0D;&#x662F;&#x5B8C;&#x6574;&#x7684;&#x8868;</li>
-<li>&#x6C47;&#x603B;&#x5404;&#x79CD;&#x8868;&#x4E2D;&#x7684;&#x6570;&#x636E;, &#x7528;&#x6237;&#x751F;&#x6210;&#x62A5;&#x544A;</li>
-</ul>
-</li>
-<li>&#x89C6;&#x56FE;&#x662F;&#x53EA;&#x8BFB;&#x7684;, &#x65E0;&#x6CD5;&#x8FDB;&#x884C;delete, insert&#x6216;update&#x64CD;&#x4F5C;, &#x4F46;&#x662F;&#x53EF;&#x4EE5;&#x521B;&#x5EFA;&#x89E6;&#x53D1;&#x5668;.</li>
-</ol>
-<h3 id="&#x521B;&#x5EFA;&#x89C6;&#x56FE;"><a href="#&#x521B;&#x5EFA;&#x89C6;&#x56FE;" class="headerlink" title="&#x521B;&#x5EFA;&#x89C6;&#x56FE;"></a>&#x521B;&#x5EFA;&#x89C6;&#x56FE;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> [temp | <span class="keyword">temporary</span>] <span class="keyword">view</span> view_name <span class="keyword">as</span> <span class="keyword">select</span> column1, column2...</span><br><span class="line"><span class="keyword">from</span> table_name <span class="keyword">where</span> [condition];</span><br><span class="line"><span class="comment">-- &#x5982;&#x679C;&#x4F7F;&#x7528;temp &#x6216;temporary, &#x5219;&#x5C06;&#x5728;&#x4E34;&#x65F6;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#x521B;&#x5EFA;&#x89C6;&#x56FE;.</span></span><br></pre></td></tr></table></figure>
-<h3 id="&#x5B9E;&#x4F8B;-2"><a href="#&#x5B9E;&#x4F8B;-2" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> company company_view <span class="keyword">as</span> <span class="keyword">select</span> <span class="keyword">id</span>, <span class="keyword">name</span>, age <span class="keyword">from</span> company;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x67E5;&#x8BE2;&#x89C6;&#x56FE;, &#x548C;&#x67E5;&#x8BE2;&#x8868;&#x7C7B;&#x4F3C;</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company_view;</span><br></pre></td></tr></table></figure>
-<h3 id="&#x5220;&#x9664;&#x89C6;&#x56FE;"><a href="#&#x5220;&#x9664;&#x89C6;&#x56FE;" class="headerlink" title="&#x5220;&#x9664;&#x89C6;&#x56FE;"></a>&#x5220;&#x9664;&#x89C6;&#x56FE;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">view</span> view_name;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5B9E;&#x4F8B;</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">view</span> company_view;</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-&#x4E8B;&#x52A1;-Transaction"><a href="#sqlite-&#x4E8B;&#x52A1;-Transaction" class="headerlink" title="sqlite &#x4E8B;&#x52A1;(Transaction)"></a>sqlite &#x4E8B;&#x52A1;(Transaction)</h2><ol>
-<li>&#x4E8B;&#x52A1;&#x662F;&#x4E00;&#x4E2A;&#x5BF9;&#x6570;&#x636E;&#x5E93;&#x6267;&#x884C;&#x5DE5;&#x4F5C;&#x5355;&#x5143;. &#x4E8B;&#x52A1;&#x662F;&#x4EE5;&#x903B;&#x8F91;&#x987A;&#x5E8F;&#x5B8C;&#x6210;&#x7684;&#x5DE5;&#x4F5C;&#x5355;&#x4F4D;&#x6216;&#x5E8F;&#x5217;, &#x53EF;&#x4EE5;&#x662F;&#x7531;&#x7528;&#x6237;&#x624B;&#x52A8;&#x64CD;&#x4F5C;&#x5B8C;&#x6210;,<br>&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x7531;&#x67D0;&#x79CD;&#x6570;&#x636E;&#x5E93;&#x7A0B;&#x5E8F;&#x81EA;&#x52A8;&#x5B8C;&#x6210;.</li>
-<li>&#x4E8B;&#x52A1;&#x662F;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x66F4;&#x6539;&#x6570;&#x636E;&#x5E93;&#x7684;&#x6269;&#x5C55;. &#x4F8B;&#x5982;, &#x5982;&#x679C;&#x60A8;&#x6B63;&#x5728;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8BB0;&#x5F55;&#x6216;&#x66F4;&#x65B0;&#x6216;&#x5220;&#x9664;, &#x90A3;&#x60A8;&#x6B63;&#x5728;&#x6539;&#x8868;&#x6267;&#x884C;&#x4E8B;&#x52A1;.</li>
-<li>todo</li>
-</ol>
-<h3 id="&#x4E8B;&#x52A1;&#x7684;&#x5C5E;&#x6027;"><a href="#&#x4E8B;&#x52A1;&#x7684;&#x5C5E;&#x6027;" class="headerlink" title="&#x4E8B;&#x52A1;&#x7684;&#x5C5E;&#x6027;"></a>&#x4E8B;&#x52A1;&#x7684;&#x5C5E;&#x6027;</h3><ol>
-<li>&#x539F;&#x5B50;&#x6027;(atomicity): &#x786E;&#x4FDD;&#x5DE5;&#x4F5C;&#x5355;&#x4F4D;&#x5185;&#x7684;&#x6240;&#x6709;&#x64CD;&#x4F5C;&#x90FD;&#x6210;&#x529F;&#x5B8C;&#x6210;, &#x5426;&#x5219;, &#x4E8B;&#x52A1;&#x4F1A;&#x5728;&#x51FA;&#x73B0;&#x6545;&#x969C;&#x65F6;&#x7EC8;&#x6B62;,<br>&#x4E4B;&#x524D;&#x7684;&#x64CD;&#x4F5C;&#x4E5F;&#x4F1A;&#x56DE;&#x6EDA;&#x5230;&#x4E4B;&#x524D;&#x7684;&#x72B6;&#x6001;.</li>
-<li>&#x4E00;&#x81F4;&#x6027;(consistency): &#x786E;&#x4FDD;&#x6570;&#x636E;&#x5E93;&#x5728;&#x6210;&#x529F;&#x63D0;&#x4EA4;&#x7684;&#x4E8B;&#x52A1;&#x4E0A;&#x6B63;&#x786E;&#x7684;&#x6539;&#x53D8;&#x72B6;&#x6001;.</li>
-<li>&#x9694;&#x79BB;&#x6027;(isolation)  : &#x4F7F;&#x4E8B;&#x52A1;&#x64CD;&#x4F5C;&#x76F8;&#x4E92;&#x72EC;&#x7ACB;&#x548C;&#x900F;&#x660E;.</li>
-<li>&#x6301;&#x4E45;&#x6027;(durability) : &#x786E;&#x4FDD;&#x5DF2;&#x63D0;&#x4EA4;&#x4E8B;&#x52A1;&#x7684;&#x7ED3;&#x679C;&#x6216;&#x6548;&#x679C;&#x5728;&#x7CFB;&#x7EDF;&#x53D1;&#x751F;&#x6545;&#x969C;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4ECD;&#x7136;&#x5B58;&#x5728;.</li>
-</ol>
-<h3 id="&#x4E8B;&#x52A1;&#x63A7;&#x5236;"><a href="#&#x4E8B;&#x52A1;&#x63A7;&#x5236;" class="headerlink" title="&#x4E8B;&#x52A1;&#x63A7;&#x5236;"></a>&#x4E8B;&#x52A1;&#x63A7;&#x5236;</h3><ol>
-<li>begin &#x6216; begin transaction : &#x5F00;&#x59CB;&#x5904;&#x7406;&#x4E8B;&#x52A1;.</li>
-<li>commit : &#x4FDD;&#x5B58;&#x4FEE;&#x6539;, &#x6216;&#x8005;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;end transaction.</li>
-<li>rollback: &#x64A4;&#x9500;&#x672A;&#x4FDD;&#x5B58;&#x5230;&#x6570;&#x636E;&#x5E93;&#x7684;&#x4E8B;&#x52A1;, commit&#x540E;&#x5C31;&#x65E0;&#x6CD5;&#x64A4;&#x9500;&#x4E86;.</li>
-</ol>
-<h3 id="&#x5B9E;&#x4F8B;-3"><a href="#&#x5B9E;&#x4F8B;-3" class="headerlink" title="&#x5B9E;&#x4F8B;"></a>&#x5B9E;&#x4F8B;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x5047;&#x8BBE;&#x6709;age&#x4E3A;25&#x7684;&#x8BB0;&#x5F55;</span></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company <span class="keyword">where</span> age=<span class="number">25</span>;</span><br><span class="line"><span class="keyword">rollback</span>;</span><br><span class="line"><span class="comment">-- &#x67E5;&#x770B;&#x8BB0;&#x5F55;&#x4ECD;&#x7136;&#x5B58;&#x5728;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company <span class="keyword">where</span> age=<span class="number">25</span>;</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line"><span class="comment">-- &#x67E5;&#x770B;&#x5DF2;&#x7ECF;&#x5220;&#x9664;, &#x5E76;&#x4E14;rollback&#x5DF2;&#x7ECF;&#x65E0;&#x7528;</span></span><br></pre></td></tr></table></figure>
-<h2 id="sqlite&#x5B50;&#x67E5;&#x8BE2;"><a href="#sqlite&#x5B50;&#x67E5;&#x8BE2;" class="headerlink" title="sqlite&#x5B50;&#x67E5;&#x8BE2;"></a>sqlite&#x5B50;&#x67E5;&#x8BE2;</h2><ol>
-<li>&#x5B50;&#x67E5;&#x8BE2;&#x6216;&#x5185;&#x90E8;&#x67E5;&#x8BE2;&#x6216;&#x5D4C;&#x5957;&#x67E5;&#x8BE2;&#x662F;&#x5728;&#x53E6;&#x4E00;&#x4E2A;sqlite&#x67E5;&#x8BE2;&#x5185;&#x5D4C;&#x5165;&#x5728;where&#x5B50;&#x53E5;&#x4E2D;&#x7684;&#x67E5;&#x8BE2;, &#x4F7F;&#x7528;&#x5B50;&#x67E5;&#x8BE2;&#x8FD4;&#x56DE;&#x7684;&#x6570;&#x636E;&#x5C06;&#x88AB;<br>&#x7528;&#x4E8E;&#x5728;&#x4E3B;&#x67E5;&#x8BE2;&#x4E2D;&#x4F5C;&#x4E3A;&#x6761;&#x4EF6;, &#x4EE5;&#x8FDB;&#x4E00;&#x6B65;&#x9650;&#x5236;&#x8981;&#x68C0;&#x7D22;&#x7684;&#x6570;&#x636E;.</li>
-<li>&#x5B50;&#x67E5;&#x8BE2;&#x4E0E;select, insert, update, delete&#x4E00;&#x8D77;&#x4F7F;&#x7528;, &#x4F34;&#x968F;&#x8FD0;&#x7B97;&#x7B26;&#x7B49;.</li>
-<li>&#x9075;&#x5FAA;&#x7684;&#x89C4;&#x5219;:<ul>
-<li>&#x5B50;&#x67E5;&#x8BE2;&#x5FC5;&#x987B;&#x7528;&#x62EC;&#x53F7;&#x62EC;&#x8D77;&#x6765;</li>
-<li>&#x5B50;&#x67E5;&#x8BE2;&#x5728;select&#x5B50;&#x53E5;&#x4E2D;&#x53EA;&#x80FD;&#x6709;&#x4E00;&#x5217;. &#x9664;&#x975E;&#x5728;&#x4E3B;&#x67E5;&#x8BE2;&#x4E2D;&#x6709;&#x591A;&#x5217;, &#x4E0E;&#x5B50;&#x67E5;&#x8BE2;&#x7684;&#x6240;&#x9009;&#x5217;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;.</li>
-<li>order by &#x4E0D;&#x80FD;&#x7528;&#x4E8E;&#x5B50;&#x67E5;&#x8BE2;&#x4E2D;, &#x867D;&#x7136;&#x4E3B;&#x67E5;&#x8BE2;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;order by; &#x53EF;&#x4EE5;&#x4F7F;&#x7528;group by, &#x529F;&#x80FD;&#x4E0E;order by&#x76F8;&#x540C;.</li>
-<li>&#x5B50;&#x67E5;&#x8BE2;&#x8FD4;&#x56DE;&#x591A;&#x4E8E;&#x4E00;&#x884C;, &#x53EA;&#x80FD;&#x4E0E;&#x591A;&#x503C;&#x8FD0;&#x7B97;&#x7B26;&#x4E00;&#x8D77;&#x4F7F;&#x7528;, &#x5982;IN&#x8FD0;&#x7B97;&#x7B26;.</li>
-<li>between&#x8FD0;&#x7B97;&#x7B26;&#x4E0D;&#x80FD;&#x4E0E;&#x5B50;&#x67E5;&#x8BE2;&#x4E00;&#x8D77;&#x4F7F;&#x7528;, &#x4F46;&#x662F;, between&#x53EF;&#x5728;&#x5B50;&#x67E5;&#x8BE2;&#x5185;&#x4F7F;&#x7528;.</li>
-</ul>
-</li>
-</ol>
-<h3 id="select&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"><a href="#select&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;" class="headerlink" title="select&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"></a>select&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> column_name [, column_name] <span class="keyword">from</span> table1 [,table2]</span><br><span class="line"><span class="keyword">where</span> column_name <span class="keyword">operator</span> (<span class="keyword">select</span> column_name[,...] <span class="keyword">from</span> table1 [,...] [<span class="keyword">where</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- example</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> company <span class="keyword">where</span> salary&gt;<span class="number">45000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> department <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> company <span class="keyword">where</span> salary&gt;<span class="number">45000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> department);</span><br></pre></td></tr></table></figure>
-<h3 id="insert&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"><a href="#insert&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;" class="headerlink" title="insert&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"></a>insert&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> table_name[(column1, column2)] <span class="keyword">select</span> [* | column1[,column2]]</span><br><span class="line"><span class="keyword">from</span> table1 [, table2] [<span class="keyword">where</span> <span class="keyword">value</span> <span class="keyword">operator</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5047;&#x8BBE;company_bkp&#x7684;&#x7ED3;&#x6784;&#x4E0E;company&#x8868;&#x7C7B;&#x4F3C;</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company_bkp <span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> company);</span><br></pre></td></tr></table></figure>
-<h3 id="update&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"><a href="#update&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;" class="headerlink" title="update&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"></a>update&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">table</span> <span class="keyword">set</span> column_name = new_value</span><br><span class="line">[ <span class="keyword">where</span> <span class="keyword">operator</span> [ <span class="keyword">value</span> ] (<span class="keyword">select</span> column_name <span class="keyword">from</span> table_name) [ <span class="keyword">where</span>) ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">update</span> company <span class="keyword">set</span> salary = salary * <span class="number">0.50</span></span><br><span class="line"><span class="keyword">where</span> age <span class="keyword">in</span> (<span class="keyword">select</span> age <span class="keyword">from</span> company_bkp <span class="keyword">where</span> age &gt;= <span class="number">27</span> );</span><br></pre></td></tr></table></figure>
-<h3 id="delete&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"><a href="#delete&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;" class="headerlink" title="delete&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;"></a>delete&#x8BED;&#x53E5;&#x4E2D;&#x7684;&#x5B50;&#x67E5;&#x8BE2;&#x4F7F;&#x7528;</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> table_name</span><br><span class="line">[ <span class="keyword">where</span> <span class="keyword">operator</span> [ <span class="keyword">value</span> ] (<span class="keyword">select</span> column_name <span class="keyword">from</span> table_name) [ <span class="keyword">where</span>) ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company</span><br><span class="line"><span class="keyword">where</span> age <span class="keyword">in</span> (<span class="keyword">select</span> age <span class="keyword">from</span> company_bkp <span class="keyword">where</span> age &gt; <span class="number">27</span> );</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-autoincrement-&#x81EA;&#x52A8;&#x9012;&#x589E;"><a href="#sqlite-autoincrement-&#x81EA;&#x52A8;&#x9012;&#x589E;" class="headerlink" title="sqlite autoincrement(&#x81EA;&#x52A8;&#x9012;&#x589E;)"></a>sqlite autoincrement(&#x81EA;&#x52A8;&#x9012;&#x589E;)</h2><ol>
-<li>sqlite &#x7684; autoincrement &#x662F;&#x4E00;&#x4E2A;&#x5173;&#x952E;&#x5B57;&#xFF0C;&#x7528;&#x4E8E;&#x8868;&#x4E2D;&#x7684;&#x5B57;&#x6BB5;&#x503C;&#x81EA;&#x52A8;&#x9012;&#x589E;&#x3002;</li>
-<li>&#x53EF;&#x4EE5;&#x5728;&#x521B;&#x5EFA;&#x8868;&#x65F6;&#x5728;&#x7279;&#x5B9A;&#x7684;&#x5217;&#x540D;&#x79F0;&#x4E0A;&#x4F7F;&#x7528; autoincrement &#x5173;&#x952E;&#x5B57;&#x5B9E;&#x73B0;&#x8BE5;&#x5B57;&#x6BB5;&#x503C;&#x7684;&#x81EA;&#x52A8;&#x589E;&#x52A0;&#x3002;</li>
-<li>&#x5173;&#x952E;&#x5B57; AUTOINCREMENT &#x53EA;&#x80FD;&#x7528;&#x4E8E;&#x6574;&#x578B;&#xFF08;INTEGER&#xFF09;&#x5B57;&#x6BB5;</li>
-</ol>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- &#x8BED;&#x6CD5;</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> table_name(</span><br><span class="line">   column1 <span class="built_in">integer</span> autoincrement,</span><br><span class="line">   column2 datatype,</span><br><span class="line">   column3 datatype,</span><br><span class="line">   .....</span><br><span class="line">   columnN datatype,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x5B9E;&#x4F8B;</span></span><br><span class="line"> <span class="keyword">create</span> <span class="keyword">table</span> company(</span><br><span class="line">   <span class="keyword">id</span> <span class="built_in">integer</span> primary <span class="keyword">key</span>   autoincrement,</span><br><span class="line">   <span class="keyword">name</span>           <span class="built_in">text</span>      <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">   age            <span class="built_in">int</span>       <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">   address        <span class="built_in">char</span>(<span class="number">50</span>),</span><br><span class="line">   salary         <span class="built_in">real</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">&apos;paul&apos;</span>, <span class="number">32</span>, <span class="string">&apos;california&apos;</span>, <span class="number">20000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> (<span class="string">&apos;allen&apos;</span>, <span class="number">25</span>, <span class="string">&apos;texas&apos;</span>, <span class="number">15000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> (<span class="string">&apos;teddy&apos;</span>, <span class="number">23</span>, <span class="string">&apos;norway&apos;</span>, <span class="number">20000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">&apos;mark&apos;</span>, <span class="number">25</span>, <span class="string">&apos;rich-mond &apos;</span>, <span class="number">65000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">&apos;david&apos;</span>, <span class="number">27</span>, <span class="string">&apos;texas&apos;</span>, <span class="number">85000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">&apos;kim&apos;</span>, <span class="number">22</span>, <span class="string">&apos;south-hall&apos;</span>, <span class="number">45000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">&apos;james&apos;</span>, <span class="number">24</span>, <span class="string">&apos;houston&apos;</span>, <span class="number">10000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#x67E5;&#x8BE2;:.header on, .mode column</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company;</span><br></pre></td></tr></table></figure>
-<h2 id="sqlite-Explain"><a href="#sqlite-Explain" class="headerlink" title="sqlite Explain"></a>sqlite Explain</h2><p>TODO:</p>
-<h2 id="sqlite-vacuum"><a href="#sqlite-vacuum" class="headerlink" title="sqlite vacuum"></a>sqlite vacuum</h2><p>TODO:</p>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/sqlite/">sqlite</a>
   </div>
 
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://yoursite.com/2017/01/12/sqlite3_advanced2/" data-title="sqlite高级-2 | 兼容" data-tsina="null" class="share clearfix">
-	  </div>
-	
-	</div>
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
 
+      
+      
+    </ul>
+  
 
-</footer>
+  
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/01/13/sqlite3_funcion/" title="sqlite常用函数">
-  <strong>上一篇：</strong><br/>
-  <span>
-  sqlite常用函数</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2017/01/12/sqlite3_advanced1/"  title="sqlite高级-1">
- <strong>下一篇：</strong><br/> 
- <span>sqlite高级-1
-</span>
-</a>
-</div>
-
+  
 </nav>
 
-	
 
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-alter-命令"><span class="toc-number">1.</span> <span class="toc-text">sqlite alter 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-number">1.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-number">1.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-truncate-table"><span class="toc-number">2.</span> <span class="toc-text">sqlite truncate table</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法-1"><span class="toc-number">2.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-1"><span class="toc-number">2.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-视图-view"><span class="toc-number">3.</span> <span class="toc-text">sqlite 视图(view)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建视图"><span class="toc-number">3.1.</span> <span class="toc-text">创建视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-2"><span class="toc-number">3.2.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除视图"><span class="toc-number">3.3.</span> <span class="toc-text">删除视图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-事务-Transaction"><span class="toc-number">4.</span> <span class="toc-text">sqlite 事务(Transaction)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事务的属性"><span class="toc-number">4.1.</span> <span class="toc-text">事务的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事务控制"><span class="toc-number">4.2.</span> <span class="toc-text">事务控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例-3"><span class="toc-number">4.3.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite子查询"><span class="toc-number">5.</span> <span class="toc-text">sqlite子查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#select语句中的子查询使用"><span class="toc-number">5.1.</span> <span class="toc-text">select语句中的子查询使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#insert语句中的子查询使用"><span class="toc-number">5.2.</span> <span class="toc-text">insert语句中的子查询使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#update语句中的子查询使用"><span class="toc-number">5.3.</span> <span class="toc-text">update语句中的子查询使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete语句中的子查询使用"><span class="toc-number">5.4.</span> <span class="toc-text">delete语句中的子查询使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-autoincrement-自动递增"><span class="toc-number">6.</span> <span class="toc-text">sqlite autoincrement(自动递增)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-Explain"><span class="toc-number">7.</span> <span class="toc-text">sqlite Explain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlite-vacuum"><span class="toc-number">8.</span> <span class="toc-text">sqlite vacuum</span></a></li></ol>
- 
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/12/sqlite3_advanced2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DaSea">
+      <meta itemprop="description" content="Fucking Code!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="兼容">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">sqlite高级-2
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-01-12 23:18:30" itemprop="dateCreated datePublished" datetime="2017-01-12T23:18:30+08:00">2017-01-12</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="sqlite-alter-命令"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-alter-命令" class="headerlink" title="sqlite alter 命令"></a>sqlite alter 命令</h2><p><code>alter table</code>命令不通过执行一个完整的转储和数据的重载来修改已有的表.<br><code>alter table</code>语句来重命名表, 还可以在已有的表中添加额外的列.<br>sqlite中, 除了重命名表和添加列外, 不支持其他操作</p>
+<h3 id="语法"><a href="/2017/01/12/sqlite3_advanced2/#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 重命名表</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> datebase_name.table_name <span class="keyword">rename</span> <span class="keyword">to</span> new_table_name;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 添加新列</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> datebase_name.table_name <span class="keyword">add</span> <span class="keyword">column</span> column_def...;</span><br></pre></td></tr></table></figure>
+<h3 id="实例"><a href="/2017/01/12/sqlite3_advanced2/#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> company <span class="keyword">rename</span> <span class="keyword">to</span> old_company;</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> old_company <span class="keyword">add</span> <span class="keyword">column</span> sex <span class="built_in">char</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-truncate-table"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-truncate-table" class="headerlink" title="sqlite truncate table"></a>sqlite truncate table</h2><p>sqlite 中, 并没有truncate table命令,可以使用sqlte的delete命令删除表中已有的数据.<br>但是如果删除整个表,建议使用drop table命令.</p>
+<h3 id="语法-1"><a href="/2017/01/12/sqlite3_advanced2/#语法-1" class="headerlink" title="语法"></a>语法</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> table_name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> table_name;</span><br></pre></td></tr></table></figure>
+<h3 id="实例-1"><a href="/2017/01/12/sqlite3_advanced2/#实例-1" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company;</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-视图-view"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-视图-view" class="headerlink" title="sqlite 视图(view)"></a>sqlite 视图(view)</h2><ol>
+<li>视图(view)是通过相关的名称存储在数据库中的一个sqlite语句;</li>
+<li>视图(view)是一个以预定义的sqlite查询形式存在的表的组合;</li>
+<li>视图(view)可以包含一个表的所有行或从一个或多个表选定行;</li>
+<li>视图是一种虚表, 允许用户实现以下几点:<ul>
+<li>用户或用户组查找结构数据的方式更自然或直观</li>
+<li>限制数据访问, 用户只能看到有限的数据, 而不是完整的表</li>
+<li>汇总各种表中的数据, 用户生成报告</li>
+</ul>
+</li>
+<li>视图是只读的, 无法进行delete, insert或update操作, 但是可以创建触发器.</li>
+</ol>
+<h3 id="创建视图"><a href="/2017/01/12/sqlite3_advanced2/#创建视图" class="headerlink" title="创建视图"></a>创建视图</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> [temp | <span class="keyword">temporary</span>] <span class="keyword">view</span> view_name <span class="keyword">as</span> <span class="keyword">select</span> column1, column2...</span><br><span class="line"><span class="keyword">from</span> table_name <span class="keyword">where</span> [condition];</span><br><span class="line"><span class="comment">-- 如果使用temp 或temporary, 则将在临时数据库中创建视图.</span></span><br></pre></td></tr></table></figure>
+<h3 id="实例-2"><a href="/2017/01/12/sqlite3_advanced2/#实例-2" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> company company_view <span class="keyword">as</span> <span class="keyword">select</span> <span class="keyword">id</span>, <span class="keyword">name</span>, age <span class="keyword">from</span> company;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询视图, 和查询表类似</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company_view;</span><br></pre></td></tr></table></figure>
+<h3 id="删除视图"><a href="/2017/01/12/sqlite3_advanced2/#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">view</span> view_name;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 实例</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">view</span> company_view;</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-事务-Transaction"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-事务-Transaction" class="headerlink" title="sqlite 事务(Transaction)"></a>sqlite 事务(Transaction)</h2><ol>
+<li>事务是一个对数据库执行工作单元. 事务是以逻辑顺序完成的工作单位或序列, 可以是由用户手动操作完成,<br>也可以是由某种数据库程序自动完成.</li>
+<li>事务是一个或多个更改数据库的扩展. 例如, 如果您正在创建一个记录或更新或删除, 那您正在改表执行事务.</li>
+<li>todo</li>
+</ol>
+<h3 id="事务的属性"><a href="/2017/01/12/sqlite3_advanced2/#事务的属性" class="headerlink" title="事务的属性"></a>事务的属性</h3><ol>
+<li>原子性(atomicity): 确保工作单位内的所有操作都成功完成, 否则, 事务会在出现故障时终止,<br>之前的操作也会回滚到之前的状态.</li>
+<li>一致性(consistency): 确保数据库在成功提交的事务上正确的改变状态.</li>
+<li>隔离性(isolation)  : 使事务操作相互独立和透明.</li>
+<li>持久性(durability) : 确保已提交事务的结果或效果在系统发生故障的情况下仍然存在.</li>
+</ol>
+<h3 id="事务控制"><a href="/2017/01/12/sqlite3_advanced2/#事务控制" class="headerlink" title="事务控制"></a>事务控制</h3><ol>
+<li>begin 或 begin transaction : 开始处理事务.</li>
+<li>commit : 保存修改, 或者可以使用end transaction.</li>
+<li>rollback: 撤销未保存到数据库的事务, commit后就无法撤销了.</li>
+</ol>
+<h3 id="实例-3"><a href="/2017/01/12/sqlite3_advanced2/#实例-3" class="headerlink" title="实例"></a>实例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 假设有age为25的记录</span></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company <span class="keyword">where</span> age=<span class="number">25</span>;</span><br><span class="line"><span class="keyword">rollback</span>;</span><br><span class="line"><span class="comment">-- 查看记录仍然存在</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company <span class="keyword">where</span> age=<span class="number">25</span>;</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line"><span class="comment">-- 查看已经删除, 并且rollback已经无用</span></span><br></pre></td></tr></table></figure>
+<h2 id="sqlite子查询"><a href="/2017/01/12/sqlite3_advanced2/#sqlite子查询" class="headerlink" title="sqlite子查询"></a>sqlite子查询</h2><ol>
+<li>子查询或内部查询或嵌套查询是在另一个sqlite查询内嵌入在where子句中的查询, 使用子查询返回的数据将被<br>用于在主查询中作为条件, 以进一步限制要检索的数据.</li>
+<li>子查询与select, insert, update, delete一起使用, 伴随运算符等.</li>
+<li>遵循的规则:<ul>
+<li>子查询必须用括号括起来</li>
+<li>子查询在select子句中只能有一列. 除非在主查询中有多列, 与子查询的所选列进行比较.</li>
+<li>order by 不能用于子查询中, 虽然主查询可以使用order by; 可以使用group by, 功能与order by相同.</li>
+<li>子查询返回多于一行, 只能与多值运算符一起使用, 如IN运算符.</li>
+<li>between运算符不能与子查询一起使用, 但是, between可在子查询内使用.</li>
+</ul>
+</li>
+</ol>
+<h3 id="select语句中的子查询使用"><a href="/2017/01/12/sqlite3_advanced2/#select语句中的子查询使用" class="headerlink" title="select语句中的子查询使用"></a>select语句中的子查询使用</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> column_name [, column_name] <span class="keyword">from</span> table1 [,table2]</span><br><span class="line"><span class="keyword">where</span> column_name <span class="keyword">operator</span> (<span class="keyword">select</span> column_name[,...] <span class="keyword">from</span> table1 [,...] [<span class="keyword">where</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- example</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> company <span class="keyword">where</span> salary&gt;<span class="number">45000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> department <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> company <span class="keyword">where</span> salary&gt;<span class="number">45000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> department);</span><br></pre></td></tr></table></figure>
+<h3 id="insert语句中的子查询使用"><a href="/2017/01/12/sqlite3_advanced2/#insert语句中的子查询使用" class="headerlink" title="insert语句中的子查询使用"></a>insert语句中的子查询使用</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> table_name[(column1, column2)] <span class="keyword">select</span> [* | column1[,column2]]</span><br><span class="line"><span class="keyword">from</span> table1 [, table2] [<span class="keyword">where</span> <span class="keyword">value</span> <span class="keyword">operator</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 假设company_bkp的结构与company表类似</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company_bkp <span class="keyword">select</span> * <span class="keyword">from</span> company <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span>(<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> company);</span><br></pre></td></tr></table></figure>
+<h3 id="update语句中的子查询使用"><a href="/2017/01/12/sqlite3_advanced2/#update语句中的子查询使用" class="headerlink" title="update语句中的子查询使用"></a>update语句中的子查询使用</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">table</span> <span class="keyword">set</span> column_name = new_value</span><br><span class="line">[ <span class="keyword">where</span> <span class="keyword">operator</span> [ <span class="keyword">value</span> ] (<span class="keyword">select</span> column_name <span class="keyword">from</span> table_name) [ <span class="keyword">where</span>) ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">update</span> company <span class="keyword">set</span> salary = salary * <span class="number">0.50</span></span><br><span class="line"><span class="keyword">where</span> age <span class="keyword">in</span> (<span class="keyword">select</span> age <span class="keyword">from</span> company_bkp <span class="keyword">where</span> age &gt;= <span class="number">27</span> );</span><br></pre></td></tr></table></figure>
+<h3 id="delete语句中的子查询使用"><a href="/2017/01/12/sqlite3_advanced2/#delete语句中的子查询使用" class="headerlink" title="delete语句中的子查询使用"></a>delete语句中的子查询使用</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> table_name</span><br><span class="line">[ <span class="keyword">where</span> <span class="keyword">operator</span> [ <span class="keyword">value</span> ] (<span class="keyword">select</span> column_name <span class="keyword">from</span> table_name) [ <span class="keyword">where</span>) ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> company</span><br><span class="line"><span class="keyword">where</span> age <span class="keyword">in</span> (<span class="keyword">select</span> age <span class="keyword">from</span> company_bkp <span class="keyword">where</span> age &gt; <span class="number">27</span> );</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-autoincrement-自动递增"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-autoincrement-自动递增" class="headerlink" title="sqlite autoincrement(自动递增)"></a>sqlite autoincrement(自动递增)</h2><ol>
+<li>sqlite 的 autoincrement 是一个关键字，用于表中的字段值自动递增。</li>
+<li>可以在创建表时在特定的列名称上使用 autoincrement 关键字实现该字段值的自动增加。</li>
+<li>关键字 AUTOINCREMENT 只能用于整型（INTEGER）字段</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> table_name(</span><br><span class="line">   column1 <span class="built_in">integer</span> autoincrement,</span><br><span class="line">   column2 datatype,</span><br><span class="line">   column3 datatype,</span><br><span class="line">   .....</span><br><span class="line">   columnN datatype,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 实例</span></span><br><span class="line"> <span class="keyword">create</span> <span class="keyword">table</span> company(</span><br><span class="line">   <span class="keyword">id</span> <span class="built_in">integer</span> primary <span class="keyword">key</span>   autoincrement,</span><br><span class="line">   <span class="keyword">name</span>           <span class="built_in">text</span>      <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">   age            <span class="built_in">int</span>       <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">   address        <span class="built_in">char</span>(<span class="number">50</span>),</span><br><span class="line">   salary         <span class="built_in">real</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">'paul'</span>, <span class="number">32</span>, <span class="string">'california'</span>, <span class="number">20000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> (<span class="string">'allen'</span>, <span class="number">25</span>, <span class="string">'texas'</span>, <span class="number">15000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> (<span class="string">'teddy'</span>, <span class="number">23</span>, <span class="string">'norway'</span>, <span class="number">20000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">'mark'</span>, <span class="number">25</span>, <span class="string">'rich-mond '</span>, <span class="number">65000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">'david'</span>, <span class="number">27</span>, <span class="string">'texas'</span>, <span class="number">85000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">'kim'</span>, <span class="number">22</span>, <span class="string">'south-hall'</span>, <span class="number">45000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> company (<span class="keyword">name</span>,age,address,salary)</span><br><span class="line"><span class="keyword">values</span> ( <span class="string">'james'</span>, <span class="number">24</span>, <span class="string">'houston'</span>, <span class="number">10000.00</span> );</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询:.header on, .mode column</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> company;</span><br></pre></td></tr></table></figure>
+<h2 id="sqlite-Explain"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-Explain" class="headerlink" title="sqlite Explain"></a>sqlite Explain</h2><p>TODO:</p>
+<h2 id="sqlite-vacuum"><a href="/2017/01/12/sqlite3_advanced2/#sqlite-vacuum" class="headerlink" title="sqlite vacuum"></a>sqlite vacuum</h2><p>TODO:</p>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sqlite/" rel="tag"># sqlite</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/12/sqlite3_advanced1/" rel="next" title="sqlite高级-1">
+                <i class="fa fa-chevron-left"></i> sqlite高级-1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/13/sqlite3_funcion/" rel="prev" title="sqlite常用函数">
+                sqlite常用函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
+
+          </div>
+          
 
   
 
+
+
+        </div>
+        
+          
   
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-  <div class="linkslist">
-  <p class="asidetitle">Links</p>
-    <ul>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
-    </ul>
-</div>
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> Talk is cheap, show me code! <br/>
-			</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</div>
-			
-		
+  </div>
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
-		
-		<a href="/about" target="_blank" title="DaSea">DaSea</a>
-		
-		
-		</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-  
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
       
-      $('#toc.toc-aside').css('display', 'none');
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">DaSea</p>
+              <p class="site-description motion-element" itemprop="description">Fucking Code!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/DaSea" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-alter-命令"><span class="nav-number">1.</span> <span class="nav-text">sqlite alter 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">1.2.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-truncate-table"><span class="nav-number">2.</span> <span class="nav-text">sqlite truncate table</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法-1"><span class="nav-number">2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-1"><span class="nav-number">2.2.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-视图-view"><span class="nav-number">3.</span> <span class="nav-text">sqlite 视图(view)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建视图"><span class="nav-number">3.1.</span> <span class="nav-text">创建视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-2"><span class="nav-number">3.2.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除视图"><span class="nav-number">3.3.</span> <span class="nav-text">删除视图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-事务-Transaction"><span class="nav-number">4.</span> <span class="nav-text">sqlite 事务(Transaction)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的属性"><span class="nav-number">4.1.</span> <span class="nav-text">事务的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务控制"><span class="nav-number">4.2.</span> <span class="nav-text">事务控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-3"><span class="nav-number">4.3.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite子查询"><span class="nav-number">5.</span> <span class="nav-text">sqlite子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select语句中的子查询使用"><span class="nav-number">5.1.</span> <span class="nav-text">select语句中的子查询使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert语句中的子查询使用"><span class="nav-number">5.2.</span> <span class="nav-text">insert语句中的子查询使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update语句中的子查询使用"><span class="nav-number">5.3.</span> <span class="nav-text">update语句中的子查询使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#delete语句中的子查询使用"><span class="nav-number">5.4.</span> <span class="nav-text">delete语句中的子查询使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-autoincrement-自动递增"><span class="nav-number">6.</span> <span class="nav-text">sqlite autoincrement(自动递增)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-Explain"><span class="nav-number">7.</span> <span class="nav-text">sqlite Explain</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlite-vacuum"><span class="nav-number">8.</span> <span class="nav-text">sqlite vacuum</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
         
-    }
-  });
-});
-</script>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaSea</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
   }
-}); 
 </script>
 
 
 
-<!-- Analytics Begin -->
 
 
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 
 
-<!-- Analytics End -->
-
-<!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
 
 
-<!-- MathJax End -->
 
-<!-- Tiny_search Begin -->
 
-<!-- Tiny_search End -->
 
-  </body>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
 </html>

@@ -1,562 +1,867 @@
+<!DOCTYPE html>
 
- <!DOCTYPE HTML>
-<html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8">
+
+
+
+
+
+
+
+
+
+
+
   
-    <title>道路线元计算工具 | 兼容</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="DaSea">
-    
 
-    
-    <meta name="description" content="&amp;#x9053;&amp;#x8DEF;&amp;#x7EBF;&amp;#x603B;&amp;#x7ED3;&amp;#x4E09;&amp;#x79CD;&amp;#x7EBF;&amp;#x5143; &amp;#x76F4;&amp;#x7EBF;&amp;#x6BB5; &amp;#x5706;&amp;#x66F2;&amp;#x7EBF; &amp;#x7F13;&amp;#x548C;&amp;#x66F2;&amp;#x7EBF; &amp;#x7B2C;&amp;#x4E00;&amp;#x7F13;&amp;#x548C;&amp;#x66F2;&amp;#x7">
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="道路线总结三种线元 直线段 圆曲线 缓和曲线 第一缓和曲线(包括完整和不完整的,不完整的需要补充为完整的) 第二缓和曲线(同上)    道路放样的俩种方法 线元法 已知各个线元，直接可以用于计算   交点法 线路转向时的交点，如从右偏到左偏，此时会发生方向的变化,所以就会一个交点 交点之间的线元会包含多段    交点法文件 ZH(起点桩号): 交点属性: 点名, N, E, 第一缓和曲线长, 圆弧">
 <meta name="keywords" content="gis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="道路线元计算工具">
 <meta property="og:url" content="http://yoursite.com/2017/07/26/roadline_basic/index.html">
 <meta property="og:site_name" content="兼容">
-<meta property="og:description" content="&amp;#x9053;&amp;#x8DEF;&amp;#x7EBF;&amp;#x603B;&amp;#x7ED3;&amp;#x4E09;&amp;#x79CD;&amp;#x7EBF;&amp;#x5143; &amp;#x76F4;&amp;#x7EBF;&amp;#x6BB5; &amp;#x5706;&amp;#x66F2;&amp;#x7EBF; &amp;#x7F13;&amp;#x548C;&amp;#x66F2;&amp;#x7EBF; &amp;#x7B2C;&amp;#x4E00;&amp;#x7F13;&amp;#x548C;&amp;#x66F2;&amp;#x7">
+<meta property="og:description" content="道路线总结三种线元 直线段 圆曲线 缓和曲线 第一缓和曲线(包括完整和不完整的,不完整的需要补充为完整的) 第二缓和曲线(同上)    道路放样的俩种方法 线元法 已知各个线元，直接可以用于计算   交点法 线路转向时的交点，如从右偏到左偏，此时会发生方向的变化,所以就会一个交点 交点之间的线元会包含多段    交点法文件 ZH(起点桩号): 交点属性: 点名, N, E, 第一缓和曲线长, 圆弧">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-07-26T14:51:20.536Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="道路线元计算工具">
-<meta name="twitter:description" content="&amp;#x9053;&amp;#x8DEF;&amp;#x7EBF;&amp;#x603B;&amp;#x7ED3;&amp;#x4E09;&amp;#x79CD;&amp;#x7EBF;&amp;#x5143; &amp;#x76F4;&amp;#x7EBF;&amp;#x6BB5; &amp;#x5706;&amp;#x66F2;&amp;#x7EBF; &amp;#x7F13;&amp;#x548C;&amp;#x66F2;&amp;#x7EBF; &amp;#x7B2C;&amp;#x4E00;&amp;#x7F13;&amp;#x548C;&amp;#x66F2;&amp;#x7">
+<meta name="twitter:description" content="道路线总结三种线元 直线段 圆曲线 缓和曲线 第一缓和曲线(包括完整和不完整的,不完整的需要补充为完整的) 第二缓和曲线(同上)    道路放样的俩种方法 线元法 已知各个线元，直接可以用于计算   交点法 线路转向时的交点，如从右偏到左偏，此时会发生方向的变化,所以就会一个交点 交点之间的线元会包含多段    交点法文件 ZH(起点桩号): 交点属性: 点名, N, E, 第一缓和曲线长, 圆弧">
 
-    
-    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    <link rel="stylesheet" href="/css/style.css">
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/26/roadline_basic/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>道路线元计算工具 | 兼容</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
 </head>
 
-  <body>
-    <header>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">兼容</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
       
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
-				<h2 class="blog-motto">这是一场不停的追逐!</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">首页</a></li>
-					
-						<li><a href="/archives">归档</a></li>
-					
-						<li><a href="/about">关于</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:yoursite.com">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
+        <h1 class="site-subtitle" itemprop="description">这是一场不停的追逐!</h1>
+      
     
-      <a href="/2017/07/26/roadline_basic/" title="道路线元计算工具" itemprop="url">道路线元计算工具</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
-		
-  <p class="article-time">
-    <time datetime="2017-07-26T14:51:20.536Z" itemprop="datePublished"> Published 2017-07-26</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#道路线总结"><span class="toc-number">1.</span> <span class="toc-text">道路线总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#三种线元"><span class="toc-number">1.1.</span> <span class="toc-text">三种线元</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#道路放样的俩种方法"><span class="toc-number">1.2.</span> <span class="toc-text">道路放样的俩种方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交点法文件"><span class="toc-number">1.3.</span> <span class="toc-text">交点法文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转角"><span class="toc-number">1.4.</span> <span class="toc-text">转角:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用到的须知点"><span class="toc-number">1.5.</span> <span class="toc-text">用到的须知点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法实现的一些参考"><span class="toc-number">1.6.</span> <span class="toc-text">算法实现的一些参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考的一些网址"><span class="toc-number">1.7.</span> <span class="toc-text">参考的一些网址</span></a></li></ol></li></ol>
-		
-		</div>
-		
-		<h1 id="&#x9053;&#x8DEF;&#x7EBF;&#x603B;&#x7ED3;"><a href="#&#x9053;&#x8DEF;&#x7EBF;&#x603B;&#x7ED3;" class="headerlink" title="&#x9053;&#x8DEF;&#x7EBF;&#x603B;&#x7ED3;"></a>&#x9053;&#x8DEF;&#x7EBF;&#x603B;&#x7ED3;</h1><h2 id="&#x4E09;&#x79CD;&#x7EBF;&#x5143;"><a href="#&#x4E09;&#x79CD;&#x7EBF;&#x5143;" class="headerlink" title="&#x4E09;&#x79CD;&#x7EBF;&#x5143;"></a>&#x4E09;&#x79CD;&#x7EBF;&#x5143;</h2><ul>
-<li>&#x76F4;&#x7EBF;&#x6BB5;</li>
-<li>&#x5706;&#x66F2;&#x7EBF;</li>
-<li>&#x7F13;&#x548C;&#x66F2;&#x7EBF;<ul>
-<li>&#x7B2C;&#x4E00;&#x7F13;&#x548C;&#x66F2;&#x7EBF;(&#x5305;&#x62EC;&#x5B8C;&#x6574;&#x548C;&#x4E0D;&#x5B8C;&#x6574;&#x7684;,&#x4E0D;&#x5B8C;&#x6574;&#x7684;&#x9700;&#x8981;&#x8865;&#x5145;&#x4E3A;&#x5B8C;&#x6574;&#x7684;)</li>
-<li>&#x7B2C;&#x4E8C;&#x7F13;&#x548C;&#x66F2;&#x7EBF;(&#x540C;&#x4E0A;)</li>
-</ul>
-</li>
-</ul>
-<h2 id="&#x9053;&#x8DEF;&#x653E;&#x6837;&#x7684;&#x4FE9;&#x79CD;&#x65B9;&#x6CD5;"><a href="#&#x9053;&#x8DEF;&#x653E;&#x6837;&#x7684;&#x4FE9;&#x79CD;&#x65B9;&#x6CD5;" class="headerlink" title="&#x9053;&#x8DEF;&#x653E;&#x6837;&#x7684;&#x4FE9;&#x79CD;&#x65B9;&#x6CD5;"></a>&#x9053;&#x8DEF;&#x653E;&#x6837;&#x7684;&#x4FE9;&#x79CD;&#x65B9;&#x6CD5;</h2><ul>
-<li>&#x7EBF;&#x5143;&#x6CD5;<ul>
-<li>&#x5DF2;&#x77E5;&#x5404;&#x4E2A;&#x7EBF;&#x5143;&#xFF0C;&#x76F4;&#x63A5;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x8BA1;&#x7B97;</li>
-</ul>
-</li>
-<li>&#x4EA4;&#x70B9;&#x6CD5;<ul>
-<li>&#x7EBF;&#x8DEF;&#x8F6C;&#x5411;&#x65F6;&#x7684;&#x4EA4;&#x70B9;&#xFF0C;&#x5982;&#x4ECE;&#x53F3;&#x504F;&#x5230;&#x5DE6;&#x504F;&#xFF0C;&#x6B64;&#x65F6;&#x4F1A;&#x53D1;&#x751F;&#x65B9;&#x5411;&#x7684;&#x53D8;&#x5316;,&#x6240;&#x4EE5;&#x5C31;&#x4F1A;&#x4E00;&#x4E2A;&#x4EA4;&#x70B9;</li>
-<li>&#x4EA4;&#x70B9;&#x4E4B;&#x95F4;&#x7684;&#x7EBF;&#x5143;&#x4F1A;&#x5305;&#x542B;&#x591A;&#x6BB5;</li>
-</ul>
-</li>
-</ul>
-<h2 id="&#x4EA4;&#x70B9;&#x6CD5;&#x6587;&#x4EF6;"><a href="#&#x4EA4;&#x70B9;&#x6CD5;&#x6587;&#x4EF6;" class="headerlink" title="&#x4EA4;&#x70B9;&#x6CD5;&#x6587;&#x4EF6;"></a>&#x4EA4;&#x70B9;&#x6CD5;&#x6587;&#x4EF6;</h2><ol>
-<li>ZH(&#x8D77;&#x70B9;&#x6869;&#x53F7;):</li>
-<li>&#x4EA4;&#x70B9;&#x5C5E;&#x6027;: &#x70B9;&#x540D;, N, E, &#x7B2C;&#x4E00;&#x7F13;&#x548C;&#x66F2;&#x7EBF;&#x957F;, &#x5706;&#x5F27;&#x534A;&#x5F84;, &#x7B2C;&#x4E8C;&#x7F13;&#x548C;&#x66F2;&#x7EBF;&#x957F;</li>
-<li>&#x8D77;&#x70B9;&#x548C;&#x7EC8;&#x70B9;&#x65E0;&#x540E;&#x9762;&#x4E09;&#x4E2A;&#x5C5E;&#x6027;</li>
-</ol>
-<p><strong>&#x8FD9;&#x91CC;&#x7684;&#x70B9;&#x4E3A;&#x6BCF;&#x6761;&#x7EBF;&#x6BB5;&#x4E4B;&#x95F4;&#x7684;&#x8FDE;&#x63A5;&#x70B9;, &#x6BCF;&#x4E09;&#x4E2A;&#x70B9;&#x4E4B;&#x95F4;&#x53EF;&#x4EE5;&#x6709;&#x51E0;&#x6BB5;&#x6570;&#x636E;;</strong></p>
-<p><strong>&#x7B2C;&#x4E00;&#x4E2A;&#x4EA4;&#x70B9;&#x5C31;&#x662F;&#x8D77;&#x70B9;; &#x6700;&#x540E;&#x4E00;&#x4E2A;&#x5C31;&#x662F;&#x7EC8;&#x70B9;</strong></p>
-<h2 id="&#x8F6C;&#x89D2;"><a href="#&#x8F6C;&#x89D2;" class="headerlink" title="&#x8F6C;&#x89D2;:"></a>&#x8F6C;&#x89D2;:</h2><p>&#x8DEF;&#x7EBF;&#x7531;&#x4E00;&#x4E2A;&#x65B9;&#x5411;&#x504F;&#x5411;&#x53E6;&#x4E00;&#x4E2A;&#x65B9;&#x5411;&#x65F6;, &#x504F;&#x8F6C;&#x540E;&#x7684;&#x53CD;&#x5411;&#x4E0E;&#x539F;&#x65B9;&#x5411;&#x7684;&#x5939;&#x89D2;;<br>&#x5F53;&#x504F;&#x8F6C;&#x540E;&#x7684;&#x65B9;&#x5411;&#x5728;&#x539F;&#x65B9;&#x5411;&#x7684;&#x5DE6;&#x4FA7;,&#x79F0;&#x4E3A;&#x5DE6;&#x8F6C;&#x89D2;; &#x53CD;&#x4E4B;&#x4E3A;&#x53F3;&#x8F6C;&#x89D2;.</p>
-<h2 id="&#x7528;&#x5230;&#x7684;&#x987B;&#x77E5;&#x70B9;"><a href="#&#x7528;&#x5230;&#x7684;&#x987B;&#x77E5;&#x70B9;" class="headerlink" title="&#x7528;&#x5230;&#x7684;&#x987B;&#x77E5;&#x70B9;"></a>&#x7528;&#x5230;&#x7684;&#x987B;&#x77E5;&#x70B9;</h2><ul>
-<li>&#x6240;&#x6709;&#x7684;&#x89D2;&#x5EA6;&#x90FD;&#x662F;&#x5F27;&#x5EA6;</li>
-<li>&#x5DE6;&#x504F;&#x4E3A;-1, &#x53F3;&#x504F;&#x4E3A;1</li>
-<li>&#x7F13;&#x548C;&#x66F2;&#x7EBF;&#x7684;&#x65E0;&#x7A77;&#x5927;&#x534A;&#x5F84;&#x7528;0&#x8868;&#x793A;</li>
-<li>&#x6700;&#x5C0F;&#x8BEF;&#x5DEE;&#x662F;0.0001</li>
-<li>Point&#x4E2D;&#x7684;x&#x4E3A;N, y&#x4E3A;E</li>
-<li>&#x5DE6;&#x504F;&#x6869;&#x70B9;&#x504F;&#x8DDD;&#x4E3A;&#x8D1F;&#x6570;, &#x53F3;&#x504F;&#x6869;&#x70B9;&#x4E3A;&#x6B63;</li>
-<li>&#x65B9;&#x4F4D;&#x89D2;&#x7684;&#x8303;&#x56F4;&#x5FC5;&#x987B;&#x4E3A;0-360&#x5EA6;</li>
-</ul>
-<h2 id="&#x7B97;&#x6CD5;&#x5B9E;&#x73B0;&#x7684;&#x4E00;&#x4E9B;&#x53C2;&#x8003;"><a href="#&#x7B97;&#x6CD5;&#x5B9E;&#x73B0;&#x7684;&#x4E00;&#x4E9B;&#x53C2;&#x8003;" class="headerlink" title="&#x7B97;&#x6CD5;&#x5B9E;&#x73B0;&#x7684;&#x4E00;&#x4E9B;&#x53C2;&#x8003;"></a>&#x7B97;&#x6CD5;&#x5B9E;&#x73B0;&#x7684;&#x4E00;&#x4E9B;&#x53C2;&#x8003;</h2><p><a href="https://github.com/DaSea/roadline" target="_blank" rel="external">github:roadline&#x5B9E;&#x73B0;</a></p>
-<h2 id="&#x53C2;&#x8003;&#x7684;&#x4E00;&#x4E9B;&#x7F51;&#x5740;"><a href="#&#x53C2;&#x8003;&#x7684;&#x4E00;&#x4E9B;&#x7F51;&#x5740;" class="headerlink" title="&#x53C2;&#x8003;&#x7684;&#x4E00;&#x4E9B;&#x7F51;&#x5740;"></a>&#x53C2;&#x8003;&#x7684;&#x4E00;&#x4E9B;&#x7F51;&#x5740;</h2><p><a href="http://www.doc88.com/p-5071644853395.html" target="_blank" rel="external">&#x53C2;&#x8003;1</a><br><a href="http://www.doc88.com/p-8039033183890.html" target="_blank" rel="external">&#x53C2;&#x8003;2</a><br><a href="http://wenku.baidu.com/link?url=JAAHtiKOalqX_m0-fDmfivILzlQDElaC835i_T64kW5poEbhfQ-HsIlNMthgBd0EdA9f07r8AFmNwHvb6UQYg0epfT81Z6DT9G-NZoxzb8_" target="_blank" rel="external">&#x53C2;&#x8003;3</a><br><a href="http://www.doc88.com/p-578889890554.html" target="_blank" rel="external">&#x53C2;&#x8003;4</a><br><a href="http://www.cnblogs.com/carekee/articles/2299546.html" target="_blank" rel="external">&#x70B9;&#x5728;&#x7EBF;&#x7684;&#x5DE6;&#x8FB9;&#x548C;&#x53F3;&#x8FB9;</a><br><a href="http://wenku.baidu.com/link?url=ewQquJocnhIxEu-bdIBETMKH_5SMFu_6cqI_RvFdGPoeq1Zkf1NbPMDSx2_ZUjhrw733jQDe1UNu5xfu6x2Z_S8GuUvgAQposSYuoWYixmW" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=Hvfrx2Uraf-DENaOPtQ5T42xCg6Vfgze8mS1WcSYuCIbuPsk1d7_DX3coX8vpjina2-2X6cg0nY-hx1McKtE3gM20Ki75T5DODpLYFOrSqa&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/view/99e2b81ff12d2af90242e62b.html?re=view" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/view/afc41d4458fafab068dc0201.html?qq-pf-to=pcqq.c2c" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=_W1tzPWM00YM31_A5vqN8t3VUPpVWB0suUBw-r9CUZy-__OW6hkFFu7rqcBplFpqpc8G00JVCv4kyLr2_saGouZPZ_gqGAIG0oADal6vPlS&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://jpkc.gdut.edu.cn/shengji.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=7vs5g6VYlXuRMMS21RV_12P96lMiPw69wf7g31KWBxDBIC2QFN69xdOu24hSOGM1_BiXrXANgtVb4ihfdVF4xYdqVIUsk3mywk1_7jHDF-7" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=A6dYGlkIHmssTy64Rn5zwKx6H1CsrGroF9o2Tfi0FCX_KPt7ahed5ivT5k07Djs80pEtFotXjdI7yGQPu2BMY3Ebc7Q0daJTMHGM4d0z4hC" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=B559c_EEBWthrnwFqyfwwaLpPS7GyceLBRU9MXlDotdLCeZJY-jbN7vXvdFhmDzusEEnh1JDB14sSCJT4rJTxwl9xEHLCAtBWSYeOT_4Z3C" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=zV1yXBQBxDjKKdErgf21H271slV_CkaNvpukHkY5G1sJzBTkrlPcyjPQgO0KstOdbWfE9tlYkWl_UdeXJJsmZpnEkPyjeSxb0AR0k0zOt8O" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=8zLYnucgzmxoUI78CEhFc1Af_L1MBalm3LqBIM9cABm6-c26FRN64Gov_TXJYyeddHFpRtnnHnR0OFyXliE8c98VuSXEUPGgLjL9VUDiw6O" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://xinxing124.blog.163.com/blog/static/30170195201162815851981/" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://www.surmap.com/articles/L294.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/view/759a6e390912a21615792900.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/view/84e65319964bcf84b9d57ba8.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://www.doc88.com/p-6002033684682.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=vZOnxcLmHVjuREUwtXO_rtq57RdoswsSFbRYJkZkTPh1C5L3GHZUtCnhqXMEEs8cozQEchMqOyUUv4uX9WMuwheRmkHElJoITocmMa4hP6K" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/view/1cd87209a216147916112804.html?re=view" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=zuLF6LOJi9k4ZJDVh9e7ZVkktKWEsxDUAkTQsQzcqfSMaLII17s2NBa5g5GCTs6UA0jsTBmhdqTbFbIEgVi3VcFw4I-cKLpixEOKgzOr0Zu&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://www.docin.com/p-736461981.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://www.docin.com/p-370156773.html" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=s017wqDkRAgGuHzJsYhzSSBwrLWtgLbsy7-LpECetmq5yYbww_srcBl4T1x15Z4TYJUPaOs3uDlY44ar2_RWHSMXaheUj2-3QHiLQnLsfZu&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://wenku.baidu.com/link?url=q7BB7pytNYPI8S-Z2MXphVUfDqVigxqCHWeqoRoD6GWitmqGp6jn2TTs6_IlvDjM9XqgNBKCswdcI2GnshRVoonIjjD98UJTNysWZkqXQ9K" target="_blank" rel="external">&#x53C2;&#x8003;</a><br><a href="http://blog.csdn.net/qll125596718/article/details/8248249" target="_blank" rel="external">&#x53C2;&#x8003;</a></p>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/gis/">gis</a>
   </div>
 
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://yoursite.com/2017/07/26/roadline_basic/" data-title="道路线元计算工具 | 兼容" data-tsina="null" class="share clearfix">
-	  </div>
-	
-	</div>
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
 
+      
+      
+    </ul>
+  
 
-</footer>
+  
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/09/01/font_unit/" title="">
-  <strong>上一篇：</strong><br/>
-  <span>
-  (no title)</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2017/07/26/gis_opengles_stencil/"  title="opengl es模板缓冲的使用">
- <strong>下一篇：</strong><br/> 
- <span>opengl es模板缓冲的使用
-</span>
-</a>
-</div>
-
+  
 </nav>
 
-	
 
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#道路线总结"><span class="toc-number">1.</span> <span class="toc-text">道路线总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#三种线元"><span class="toc-number">1.1.</span> <span class="toc-text">三种线元</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#道路放样的俩种方法"><span class="toc-number">1.2.</span> <span class="toc-text">道路放样的俩种方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交点法文件"><span class="toc-number">1.3.</span> <span class="toc-text">交点法文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转角"><span class="toc-number">1.4.</span> <span class="toc-text">转角:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用到的须知点"><span class="toc-number">1.5.</span> <span class="toc-text">用到的须知点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法实现的一些参考"><span class="toc-number">1.6.</span> <span class="toc-text">算法实现的一些参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考的一些网址"><span class="toc-number">1.7.</span> <span class="toc-text">参考的一些网址</span></a></li></ol></li></ol>
- 
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/26/roadline_basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="DaSea">
+      <meta itemprop="description" content="Fucking Code!">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="兼容">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">道路线元计算工具
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-07-26 22:51:20" itemprop="dateCreated datePublished" datetime="2017-07-26T22:51:20+08:00">2017-07-26</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="道路线总结"><a href="/2017/07/26/roadline_basic/#道路线总结" class="headerlink" title="道路线总结"></a>道路线总结</h1><h2 id="三种线元"><a href="/2017/07/26/roadline_basic/#三种线元" class="headerlink" title="三种线元"></a>三种线元</h2><ul>
+<li>直线段</li>
+<li>圆曲线</li>
+<li>缓和曲线<ul>
+<li>第一缓和曲线(包括完整和不完整的,不完整的需要补充为完整的)</li>
+<li>第二缓和曲线(同上)</li>
+</ul>
+</li>
+</ul>
+<h2 id="道路放样的俩种方法"><a href="/2017/07/26/roadline_basic/#道路放样的俩种方法" class="headerlink" title="道路放样的俩种方法"></a>道路放样的俩种方法</h2><ul>
+<li>线元法<ul>
+<li>已知各个线元，直接可以用于计算</li>
+</ul>
+</li>
+<li>交点法<ul>
+<li>线路转向时的交点，如从右偏到左偏，此时会发生方向的变化,所以就会一个交点</li>
+<li>交点之间的线元会包含多段</li>
+</ul>
+</li>
+</ul>
+<h2 id="交点法文件"><a href="/2017/07/26/roadline_basic/#交点法文件" class="headerlink" title="交点法文件"></a>交点法文件</h2><ol>
+<li>ZH(起点桩号):</li>
+<li>交点属性: 点名, N, E, 第一缓和曲线长, 圆弧半径, 第二缓和曲线长</li>
+<li>起点和终点无后面三个属性</li>
+</ol>
+<p><strong>这里的点为每条线段之间的连接点, 每三个点之间可以有几段数据;</strong></p>
+<p><strong>第一个交点就是起点; 最后一个就是终点</strong></p>
+<h2 id="转角"><a href="/2017/07/26/roadline_basic/#转角" class="headerlink" title="转角:"></a>转角:</h2><p>路线由一个方向偏向另一个方向时, 偏转后的反向与原方向的夹角;<br>当偏转后的方向在原方向的左侧,称为左转角; 反之为右转角.</p>
+<h2 id="用到的须知点"><a href="/2017/07/26/roadline_basic/#用到的须知点" class="headerlink" title="用到的须知点"></a>用到的须知点</h2><ul>
+<li>所有的角度都是弧度</li>
+<li>左偏为-1, 右偏为1</li>
+<li>缓和曲线的无穷大半径用0表示</li>
+<li>最小误差是0.0001</li>
+<li>Point中的x为N, y为E</li>
+<li>左偏桩点偏距为负数, 右偏桩点为正</li>
+<li>方位角的范围必须为0-360度</li>
+</ul>
+<h2 id="算法实现的一些参考"><a href="/2017/07/26/roadline_basic/#算法实现的一些参考" class="headerlink" title="算法实现的一些参考"></a>算法实现的一些参考</h2><p><a href="https://github.com/DaSea/roadline" target="_blank" rel="noopener">github:roadline实现</a></p>
+<h2 id="参考的一些网址"><a href="/2017/07/26/roadline_basic/#参考的一些网址" class="headerlink" title="参考的一些网址"></a>参考的一些网址</h2><p><a href="http://www.doc88.com/p-5071644853395.html" target="_blank" rel="noopener">参考1</a><br><a href="http://www.doc88.com/p-8039033183890.html" target="_blank" rel="noopener">参考2</a><br><a href="http://wenku.baidu.com/link?url=JAAHtiKOalqX_m0-fDmfivILzlQDElaC835i_T64kW5poEbhfQ-HsIlNMthgBd0EdA9f07r8AFmNwHvb6UQYg0epfT81Z6DT9G-NZoxzb8_" target="_blank" rel="noopener">参考3</a><br><a href="http://www.doc88.com/p-578889890554.html" target="_blank" rel="noopener">参考4</a><br><a href="http://www.cnblogs.com/carekee/articles/2299546.html" target="_blank" rel="noopener">点在线的左边和右边</a><br><a href="http://wenku.baidu.com/link?url=ewQquJocnhIxEu-bdIBETMKH_5SMFu_6cqI_RvFdGPoeq1Zkf1NbPMDSx2_ZUjhrw733jQDe1UNu5xfu6x2Z_S8GuUvgAQposSYuoWYixmW" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=Hvfrx2Uraf-DENaOPtQ5T42xCg6Vfgze8mS1WcSYuCIbuPsk1d7_DX3coX8vpjina2-2X6cg0nY-hx1McKtE3gM20Ki75T5DODpLYFOrSqa&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/view/99e2b81ff12d2af90242e62b.html?re=view" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/view/afc41d4458fafab068dc0201.html?qq-pf-to=pcqq.c2c" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=_W1tzPWM00YM31_A5vqN8t3VUPpVWB0suUBw-r9CUZy-__OW6hkFFu7rqcBplFpqpc8G00JVCv4kyLr2_saGouZPZ_gqGAIG0oADal6vPlS&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="noopener">参考</a><br><a href="http://jpkc.gdut.edu.cn/shengji.html" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=7vs5g6VYlXuRMMS21RV_12P96lMiPw69wf7g31KWBxDBIC2QFN69xdOu24hSOGM1_BiXrXANgtVb4ihfdVF4xYdqVIUsk3mywk1_7jHDF-7" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=A6dYGlkIHmssTy64Rn5zwKx6H1CsrGroF9o2Tfi0FCX_KPt7ahed5ivT5k07Djs80pEtFotXjdI7yGQPu2BMY3Ebc7Q0daJTMHGM4d0z4hC" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=B559c_EEBWthrnwFqyfwwaLpPS7GyceLBRU9MXlDotdLCeZJY-jbN7vXvdFhmDzusEEnh1JDB14sSCJT4rJTxwl9xEHLCAtBWSYeOT_4Z3C" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=zV1yXBQBxDjKKdErgf21H271slV_CkaNvpukHkY5G1sJzBTkrlPcyjPQgO0KstOdbWfE9tlYkWl_UdeXJJsmZpnEkPyjeSxb0AR0k0zOt8O" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=8zLYnucgzmxoUI78CEhFc1Af_L1MBalm3LqBIM9cABm6-c26FRN64Gov_TXJYyeddHFpRtnnHnR0OFyXliE8c98VuSXEUPGgLjL9VUDiw6O" target="_blank" rel="noopener">参考</a><br><a href="http://xinxing124.blog.163.com/blog/static/30170195201162815851981/" target="_blank" rel="noopener">参考</a><br><a href="http://www.surmap.com/articles/L294.html" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/view/759a6e390912a21615792900.html" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/view/84e65319964bcf84b9d57ba8.html" target="_blank" rel="noopener">参考</a><br><a href="http://www.doc88.com/p-6002033684682.html" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=vZOnxcLmHVjuREUwtXO_rtq57RdoswsSFbRYJkZkTPh1C5L3GHZUtCnhqXMEEs8cozQEchMqOyUUv4uX9WMuwheRmkHElJoITocmMa4hP6K" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/view/1cd87209a216147916112804.html?re=view" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=zuLF6LOJi9k4ZJDVh9e7ZVkktKWEsxDUAkTQsQzcqfSMaLII17s2NBa5g5GCTs6UA0jsTBmhdqTbFbIEgVi3VcFw4I-cKLpixEOKgzOr0Zu&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="noopener">参考</a><br><a href="http://www.docin.com/p-736461981.html" target="_blank" rel="noopener">参考</a><br><a href="http://www.docin.com/p-370156773.html" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=s017wqDkRAgGuHzJsYhzSSBwrLWtgLbsy7-LpECetmq5yYbww_srcBl4T1x15Z4TYJUPaOs3uDlY44ar2_RWHSMXaheUj2-3QHiLQnLsfZu&amp;qq-pf-to=pcqq.c2c" target="_blank" rel="noopener">参考</a><br><a href="http://wenku.baidu.com/link?url=q7BB7pytNYPI8S-Z2MXphVUfDqVigxqCHWeqoRoD6GWitmqGp6jn2TTs6_IlvDjM9XqgNBKCswdcI2GnshRVoonIjjD98UJTNysWZkqXQ9K" target="_blank" rel="noopener">参考</a><br><a href="http://blog.csdn.net/qll125596718/article/details/8248249" target="_blank" rel="noopener">参考</a></p>
+
+      
+    </div>
+
+    
+      
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gis/" rel="tag"># gis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/26/gis_opengles_stencil/" rel="next" title="opengl es模板缓冲的使用">
+                <i class="fa fa-chevron-left"></i> opengl es模板缓冲的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/01/font_unit/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
+
+          </div>
+          
 
   
 
+
+
+        </div>
+        
+          
   
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-  <div class="linkslist">
-  <p class="asidetitle">Links</p>
-    <ul>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
-    </ul>
-</div>
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> Talk is cheap, show me code! <br/>
-			</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</div>
-			
-		
+  </div>
 
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
-		
-		<a href="/about" target="_blank" title="DaSea">DaSea</a>
-		
-		
-		</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-  
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
       
-      $('#toc.toc-aside').css('display', 'none');
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">DaSea</p>
+              <p class="site-description motion-element" itemprop="description">Fucking Code!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/DaSea" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#道路线总结"><span class="nav-number">1.</span> <span class="nav-text">道路线总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三种线元"><span class="nav-number">1.1.</span> <span class="nav-text">三种线元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#道路放样的俩种方法"><span class="nav-number">1.2.</span> <span class="nav-text">道路放样的俩种方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交点法文件"><span class="nav-number">1.3.</span> <span class="nav-text">交点法文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转角"><span class="nav-number">1.4.</span> <span class="nav-text">转角:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用到的须知点"><span class="nav-number">1.5.</span> <span class="nav-text">用到的须知点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法实现的一些参考"><span class="nav-number">1.6.</span> <span class="nav-text">算法实现的一些参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考的一些网址"><span class="nav-number">1.7.</span> <span class="nav-text">参考的一些网址</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
         
-    }
-  });
-});
-</script>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DaSea</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
   }
-}); 
 </script>
 
 
 
-<!-- Analytics Begin -->
 
 
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 
 
-<!-- Analytics End -->
-
-<!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
 
 
-<!-- MathJax End -->
 
-<!-- Tiny_search Begin -->
 
-<!-- Tiny_search End -->
 
-  </body>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
 </html>
