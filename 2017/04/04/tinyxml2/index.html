@@ -1,0 +1,529 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>tinyxml2使用的记录 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="&amp;#x7C7B;&amp;#x7ED3;&amp;#x6784; XMLNode&amp;#x6307;&amp;#x7684;&amp;#x662F;&amp;#x6240;&amp;#x6709;&amp;#x88AB;&amp;lt;&amp;#x2026;&amp;gt;&amp;#x2026;&amp;lt;/&amp;#x2026;&amp;gt;&amp;#x5305;&amp;#x62EC;&amp;#x7684;&amp;#x5185;&amp;#x5BB9;, &amp;#x5177;&amp;#x4F53;&amp;#x6709;&amp;#x58F0;&amp;#x66">
+<meta name="keywords" content="tinyxml2,xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tinyxml2使用的记录">
+<meta property="og:url" content="http://yoursite.com/2017/04/04/tinyxml2/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="&amp;#x7C7B;&amp;#x7ED3;&amp;#x6784; XMLNode&amp;#x6307;&amp;#x7684;&amp;#x662F;&amp;#x6240;&amp;#x6709;&amp;#x88AB;&amp;lt;&amp;#x2026;&amp;gt;&amp;#x2026;&amp;lt;/&amp;#x2026;&amp;gt;&amp;#x5305;&amp;#x62EC;&amp;#x7684;&amp;#x5185;&amp;#x5BB9;, &amp;#x5177;&amp;#x4F53;&amp;#x6709;&amp;#x58F0;&amp;#x66">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/04/04/tinyxml2/tinyxml2.png">
+<meta property="og:updated_time" content="2017-04-03T17:14:38.341Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tinyxml2使用的记录">
+<meta name="twitter:description" content="&amp;#x7C7B;&amp;#x7ED3;&amp;#x6784; XMLNode&amp;#x6307;&amp;#x7684;&amp;#x662F;&amp;#x6240;&amp;#x6709;&amp;#x88AB;&amp;lt;&amp;#x2026;&amp;gt;&amp;#x2026;&amp;lt;/&amp;#x2026;&amp;gt;&amp;#x5305;&amp;#x62EC;&amp;#x7684;&amp;#x5185;&amp;#x5BB9;, &amp;#x5177;&amp;#x4F53;&amp;#x6709;&amp;#x58F0;&amp;#x66">
+<meta name="twitter:image" content="http://yoursite.com/2017/04/04/tinyxml2/tinyxml2.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/04/tinyxml2/" title="tinyxml2使用的记录" itemprop="url">tinyxml2使用的记录</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-03T17:14:38.342Z" itemprop="datePublished"> Published 2017-04-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#类结构"><span class="toc-number">1.</span> <span class="toc-text">类结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写的例子"><span class="toc-number">2.</span> <span class="toc-text">写的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读的例子"><span class="toc-number">3.</span> <span class="toc-text">读的例子</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="&#x7C7B;&#x7ED3;&#x6784;"><a href="#&#x7C7B;&#x7ED3;&#x6784;" class="headerlink" title="&#x7C7B;&#x7ED3;&#x6784;"></a>&#x7C7B;&#x7ED3;&#x6784;</h2><p><img src="/2017/04/04/tinyxml2/tinyxml2.png" alt=""></p>
+<p>XMLNode&#x6307;&#x7684;&#x662F;&#x6240;&#x6709;&#x88AB;&lt;&#x2026;&gt;&#x2026;&lt;/&#x2026;&gt;&#x5305;&#x62EC;&#x7684;&#x5185;&#x5BB9;, &#x5177;&#x4F53;&#x6709;&#x58F0;&#x660E;, &#x6CE8;&#x91CA;, &#x8282;&#x70B9;&#x53CA;&#x8282;&#x70B9;&#x95F4;&#x7684;&#x6587;&#x672C;.<br>&#x4F8B;&#x5982;:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">0. &#x6574;&#x4E2A;&#x6587;&#x6863;&#x4E3A;XMLDocument</span><br><span class="line">1. &#x4E0B;&#x9762;&#x4E3A;XMLDeclaration</span><br><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span><span class="meta">?&gt;</span></span></span><br><span class="line">2. &#x4E00;&#x4E2A;<span class="tag">&lt;<span class="name">phonebook</span>&gt;</span>...<span class="tag">&lt;/<span class="name">phonebook</span>&gt;</span>&#x662F;&#x4E00;&#x4E2A;XMLElement</span><br><span class="line"><span class="tag">&lt;<span class="name">phonebook</span>&gt;</span></span><br><span class="line">    3. XMLComment</span><br><span class="line">    <span class="comment">&lt;!--one item behalfs one contacted person.--&gt;</span></span><br><span class="line">    4. &#x4E00;&#x4E2A;<span class="tag">&lt;<span class="name">item</span>&gt;</span>&#x662F;&#x4E00;&#x4E2A;XMLElement;</span><br><span class="line">    5. item&#x4E2D;&#x7684;name=&quot;1&quot;&#x662F;&#x4E00;&#x4E2A;XMLAttribute</span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">        5. item&#x4E2D;&#x7684;<span class="tag">&lt;<span class="name">name</span>&gt;</span>&#x4E5F;&#x662F;&#x4E00;&#x4E2A;XMLElement</span><br><span class="line">        6. <span class="tag">&lt;<span class="name">name</span>&gt;</span>&#x4E0E;<span class="tag">&lt;/<span class="name">name</span>&gt;</span>&#x4E4B;&#x95F4;&#x7684;&#x662F;&#x4E00;&#x4E2A;XMLText</span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>miaomaio<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">addr</span>&gt;</span>Shaanxi Xi&apos;an<span class="tag">&lt;/<span class="name">addr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tel</span>&gt;</span>13759911917<span class="tag">&lt;/<span class="name">tel</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">email</span>&gt;</span>miaomiao@home.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;2&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>gougou<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">addr</span>&gt;</span>Liaoning Shenyang<span class="tag">&lt;/<span class="name">addr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tel</span>&gt;</span>15840330481<span class="tag">&lt;/<span class="name">tel</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">email</span>&gt;</span>gougou@home.com<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    3. &#x4E0B;&#x9762;&#x4E3A;XMLComment</span><br><span class="line">    <span class="comment">&lt;!--more contacted persons.--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">phonebook</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="&#x5199;&#x7684;&#x4F8B;&#x5B50;"><a href="#&#x5199;&#x7684;&#x4F8B;&#x5B50;" class="headerlink" title="&#x5199;&#x7684;&#x4F8B;&#x5B50;"></a>&#x5199;&#x7684;&#x4F8B;&#x5B50;</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">writexmlfile</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        XMLDocument* xmldoc = <span class="keyword">new</span> XMLDocument();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#x8BBE;&#x7F6E;&#x6587;&#x4EF6;&#x58F0;&#x660E;</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span>* decla = <span class="string">&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;&quot;</span>;</span><br><span class="line">        XMLDeclaration* declarations = xmldoc-&gt;NewDeclaration(decla);</span><br><span class="line">        xmldoc-&gt;LinkEndChild(declarations);</span><br><span class="line">        <span class="comment">// &#x521B;&#x5EFA;&#x6839;&#x5143;&#x7D20;</span></span><br><span class="line">        XMLElement* rootele = xmldoc-&gt;NewElement(<span class="string">&quot;phonebook&quot;</span>);</span><br><span class="line">        <span class="comment">// &#x94FE;&#x63A5;&#x4F5C;&#x4E3A;&#x6839;&#x5BF9;&#x8C61;</span></span><br><span class="line">        xmldoc-&gt;LinkEndChild(rootele);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5143;&#x7D20;</span></span><br><span class="line">        XMLElement* item1 = xmldoc-&gt;NewElement(<span class="string">&quot;item&quot;</span>);</span><br><span class="line">        <span class="comment">// &#x94FE;&#x63A5;&#x5230;&#x6839;&#x5143;&#x7D20;&#x5C31;&#x6210;&#x4E3A;&#x6839;&#x5143;&#x7D20;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x9879;</span></span><br><span class="line">        rootele-&gt;LinkEndChild(item1);</span><br><span class="line">        <span class="comment">// &#x4E3A;&#x7B2C;&#x4E00;&#x4E2A;&#x9879;&#x8BBE;&#x7F6E;&#x5C5E;&#x6027;</span></span><br><span class="line">        item1-&gt;SetAttribute(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br><span class="line">        <span class="comment">// &#x4E3A;item1&#x8BBE;&#x7F6E;&#x4FE9;&#x4E2A;&#x5143;&#x7D20;</span></span><br><span class="line">        XMLElement* name1 = xmldoc-&gt;NewElement(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        XMLElement* tel1 = xmldoc-&gt;NewElement(<span class="string">&quot;tel&quot;</span>);</span><br><span class="line">        item1-&gt;LinkEndChild(name1);</span><br><span class="line">        item1-&gt;LinkEndChild(tel1);</span><br><span class="line">        <span class="comment">// &#x4E3A;&#x5143;&#x7D20;&#x8BBE;&#x7F6E;</span></span><br><span class="line">        name1-&gt;SetText(<span class="string">&quot;Ding&quot;</span>);</span><br><span class="line">        tel1-&gt;SetText(<span class="string">&quot;111111&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#x4FDD;&#x5B58;&#x6587;&#x4EF6;</span></span><br><span class="line">        xmldoc-&gt;SaveFile(<span class="string">&quot;write.xml&quot;</span>);</span><br><span class="line">    } <span class="keyword">catch</span> (...) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="&#x8BFB;&#x7684;&#x4F8B;&#x5B50;"><a href="#&#x8BFB;&#x7684;&#x4F8B;&#x5B50;" class="headerlink" title="&#x8BFB;&#x7684;&#x4F8B;&#x5B50;"></a>&#x8BFB;&#x7684;&#x4F8B;&#x5B50;</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">readxmlfile</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        XMLDocument* xmldoc = <span class="keyword">new</span> XMLDocument();</span><br><span class="line">        xmldoc-&gt;LoadFile(<span class="string">&quot;write.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#x8BFB;&#x58F0;&#x660E;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// root</span></span><br><span class="line">        XMLElement* root = xmldoc-&gt;RootElement();</span><br><span class="line">        <span class="comment">// item1</span></span><br><span class="line">        XMLElement* item1 = root-&gt;FirstChildElement();</span><br><span class="line">        XMLElement* name1 = item1-&gt;FirstChildElement();</span><br><span class="line">        XMLElement* tel1 = name1-&gt;NextSiblingElement();</span><br><span class="line">        <span class="comment">// &#x5F97;&#x5230;item1&#x7684;attribute&#x5C5E;&#x6027;&#x503C;</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span>* item1name = item1-&gt;Attribute(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;item1&#x5C5E;&#x6027;&#x503C;:&quot;</span> &lt;&lt; item1name &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        <span class="comment">// &#x5F97;&#x5230;name1&#x548C;tel1&#x7684;XMLText&#x503C;</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span>* name1val = name1-&gt;GetText();</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span>* tel1val = tel1-&gt;GetText();</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;name&#x9879;&#x7684;&#x503C;&#x4E3A;:&quot;</span> &lt;&lt; name1val &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;tel&#x9879;&#x7684;&#x503C;&#x4E3A;: &quot;</span> &lt;&lt; tel1val &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// item2</span></span><br><span class="line">        <span class="comment">// XMLElement* item2 = item1-&gt;NextSiblingElement(&quot;item&quot;);</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="keyword">delete</span> xmldoc;</span><br><span class="line">    } <span class="keyword">catch</span> (...) {</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/tinyxml2/">tinyxml2</a><a href="/tags/xml/">xml</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/04/04/tinyxml2/" data-title="tinyxml2使用的记录 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/23/gdal_image/" title="">
+  <strong>上一篇：</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/03/23/encoding_convert/"  title="编码转换">
+ <strong>下一篇：</strong><br/> 
+ <span>编码转换
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#类结构"><span class="toc-number">1.</span> <span class="toc-text">类结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写的例子"><span class="toc-number">2.</span> <span class="toc-text">写的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读的例子"><span class="toc-number">3.</span> <span class="toc-text">读的例子</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,542 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="GDAL &amp;#x5E93;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x8DE8;&amp;#x5E73;&amp;#x53F0;&amp;#x7684;&amp;#x6805;&amp;#x683C;&amp;#x5730;&amp;#x7406;&amp;#x6570;&amp;#x636E;&amp;#x683C;&amp;#x5F0F;&amp;#x5E93;&amp;#xFF0C;&amp;#x5305;&amp;#x62EC;&amp;#x8BFB;&amp;#x53D6;&amp;#x3001;&amp;#x5199;&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="兼容">
+<meta property="og:url" content="http://yoursite.com/2017/05/23/gdal_image/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="GDAL &amp;#x5E93;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x8DE8;&amp;#x5E73;&amp;#x53F0;&amp;#x7684;&amp;#x6805;&amp;#x683C;&amp;#x5730;&amp;#x7406;&amp;#x6570;&amp;#x636E;&amp;#x683C;&amp;#x5F0F;&amp;#x5E93;&amp;#xFF0C;&amp;#x5305;&amp;#x62EC;&amp;#x8BFB;&amp;#x53D6;&amp;#x3001;&amp;#x5199;&amp;#x">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-05-23T07:46:55.165Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="兼容">
+<meta name="twitter:description" content="GDAL &amp;#x5E93;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x8DE8;&amp;#x5E73;&amp;#x53F0;&amp;#x7684;&amp;#x6805;&amp;#x683C;&amp;#x5730;&amp;#x7406;&amp;#x6570;&amp;#x636E;&amp;#x683C;&amp;#x5F0F;&amp;#x5E93;&amp;#xFF0C;&amp;#x5305;&amp;#x62EC;&amp;#x8BFB;&amp;#x53D6;&amp;#x3001;&amp;#x5199;&amp;#x">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/23/gdal_image/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-23T07:46:55.165Z" itemprop="datePublished"> Published 2017-05-23</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			
+		
+		</div>
+		
+		<p>GDAL &#x5E93;&#x662F;&#x4E00;&#x4E2A;&#x8DE8;&#x5E73;&#x53F0;&#x7684;&#x6805;&#x683C;&#x5730;&#x7406;&#x6570;&#x636E;&#x683C;&#x5F0F;&#x5E93;&#xFF0C;&#x5305;&#x62EC;&#x8BFB;&#x53D6;&#x3001;&#x5199;&#x5165;&#x3001;&#x8F6C;&#x6362;&#x3001;&#x5904;&#x7406;&#x5404;&#x79CD;&#x6805;&#x683C;&#x6570;&#x636E;&#x683C;&#x5F0F;&#xFF08;&#x6709;&#x4E9B;&#x7279;&#x5B9A;&#x7684;&#x683C;&#x5F0F;&#x5BF9;&#x4E00;&#x4E9B;&#x64CD;&#x4F5C;&#x5982;&#x5199;&#x5165;&#x7B49;&#x4E0D;&#x652F;&#x6301;&#xFF09;&#x3002;&#x5B83;&#x4F7F;&#x7528;&#x4E86;&#x4E00;&#x4E2A;&#x5355;&#x4E00;&#x7684;&#x62BD;&#x8C61;&#x6570;&#x636E;&#x6A21;&#x578B;&#x5C31;&#x652F;&#x6301;&#x4E86;&#x5927;&#x591A;&#x6570;&#x7684;&#x6805;&#x683C;&#x6570;&#x636E;&#x3002;&#x8FD9;&#x91CC;&#x6709; GDAL &#x5E93;&#x652F;&#x6301;&#x7684;&#x683C;&#x5F0F;&#xFF1A;<a href="http://www.gdal.org/formats_list.html" target="_blank" rel="external">http://www.gdal.org/formats_list.html</a></p>
+<ol>
+<li>&#x83B7;&#x53D6;&#x56FE;&#x50CF;&#x7684;&#x57FA;&#x672C;&#x4FE1;&#x606F;</li>
+</ol>
+<p>&#x91C7;&#x7528; GDAL &#x8BFB;&#x53D6;&#x56FE;&#x50CF;&#x6210;&#x529F;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x56FE;&#x50CF;&#x7684;&#x4E00;&#x4E9B;&#x57FA;&#x672C;&#x4FE1;&#x606F;&#xFF0C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p>&#x63CF;&#x8FF0;&#x4FE1;&#x606F;&#xFF1A;const char*  GDALDataset::GetDriver()-&gt;GetDescription()&#xFF0C;&#x901A;&#x5E38;&#x662F;&#x56FE;&#x50CF;&#x7684;&#x683C;&#x5F0F;</p>
+<ol>
+<li><p>&#x56FE;&#x50CF;&#x5927;&#x5C0F;<br> &#x56FE;&#x50CF;&#x5BBD;&#x5EA6;  int  GDALDataset::GetRasterXSize()<br> &#x56FE;&#x50CF;&#x9AD8;&#x5EA6;  int   GDALDataset::GetRasterYSize()</p>
+</li>
+<li><p>&#x6CE2;&#x6BB5;&#x6570;&#xFF1A;int   GDALDataset::GetRasterCount()<br>&#x6CE2;&#x6BB5;&#x6570;&#x5373;&#x56FE;&#x50CF;&#x6BCF;&#x4E2A;&#x50CF;&#x7D20;&#x70B9;&#x6240;&#x542B;&#x7684;&#x989C;&#x8272;&#x79CD;&#x7C7B;&#xFF0C;&#x7269;&#x7406;&#x4E2D;&#x7684;&#x5149;&#x5B66;&#x4E2D;&#x5B66;&#x8FC7;&#x989C;&#x8272;&#x5C31;&#x662F;&#x67D0;&#x9891;&#x7387;&#x7684;&#x5149;&#x6CE2;<br>&#x6CE2;&#x6BB5;&#x5C11;&#x5219;&#x4E00;&#x4E2A;&#xFF0C;&#x591A;&#x5219;&#x5F88;&#x591A;&#x4E2A;&#xFF0C;&#x5728;&#x9065;&#x611F;&#x5F71;&#x8C61;&#x4E2D;&#x6CE2;&#x6BB5;&#x901A;&#x5E38;&#x6709;&#x591A;&#x4E2A;&#x3002;</p>
+</li>
+<li><p>&#x6295;&#x5F71;&#x4FE1;&#x606F;&#xFF1A;GDALDataset::GetProjectionRef()<br>&#x6709;&#x7684;&#x56FE;&#x50CF;&#x6CA1;&#x6709;&#x6295;&#x5F71;&#x4FE1;&#x606F;&#xFF0C;&#x4E0D;&#x5982;&#x4E00;&#x822C;&#x7684; JPG&#x3001;BMP &#x683C;&#x5F0F;&#x56FE;&#x50CF;&#x3002;</p>
+</li>
+<li><p>&#x5730;&#x7406;&#x5750;&#x6807;&#x4FE1;&#x606F;&#xFF1A;double adfGeoTransform[6]<br>GDALDataset::GetGeoTransform(adfGeoTransform)</p>
+</li>
+</ol>
+<p>&#x5730;&#x7406;&#x5750;&#x6807;&#x4FE1;&#x606F;&#x662F;&#x4E00;&#x4E2A;&#x542B; 6 &#x4E2A; double &#x578B;&#x6570;&#x636E;&#x7684;&#x6570;&#x7EC4;&#xFF0C;adfGeoTransform[1] &#x548C; adfGeoTransform[5] &#x8868;&#x793A;&#x4E1C;&#x897F;&#x548C;&#x5357;&#x5317;&#x65B9;&#x5411;&#x4E00;&#x4E2A;&#x50CF;&#x7D20;&#x5BF9;&#x5E94;&#x7684;&#x8DDD;&#x79BB;&#xFF0C;adfGeoTransform[0] &#x548C; adfGeoTransform[3] &#x8868;&#x793A;&#x5DE6;&#x4E0A;&#x89D2;&#x7684;&#x5750;&#x6807;&#x3002;</p>
+<ol>
+<li>&#x6CE2;&#x6BB5;&#x4FE1;&#x606F;&#xFF1A;&#x6570;&#x636E;&#x96C6;&#x4E2D;&#x91CD;&#x8981;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x6709;&#x6CE2;&#x6BB5;&#x5C3A;&#x5BF8;&#x3001;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x3001;&#x989C;&#x8272;&#x4FE1;&#x606F;&#x7B49;&#x3002;<br>&#x83B7;&#x53D6;&#x6CE2;&#x6BB5;&#x7684;&#x65B9;&#x6CD5;&#xFF1A; GDALRasterBand *poBand;</li>
+</ol>
+<p>poBand = poDataset-&gt;GetRasterBand(i)     poBand &#x4E3A;&#x6307;&#x5411;&#x7B2C; i &#x4E2A;&#x6CE2;&#x6BB5;&#x7684;&#x6307;&#x9488;</p>
+<p>&#x6CE2;&#x6BB5;&#x5C3A;&#x5BF8;&#xFF1A;int   poBand-&gt;GetXSize()</p>
+<pre><code>int   poBand-&gt;GetYSize()
+</code></pre><p>&#x6570;&#x636E;&#x7C7B;&#x578B;&#xFF1A;const char*   GDALGetDataTypeName(poBand-&gt;GetRasterDataType())</p>
+<p>&#x989C;&#x8272;&#x4FE1;&#x606F;&#xFF1A;const char*   GDALGetColorInterpretationName(poBand-&gt;GetColorInterpretation())</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/05/23/gdal_image/" data-title="兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/26/sqlite3_cppcode/" title="sqlite3测试代码">
+  <strong>上一篇：</strong><br/>
+  <span>
+  sqlite3测试代码</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/04/04/tinyxml2/"  title="tinyxml2使用的记录">
+ <strong>下一篇：</strong><br/> 
+ <span>tinyxml2使用的记录
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

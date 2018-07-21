@@ -1,0 +1,524 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>sqlite3测试代码 | 兼容</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="DaSea">
+    
+
+    
+    <meta name="description" content="c++ &amp;#x6D4B;&amp;#x8BD5;&amp;#x4EE3;&amp;#x7801;12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273#define LOGD printfstatic i">
+<meta name="keywords" content="sqlite">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlite3测试代码">
+<meta property="og:url" content="http://yoursite.com/2017/05/26/sqlite3_cppcode/index.html">
+<meta property="og:site_name" content="兼容">
+<meta property="og:description" content="c++ &amp;#x6D4B;&amp;#x8BD5;&amp;#x4EE3;&amp;#x7801;12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273#define LOGD printfstatic i">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-05-26T09:13:26.342Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sqlite3测试代码">
+<meta name="twitter:description" content="c++ &amp;#x6D4B;&amp;#x8BD5;&amp;#x4EE3;&amp;#x7801;12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273#define LOGD printfstatic i">
+
+    
+    <link rel="alternative" href="/atom.xml" title="兼容" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="兼容" title="兼容"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="兼容">兼容</a></h1>
+				<h2 class="blog-motto">这是一场不停的追逐!</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/26/sqlite3_cppcode/" title="sqlite3测试代码" itemprop="url">sqlite3测试代码</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="DaSea" target="_blank" itemprop="author">DaSea</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-26T09:13:26.342Z" itemprop="datePublished"> Published 2017-05-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#c-测试代码"><span class="toc-number">1.</span> <span class="toc-text">c++ 测试代码</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="c-&#x6D4B;&#x8BD5;&#x4EE3;&#x7801;"><a href="#c-&#x6D4B;&#x8BD5;&#x4EE3;&#x7801;" class="headerlink" title="c++ &#x6D4B;&#x8BD5;&#x4EE3;&#x7801;"></a>c++ &#x6D4B;&#x8BD5;&#x4EE3;&#x7801;</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOGD printf</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">callback</span><span class="params">(<span class="keyword">void</span> *NotUsed, <span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, <span class="keyword">char</span> **azColName)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; argc; ++i) {</span><br><span class="line">        LOGD(<span class="string">&quot;%s = %s\n&quot;</span>, azColName[i], argv[i] ? argv[i] : <span class="string">&quot;NULL&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">testsqlite</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// &#x6570;&#x636E;&#x5E93;&#x7248;&#x672C;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* version = sqlite3_libversion();</span><br><span class="line">    LOGD(<span class="string">&quot;sqlite version: %s&quot;</span>, version);</span><br><span class="line"></span><br><span class="line">    sqlite3 *db;</span><br><span class="line">    <span class="keyword">char</span> *errMsg;</span><br><span class="line">    <span class="keyword">int</span> rv = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// &#x6253;&#x5F00;&#x6570;&#x636E;&#x5E93;, &#x5982;&#x679C;&#x6570;&#x636E;&#x5E93;&#x4E0D;&#x5B58;&#x5728;&#x7684;&#x8BDD;, &#x5219;&#x521B;&#x5EFA;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">&quot;test.db&quot;</span>;</span><br><span class="line">    rv = sqlite3_open_v2(filename, &amp;db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (rv) {</span><br><span class="line">        LOGD(<span class="string">&quot;Cannot open database: %s&quot;</span>, sqlite3_errmsg(db));</span><br><span class="line">        sqlite3_close(db);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// &#x521B;&#x5EFA;&#x8868;</span></span><br><span class="line">    <span class="keyword">char</span> create_table[<span class="number">100</span>] = <span class="string">&quot;CREATE  TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY,name TEXT NOT NULL)&quot;</span>;</span><br><span class="line">    rv = sqlite3_exec(db, create_table, callback, <span class="number">0</span>, &amp;errMsg);</span><br><span class="line">    <span class="keyword">if</span> (rv != SQLITE_OK) {</span><br><span class="line">        LOGD(<span class="string">&quot;SQLite statement execution error: %s&quot;</span>, errMsg);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// &#x63D2;&#x5165;&#x6570;&#x636E;</span></span><br><span class="line">    <span class="keyword">char</span> insert_value[<span class="number">100</span>] = <span class="string">&quot;INSERT INTO customers VALUES(&apos;1&apos;, &apos;roman10&apos;)&quot;</span>;</span><br><span class="line">    rv = sqlite3_exec(db, insert_value, callback, <span class="number">0</span>, &amp;errMsg);</span><br><span class="line">    <span class="keyword">if</span> (rv != SQLITE_OK) {</span><br><span class="line">        LOGD(<span class="string">&quot;SQLite statement execution error: %s&quot;</span>, errMsg);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// &#x4FEE;&#x6539;&#x6570;&#x636E; : update company set address=&apos;gansu&apos;, salary=33333;</span></span><br><span class="line">    <span class="keyword">char</span> change_value[<span class="number">100</span>] = <span class="string">&quot;UPDATE customers SET name=\&quot;newname\&quot; WHERE id=1&quot;</span>;</span><br><span class="line">    rv = sqlite3_exec(db, change_value, callback, <span class="number">0</span>, &amp;errMsg);</span><br><span class="line">    <span class="keyword">if</span> (rv != SQLITE_OK) {</span><br><span class="line">        LOGD(<span class="string">&quot;SQLite statement execution error: %s&quot;</span>, errMsg);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// &#x67E5;&#x8BE2;&#x6570;&#x636E;</span></span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *query = <span class="string">&quot;SELECT ID, NAME FROM customers ORDER BY ROW;&quot;</span>;</span><br><span class="line">        sqlite3_stmt *statement;</span><br><span class="line">        rv = sqlite3_prepare(db, query, <span class="number">-1</span>, &amp;statement, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span> (rv != SQLITE_OK) {</span><br><span class="line">            LOGD(<span class="string">&quot;SQLite statement execution error: %s&quot;</span>, errMsg);</span><br><span class="line">            sqlite3_close(db);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> count = sqlite3_column_count(statement);</span><br><span class="line">        LOGD(<span class="string">&quot;&#x5217;&#x5927;&#x5C0F;&#x4E3A;: %d&quot;</span>, count);</span><br><span class="line">        <span class="keyword">while</span> (sqlite3_step(statement) == SQLITE_ROW) {</span><br><span class="line">            <span class="comment">// &#x7B2C;&#x4E00;&#x5217;&#x7684;&#x6570;&#x636E;: id</span></span><br><span class="line">            <span class="keyword">int</span> rowNum = sqlite3_column_int(statement, <span class="number">0</span>);</span><br><span class="line">            <span class="comment">// &#x7B2C;&#x4E8C;&#x5217;&#x7684;&#x6570;&#x636E;: name</span></span><br><span class="line">            <span class="keyword">char</span> *rowData = (<span class="keyword">char</span> *)sqlite3_column_text(statement, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">            LOGD(<span class="string">&quot;&#x7B2C;%d&#x884C;&#x6570;&#x636E;: %d - %s&quot;</span>, rowNum, rowData);</span><br><span class="line">        }</span><br><span class="line">        sqlite3_finalize(statement);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    sqlite3_close(db);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/sqlite/">sqlite</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/05/26/sqlite3_cppcode/" data-title="sqlite3测试代码 | 兼容" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/31/vim_collect/" title="Vim使用过程中收集的一些东西">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Vim使用过程中收集的一些东西</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/05/23/gdal_image/"  title="">
+ <strong>下一篇：</strong><br/> 
+ <span>(no title)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#c-测试代码"><span class="toc-number">1.</span> <span class="toc-text">c++ 测试代码</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/bat/" title="bat">bat<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cpp/" title="cpp">cpp<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NDK/" title="NDK">NDK<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/sqlite/" title="sqlite">sqlite<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gis/" title="gis">gis<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/bash/" title="bash">bash<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Effective-c/" title="Effective c++">Effective c++<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/opengl-es/" title="opengl es">opengl es<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/gun/" title="gun">gun<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/make/" title="make">make<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/format/" title="format">format<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cipher/" title="cipher">cipher<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jni/" title="Jni">Jni<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/encoding/" title="encoding">encoding<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Talk is cheap, show me code! <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/DaSea" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="DaSea">DaSea</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
